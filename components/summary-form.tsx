@@ -74,6 +74,16 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Republika Czeska": "República Checa",
     "Czechy": "Chéquia",
     "Słowacja": "Eslováquia",
+    "Wpisz nazwę firmy (opcjonalne)": "Introduza o nome da empresa (opcional)",
+    "Wpisz numer VAT (opcjonalne)": "Introduza o número de IVA (opcional)",
+    "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
+      "Por favor, aceite todos os consentimentos obrigatórios antes de enviar o pedido.",
+    "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
+      "Concordo com a recolha e o tratamento dos dados fornecidos neste registo, caso o dispositivo tenha sido utilizado de forma incompatível com o manual de instruções. As disposições detalhadas encontram-se no documento \"Condições de garantia\". As instruções de utilização e as condições de garantia podem ser consultadas na nossa Lista de documentos disponíveis.",
+    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
+      "Ao preencher o formulário de reclamação, o Cliente autoriza o tratamento de dados pessoais para a execução do processo de reclamação pela Erbo Technology Sp. z o.o., com sede em Gdynia. O responsável pelo tratamento dos dados pessoais é a Erbo Technology Sp. z o.o., com sede em Gdynia. Os dados pessoais são protegidos em conformidade com a legislação aplicável, de forma a impedir o acesso por terceiros. O Cliente tem o direito de consultar os seus dados pessoais, corrigi-los e solicitar a sua eliminação ou atualização.",
+    "Akceptuję Politykę Prywatności Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Erbo Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
+      "Aceito a Política de Privacidade da Erbo Technology Sp. z o.o., com sede em Gdynia. Concordo em ser contactado por representantes da Erbo Technology Sp. z o.o., com sede em Gdynia, através dos dados de contacto que forneci no formulário.",
   },
   en: {
     "1. Akcesorium": "1. Accessory",

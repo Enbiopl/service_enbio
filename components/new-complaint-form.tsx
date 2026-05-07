@@ -41,6 +41,18 @@ const SUPPORTED_LANGUAGES = ["en", "pl", "es", "fr", "de", "it", "uk", "ru", "pt
 
 type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number]
 
+const LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
+  en: "English",
+  pl: "Polski",
+  es: "Español",
+  fr: "Français",
+  de: "Deutsch",
+  it: "Italiano",
+  uk: "Українська",
+  ru: "Русский",
+  pt: "Português",
+}
+
 const HEADING_TRANSLATIONS: Record<SupportedLanguage, string> = {
   pl: "Jak możemy Ci pomóc?",
   en: "How can we help you?",
@@ -137,6 +149,7 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Podaj numer": "Introduza o número",
     "Numer lokalu": "Número da porta",
     "Wpisz jeżeli występuje": "Introduza se aplicável",
+    "Wpisz pełną nazwę miasta": "Introduza o nome completo da cidade",
     "Kod pocztowy": "Código‑postal",
     "Wpisz kod": "Introduza o código‑postal",
     "Miasto": "Cidade",
@@ -178,10 +191,13 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Błąd:": "Erro:",
     "Wystąpił błąd sieci. Sprawdź konsolę deweloperską.":
       "Ocorreu um erro de rede. Verifique a consola de programador.",
+    "Wystąpił błąd podczas przesyłania pliku. Spróbuj ponownie.":
+      "Ocorreu um erro durante o envio do ficheiro. Tente novamente.",
     "Komentarz nie może być pusty.": "O comentário não pode estar vazio.",
     "Proszę dodać zdjęcie faktury lub świadectwa gwarancji.":
       "Adicione uma foto da fatura ou do documento de garantia.",
     "Imię i nazwisko jest wymagane.": "O nome completo é obrigatório.",
+    "Numer seryjny jest wymagany.": "O número de série é obrigatório.",
     "Adres e-mail jest wymagany.": "O endereço de e‑mail é obrigatório.",
     "Numer telefonu jest wymagany.": "O número de telefone é obrigatório.",
     "Prefix numeru telefonu jest wymagany.": "O indicativo telefónico é obrigatório.",
@@ -290,6 +306,7 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Podaj numer": "Enter number",
     "Numer lokalu": "Apartment number",
     "Wpisz jeżeli występuje": "Enter if applicable",
+    "Wpisz pełną nazwę miasta": "Enter full city name",
     "Kod pocztowy": "Postal code",
     "Wpisz kod": "Enter postal code",
     "Miasto": "City",
@@ -331,10 +348,13 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Błąd:": "Error:",
     "Wystąpił błąd sieci. Sprawdź konsolę deweloperską.":
       "A network error has occurred. Check the developer console.",
+    "Wystąpił błąd podczas przesyłania pliku. Spróbuj ponownie.":
+      "An error occurred while uploading the file. Please try again.",
     "Komentarz nie może być pusty.": "Comment cannot be empty.",
     "Proszę dodać zdjęcie faktury lub świadectwa gwarancji.":
       "Please add a photo of the invoice or warranty document.",
     "Imię i nazwisko jest wymagane.": "Full name is required.",
+    "Numer seryjny jest wymagany.": "Serial number is required.",
     "Adres e-mail jest wymagany.": "E-mail address is required.",
     "Numer telefonu jest wymagany.": "Phone number is required.",
     "Prefix numeru telefonu jest wymagany.": "Phone prefix is required.",
@@ -434,6 +454,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Wpisz numer VAT": "Saisissez le numéro de TVA",
     "Imię i nazwisko": "Nom et prénom",
     "Wpisz pełne imię i nazwisko": "Saisissez le nom et le prénom complets",
+    "Numer seryjny": "Numéro de série",
+    "Wpisz numer seryjny": "Saisissez le numéro de série",
     "Adres e-mail": "Adresse e‑mail",
     "Podaj adres e-mail": "Saisissez l’adresse e‑mail",
     "Telefon": "Téléphone",
@@ -443,6 +465,7 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Podaj numer": "Saisissez le numéro",
     "Numer lokalu": "Numéro d’appartement",
     "Wpisz jeżeli występuje": "Saisissez‑le si applicable",
+    "Wpisz pełną nazwę miasta": "Saisissez le nom complet de la ville",
     "Kod pocztowy": "Code postal",
     "Wpisz kod": "Saisissez le code postal",
     "Miasto": "Ville",
@@ -484,10 +507,13 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Błąd:": "Erreur :",
     "Wystąpił błąd sieci. Sprawdź konsolę deweloperską.":
       "Une erreur réseau s’est produite. Consultez la console du développeur.",
+    "Wystąpił błąd podczas przesyłania pliku. Spróbuj ponownie.":
+      "Une erreur s'est produite lors du téléversement du fichier. Veuillez réessayer.",
     "Komentarz nie może być pusty.": "Le commentaire ne peut pas être vide.",
     "Proszę dodać zdjęcie faktury lub świadectwa gwarancji.":
       "Veuillez ajouter une photo de la facture ou du document de garantie.",
     "Imię i nazwisko jest wymagane.": "Le nom et le prénom sont obligatoires.",
+    "Numer seryjny jest wymagany.": "Le numéro de série est obligatoire.",
     "Adres e-mail jest wymagany.": "L’adresse e‑mail est obligatoire.",
     "Numer telefonu jest wymagany.": "Le numéro de téléphone est obligatoire.",
     "Prefix numeru telefonu jest wymagany.": "L'indicatif téléphonique est obligatoire.",
@@ -591,6 +617,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Wpisz numer VAT": "Introduce el número de IVA",
     "Imię i nazwisko": "Nombre y apellidos",
     "Wpisz pełne imię i nazwisko": "Introduce nombre y apellidos completos",
+    "Numer seryjny": "Número de serie",
+    "Wpisz numer seryjny": "Introduce el número de serie",
     "Adres e-mail": "Dirección de correo electrónico",
     "Podaj adres e-mail": "Introduce la dirección de correo electrónico",
     "Telefon": "Teléfono",
@@ -600,6 +628,7 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Podaj numer": "Introduce el número",
     "Numer lokalu": "Número de apartamento",
     "Wpisz jeżeli występuje": "Introduce si aplica",
+    "Wpisz pełną nazwę miasta": "Introduce el nombre completo de la ciudad",
     "Kod pocztowy": "Código postal",
     "Wpisz kod": "Introduce el código",
     "Miasto": "Ciudad",
@@ -640,10 +669,13 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Błąd:": "Error:",
     "Wystąpił błąd sieci. Sprawdź konsolę deweloperską.":
       "Se ha producido un error de red. Consulta la consola del desarrollador.",
+    "Wystąpił błąd podczas przesyłania pliku. Spróbuj ponownie.":
+      "Se produjo un error al cargar el archivo. Inténtalo de nuevo.",
     "Komentarz nie może być pusty.": "El comentario no puede estar vacío.",
     "Proszę dodać zdjęcie faktury lub świadectwa gwarancji.":
       "Añade una foto de la factura o del documento de garantía.",
     "Imię i nazwisko jest wymagane.": "El nombre y los apellidos son obligatorios.",
+    "Numer seryjny jest wymagany.": "El número de serie es obligatorio.",
     "Adres e-mail jest wymagany.": "La dirección de correo electrónico es obligatoria.",
     "Numer telefonu jest wymagany.": "El número de teléfono es obligatorio.",
     "Prefix numeru telefonu jest wymagany.": "El prefijo telefónico es obligatorio.",
@@ -740,6 +772,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Wpisz numer VAT": "USt-IdNr. eingeben",
     "Imię i nazwisko": "Vor- und Nachname",
     "Wpisz pełne imię i nazwisko": "Vor- und Nachname eingeben",
+    "Numer seryjny": "Seriennummer",
+    "Wpisz numer seryjny": "Seriennummer eingeben",
     "Adres e-mail": "E-Mail-Adresse",
     "Podaj adres e-mail": "E-Mail-Adresse eingeben",
     "Telefon": "Telefon",
@@ -749,6 +783,7 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Podaj numer": "Nummer eingeben",
     "Numer lokalu": "Wohnungsnummer",
     "Wpisz jeżeli występuje": "Falls zutreffend eingeben",
+    "Wpisz pełną nazwę miasta": "Vollständigen Stadtnamen eingeben",
     "Kod pocztowy": "Postleitzahl",
     "Wpisz kod": "Postleitzahl eingeben",
     "Miasto": "Stadt",
@@ -774,10 +809,13 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Błąd:": "Fehler:",
     "Wystąpił błąd sieci. Sprawdź konsolę deweloperską.":
       "Ein Netzwerkfehler ist aufgetreten. Überprüfen Sie die Entwicklerkonsole.",
+    "Wystąpił błąd podczas przesyłania pliku. Spróbuj ponownie.":
+      "Beim Hochladen der Datei ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
     "Komentarz nie może być pusty.": "Der Kommentar darf nicht leer sein.",
     "Proszę dodać zdjęcie faktury lub świadectwa gwarancji.":
       "Bitte fügen Sie ein Foto der Rechnung oder des Garantiedokuments hinzu.",
     "Imię i nazwisko jest wymagane.": "Vor- und Nachname sind erforderlich.",
+    "Numer seryjny jest wymagany.": "Seriennummer ist erforderlich.",
     "Adres e-mail jest wymagany.": "E-Mail-Adresse ist erforderlich.",
     "Numer telefonu jest wymagany.": "Telefonnummer ist erforderlich.",
     "Prefix numeru telefonu jest wymagany.": "Telefonvorwahl ist erforderlich.",
@@ -891,6 +929,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Wpisz numer VAT": "Inserisci la partita IVA",
     "Imię i nazwisko": "Nome e cognome",
     "Wpisz pełne imię i nazwisko": "Inserisci nome e cognome completi",
+    "Numer seryjny": "Numero di serie",
+    "Wpisz numer seryjny": "Inserisci il numero di serie",
     "Adres e-mail": "Indirizzo e-mail",
     "Podaj adres e-mail": "Inserisci l'indirizzo e-mail",
     "Telefon": "Telefono",
@@ -900,6 +940,7 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Podaj numer": "Inserisci il numero",
     "Numer lokalu": "Numero interno",
     "Wpisz jeżeli występuje": "Inserisci se presente",
+    "Wpisz pełną nazwę miasta": "Inserisci il nome completo della città",
     "Kod pocztowy": "CAP",
     "Wpisz kod": "Inserisci il CAP",
     "Miasto": "Città",
@@ -925,10 +966,13 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Błąd:": "Errore:",
     "Wystąpił błąd sieci. Sprawdź konsolę deweloperską.":
       "Si è verificato un errore di rete. Controlla la console dello sviluppatore.",
+    "Wystąpił błąd podczas przesyłania pliku. Spróbuj ponownie.":
+      "Si è verificato un errore durante il caricamento del file. Riprova.",
     "Komentarz nie może być pusty.": "Il commento non può essere vuoto.",
     "Proszę dodać zdjęcie faktury lub świadectwa gwarancji.":
       "Aggiungi una foto della fattura o del documento di garanzia.",
     "Imię i nazwisko jest wymagane.": "Nome e cognome obbligatori.",
+    "Numer seryjny jest wymagany.": "Il numero di serie è obbligatorio.",
     "Adres e-mail jest wymagany.": "Indirizzo e-mail obbligatorio.",
     "Numer telefonu jest wymagany.": "Numero di telefono obbligatorio.",
     "Prefix numeru telefonu jest wymagany.": "Prefisso telefonico obbligatorio.",
@@ -1039,6 +1083,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Wpisz numer VAT": "Введіть ІПН",
     "Imię i nazwisko": "Ім'я та прізвище",
     "Wpisz pełne imię i nazwisko": "Введіть повне ім'я та прізвище",
+    "Numer seryjny": "Серійний номер",
+    "Wpisz numer seryjny": "Введіть серійний номер",
     "Adres e-mail": "Ел. пошта",
     "Podaj adres e-mail": "Введіть ел. пошту",
     "Telefon": "Телефон",
@@ -1048,6 +1094,7 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Podaj numer": "Введіть номер",
     "Numer lokalu": "Номер квартири",
     "Wpisz jeżeli występuje": "Введіть за наявності",
+    "Wpisz pełną nazwę miasta": "Введіть повну назву міста",
     "Kod pocztowy": "Поштовий індекс",
     "Wpisz kod": "Введіть індекс",
     "Miasto": "Місто",
@@ -1073,10 +1120,13 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Błąd:": "Помилка:",
     "Wystąpił błąd sieci. Sprawdź konsolę deweloperską.":
       "Виникла мережева помилка. Перевірте консоль розробника.",
+    "Wystąpił błąd podczas przesyłania pliku. Spróbuj ponownie.":
+      "Під час завантаження файлу сталася помилка. Спробуйте ще раз.",
     "Komentarz nie może być pusty.": "Коментар не може бути порожнім.",
     "Proszę dodać zdjęcie faktury lub świadectwa gwarancji.":
       "Додайте фото рахунку або гарантійного документу.",
     "Imię i nazwisko jest wymagane.": "Ім'я та прізвище обов'язкові.",
+    "Numer seryjny jest wymagany.": "Серійний номер обов'язковий.",
     "Adres e-mail jest wymagany.": "Ел. пошта обов'язкова.",
     "Numer telefonu jest wymagany.": "Номер телефону обов'язковий.",
     "Prefix numeru telefonu jest wymagany.": "Код країни телефону обов'язковий.",
@@ -1187,6 +1237,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Wpisz numer VAT": "Введите ИНН",
     "Imię i nazwisko": "Имя и фамилия",
     "Wpisz pełne imię i nazwisko": "Введите полные имя и фамилию",
+    "Numer seryjny": "Серийный номер",
+    "Wpisz numer seryjny": "Введите серийный номер",
     "Adres e-mail": "Эл. почта",
     "Podaj adres e-mail": "Введите эл. почту",
     "Telefon": "Телефон",
@@ -1196,6 +1248,7 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Podaj numer": "Введите номер",
     "Numer lokalu": "Номер квартиры",
     "Wpisz jeżeli występuje": "Введите при наличии",
+    "Wpisz pełną nazwę miasta": "Введите полное название города",
     "Kod pocztowy": "Почтовый индекс",
     "Wpisz kod": "Введите индекс",
     "Miasto": "Город",
@@ -1221,10 +1274,13 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Błąd:": "Ошибка:",
     "Wystąpił błąd sieci. Sprawdź konsolę deweloperską.":
       "Произошла сетевая ошибка. Проверьте консоль разработчика.",
+    "Wystąpił błąd podczas przesyłania pliku. Spróbuj ponownie.":
+      "Во время загрузки файла произошла ошибка. Попробуйте снова.",
     "Komentarz nie może być pusty.": "Комментарий не может быть пустым.",
     "Proszę dodać zdjęcie faktury lub świadectwa gwarancji.":
       "Добавьте фото счёта или гарантийного документа.",
     "Imię i nazwisko jest wymagane.": "Имя и фамилия обязательны.",
+    "Numer seryjny jest wymagany.": "Серийный номер обязателен.",
     "Adres e-mail jest wymagany.": "Эл. почта обязательна.",
     "Numer telefonu jest wymagany.": "Номер телефона обязателен.",
     "Prefix numeru telefonu jest wymagany.": "Код страны телефона обязателен.",
@@ -1357,6 +1413,17 @@ export default function NewComplaintForm() {
     (urlLangParam && SUPPORTED_LANGUAGES.includes(urlLangParam as SupportedLanguage)
       ? (urlLangParam as SupportedLanguage)
       : "en")
+
+  const handleLanguageChange = (nextLanguage: SupportedLanguage) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (nextLanguage === "en") {
+      params.delete("lang")
+    } else {
+      params.set("lang", nextLanguage)
+    }
+    const nextQuery = params.toString()
+    router.push(nextQuery ? `/?${nextQuery}` : "/")
+  }
 
   // Ustaw język dokumentu
   useEffect(() => {
@@ -1809,6 +1876,9 @@ export default function NewComplaintForm() {
     }
     const errors: string[] = []
     if (!formData.name.trim()) errors.push(tr(language, "Imię i nazwisko jest wymagane."))
+    if (selectedCategory === "autoclave" && !formData.serialNumber.trim()) {
+      errors.push(tr(language, "Numer seryjny jest wymagany."))
+    }
     if (!formData.email.trim()) errors.push(tr(language, "Adres e-mail jest wymagany."))
     if (!formData.phonePrefix.trim()) errors.push(tr(language, "Prefix numeru telefonu jest wymagany."))
     if (!formData.phoneNumber.trim()) errors.push(tr(language, "Numer telefonu jest wymagany."))
@@ -1934,6 +2004,22 @@ export default function NewComplaintForm() {
     event.preventDefault(); 
 
     if (isSubmitting) return
+
+    const finalErrors: string[] = []
+    const finalName = (summaryData?.name ?? formData.name ?? "").toString().trim()
+    const finalCategory = (summaryData?.selectedCategory ?? selectedCategory ?? "").toString()
+    const finalSerial = (summaryData?.serialNumber ?? formData.serialNumber ?? "").toString().trim()
+
+    if (!finalName) {
+      finalErrors.push(tr(language, "Imię i nazwisko jest wymagane."))
+    }
+    if (finalCategory === "autoclave" && !finalSerial) {
+      finalErrors.push(tr(language, "Numer seryjny jest wymagany."))
+    }
+    if (finalErrors.length > 0) {
+      alert(finalErrors.join("\n"))
+      return
+    }
 
     setIsSubmitting(true)
     console.log("Wysyłanie danych do serwera:", summaryData);
@@ -2803,7 +2889,7 @@ export default function NewComplaintForm() {
                 {selectedCategory === "autoclave" && (serviceType === "warranty" || serviceType === "post-warranty") && (
                   <div>
                     <Label htmlFor="serialNumber" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                      {tr(language, "Numer seryjny")}
+                      {tr(language, "Numer seryjny")}<span className="text-red-500 ml-1">*</span>
                     </Label>
                     <Input
                       id="serialNumber"
@@ -2812,13 +2898,14 @@ export default function NewComplaintForm() {
                       onChange={(e) => handleInputChange("serialNumber", e.target.value)}
                       placeholder={tr(language, "Wpisz numer seryjny")}
                       className={getInputStyles(formData.serialNumber)}
+                      required
                     />
                   </div>
                 )}
 
                 <div>
                   <Label htmlFor="name" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                    {tr(language, "Imię i nazwisko")}
+                    {tr(language, "Imię i nazwisko")}<span className="text-red-500 ml-1">*</span>
                   </Label>
                   <Input
                       id="name"
@@ -2833,7 +2920,7 @@ export default function NewComplaintForm() {
 
                 <div>
                   <Label htmlFor="email" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                    {tr(language, "Adres e-mail")}
+                    {tr(language, "Adres e-mail")}<span className="text-red-500 ml-1">*</span>
                   </Label>
                   <Input
                       id="email"
@@ -2849,7 +2936,7 @@ export default function NewComplaintForm() {
 
                 <div>
                   <Label htmlFor="phone" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                    {tr(language, "Telefon")}
+                    {tr(language, "Telefon")}<span className="text-red-500 ml-1">*</span>
                   </Label>
                   <div className="flex gap-2 items-stretch">
                     <Input
@@ -2875,7 +2962,7 @@ export default function NewComplaintForm() {
 
                 <div>
                   <Label htmlFor="street" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                    {tr(language, "Nazwa ulicy")}
+                    {tr(language, "Nazwa ulicy")}<span className="text-red-500 ml-1">*</span>
                   </Label>
                   <Input
                       id="street"
@@ -2891,7 +2978,7 @@ export default function NewComplaintForm() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="buildingNumber" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                      {tr(language, "Numer budynku")}
+                      {tr(language, "Numer budynku")}<span className="text-red-500 ml-1">*</span>
                     </Label>
                     <Input
                         id="buildingNumber"
@@ -2922,7 +3009,7 @@ export default function NewComplaintForm() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="postalCode" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                      {tr(language, "Kod pocztowy")}
+                      {tr(language, "Kod pocztowy")}<span className="text-red-500 ml-1">*</span>
                     </Label>
                     <Input
                         id="postalCode"
@@ -2937,7 +3024,7 @@ export default function NewComplaintForm() {
 
                   <div>
                     <Label htmlFor="city" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                      {tr(language, "Miasto")}
+                      {tr(language, "Miasto")}<span className="text-red-500 ml-1">*</span>
                     </Label>
                     <Input
                         id="city"
@@ -3510,7 +3597,7 @@ export default function NewComplaintForm() {
               <div className="bg-white rounded-md p-4 sm:p-5 space-y-4">
                 <div>
                   <Label htmlFor="name" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                    {tr(language, "Imię i nazwisko")}
+                    {tr(language, "Imię i nazwisko")}<span className="text-red-500 ml-1">*</span>
                   </Label>
                   <Input
                       id="name"
@@ -3525,7 +3612,7 @@ export default function NewComplaintForm() {
 
                 <div>
                   <Label htmlFor="email" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                    {tr(language, "Adres e-mail")}
+                    {tr(language, "Adres e-mail")}<span className="text-red-500 ml-1">*</span>
                   </Label>
                   <Input
                       id="email"
@@ -3541,7 +3628,7 @@ export default function NewComplaintForm() {
 
                 <div>
                   <Label htmlFor="phone" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                    {tr(language, "Telefon")}
+                    {tr(language, "Telefon")}<span className="text-red-500 ml-1">*</span>
                   </Label>
                   <div className="flex gap-2 items-stretch">
                     <Input
@@ -3567,7 +3654,7 @@ export default function NewComplaintForm() {
 
                 <div>
                   <Label htmlFor="street" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                    {tr(language, "Nazwa ulicy")}
+                    {tr(language, "Nazwa ulicy")}<span className="text-red-500 ml-1">*</span>
                   </Label>
                   <Input
                       id="street"
@@ -3583,7 +3670,7 @@ export default function NewComplaintForm() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="buildingNumber" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                      {tr(language, "Numer budynku")}
+                      {tr(language, "Numer budynku")}<span className="text-red-500 ml-1">*</span>
                     </Label>
                     <Input
                         id="buildingNumber"
@@ -3614,7 +3701,7 @@ export default function NewComplaintForm() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="postalCode" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                      {tr(language, "Kod pocztowy")}
+                      {tr(language, "Kod pocztowy")}<span className="text-red-500 ml-1">*</span>
                     </Label>
                     <Input
                         id="postalCode"
@@ -3629,7 +3716,7 @@ export default function NewComplaintForm() {
 
                   <div>
                     <Label htmlFor="city" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                      {tr(language, "Miasto")}
+                      {tr(language, "Miasto")}<span className="text-red-500 ml-1">*</span>
                     </Label>
                     <Input
                         id="city"
@@ -3699,6 +3786,24 @@ export default function NewComplaintForm() {
   return (
       <div className="min-h-screen bg-gray-100 text-gray-900 py-4 sm:py-6 md:py-8">
         <div className="w-full max-w-[1035px] mx-auto px-4 sm:px-6">
+          <div className="flex justify-end mb-4">
+            <Select value={language} onValueChange={(value) => handleLanguageChange(value as SupportedLanguage)}>
+              <SelectTrigger className="w-[150px] h-10 bg-gray-100 border-gray-200 text-gray-900 rounded-md">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-gray-200 text-gray-900">
+                {SUPPORTED_LANGUAGES.map((langCode) => (
+                  <SelectItem
+                    key={langCode}
+                    value={langCode}
+                    className="text-gray-700 data-[state=checked]:text-gray-900 data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-900"
+                  >
+                    {LANGUAGE_LABELS[langCode]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <h1 className="text-gray-900 text-center text-xl sm:text-2xl font-medium mb-6 sm:mb-8">
             {currentStep === "summary"
               ? tr(language, "Dane rozpoznane z faktury, sprawdź poprawność")

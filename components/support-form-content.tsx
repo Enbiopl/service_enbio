@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { ChevronDown } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
@@ -10,6 +11,9 @@ interface SupportFormProps {
 }
 
 export default function SupportForm({ onNext }: SupportFormProps) {
+  const searchParams = useSearchParams()
+  const language = searchParams.get("lang") || "en"
+  const t = (pl: string, en: string) => (language === "pl" ? pl : en)
   const [serviceType, setServiceType] = useState<string | undefined>(undefined)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -21,7 +25,7 @@ export default function SupportForm({ onNext }: SupportFormProps) {
   return (
     <>
       {/* Main h1 title is now in FormContainer */}
-      <h2 className="text-gray-900 text-xl font-medium mb-6">1. Dane urządzenia</h2>
+      <h2 className="text-gray-900 text-xl font-medium mb-6">{t("1. Dane urządzenia", "1. Device data")}</h2>
 
       <div className="bg-gray-50 rounded-md p-5 w-[430px] ml-0 border border-gray-200">
         <div className="space-y-6">
@@ -45,9 +49,11 @@ export default function SupportForm({ onNext }: SupportFormProps) {
             </div>
             <div>
               <Label htmlFor="warranty" className="text-gray-900 font-medium text-base cursor-pointer">
-                Serwis gwarancyjny
+                {t("Serwis gwarancyjny", "Warranty service")}
               </Label>
-              <p className="text-gray-600 text-sm mt-1">Dla urządzeń objętych aktywną gwarancją producenta.</p>
+              <p className="text-gray-600 text-sm mt-1">
+                {t("Dla urządzeń objętych aktywną gwarancją producenta.", "For devices covered by an active manufacturer's warranty.")}
+              </p>
             </div>
           </div>
 
@@ -71,9 +77,11 @@ export default function SupportForm({ onNext }: SupportFormProps) {
             </div>
             <div>
               <Label htmlFor="post-warranty" className="text-gray-900 font-medium text-base cursor-pointer">
-                Serwis pogwarancyjny
+                {t("Serwis pogwarancyjny", "Post-warranty service")}
               </Label>
-              <p className="text-gray-600 text-sm mt-1">Jeśli gwarancja już wygasła lub nie masz pewności</p>
+              <p className="text-gray-600 text-sm mt-1">
+                {t("Jeśli gwarancja już wygasła lub nie masz pewności", "If the warranty has expired or you are not sure")}
+              </p>
             </div>
           </div>
         </div>
@@ -81,7 +89,7 @@ export default function SupportForm({ onNext }: SupportFormProps) {
         <div className="mt-8 border-t border-gray-200 pt-4 text-left pl-0">
           <Collapsible open={isOpen} onOpenChange={setIsOpen}>
             <CollapsibleTrigger className="flex items-center text-gray-900 hover:text-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-50 rounded-sm">
-              <span className="text-sm">Sprawdź czy Twoje urządzenie jest na gwarancji</span>
+              <span className="text-sm">{t("Sprawdź czy Twoje urządzenie jest na gwarancji", "Check if your device is under warranty")}</span>
               <div
                 className={`ml-2 w-5 h-5 rounded-full bg-gray-900 flex items-center justify-center transition-transform duration-300 ease-in-out ${isOpen ? "rotate-180" : "rotate-0"}`}
               >
@@ -92,15 +100,15 @@ export default function SupportForm({ onNext }: SupportFormProps) {
               <div className="mt-4 text-gray-700 text-sm space-y-4">
                 <div>
                   <h4 className="text-gray-900 font-semibold mb-3">
-                    Twoje urządzenie może być objęte gwarancją, jeśli:
+                    {t("Twoje urządzenie może być objęte gwarancją, jeśli:", "Your device may be covered by warranty if:")}
                   </h4>
                   <ol className="list-decimal list-inside space-y-3 ml-2">
                     <li>
-                      Od daty zakupu nie minęły <strong className="text-gray-900 font-semibold">2 lata</strong>.
+                      {t("Od daty zakupu nie minęły ", "Less than ")}<strong className="text-gray-900 font-semibold">2 {t("lata", "years")}</strong>.
                     </li>
                     <li>
-                      W Twoim kraju wymagany <strong className="text-gray-900 font-semibold">przegląd</strong> został
-                      wykonany zgodnie z instrukcją.
+                      {t("W Twoim kraju wymagany ", "In your country, the required ")}<strong className="text-gray-900 font-semibold">{t("przegląd", "maintenance")}</strong>{" "}
+                      {t("został wykonany zgodnie z instrukcją.", "was performed according to the instructions.")}
                     </li>
                   </ol>
                 </div>
@@ -111,8 +119,10 @@ export default function SupportForm({ onNext }: SupportFormProps) {
                       <span className="text-white font-bold text-sm">!</span>
                     </div>
                     <div>
-                      <p className="text-red-700 font-semibold mb-1">UWAGA!</p>
-                      <p className="text-red-600 font-normal">Warunki przeglądu różnią się w zależności od kraju.</p>
+                      <p className="text-red-700 font-semibold mb-1">{t("UWAGA!", "NOTICE!")}</p>
+                      <p className="text-red-600 font-normal">
+                        {t("Warunki przeglądu różnią się w zależności od kraju.", "Maintenance requirements vary depending on the country.")}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -121,20 +131,20 @@ export default function SupportForm({ onNext }: SupportFormProps) {
                   <div className="flex items-start gap-2 mb-3">
                     <span className="text-gray-600">🔗</span>
                     <p className="text-gray-700 font-normal">
-                      Aby sprawdzić szczegóły dotyczące przeglądu, skorzystaj z dokumentacji:
+                      {t("Aby sprawdzić szczegóły dotyczące przeglądu, skorzystaj z dokumentacji:", "To check maintenance details, use the documentation:")}
                     </p>
                   </div>
                   <ul className="list-disc list-inside space-y-2 ml-6 text-gray-700 font-normal">
                     <li>
-                      Pendrive dołączony do urządzenia → plik{" "}
-                      <strong className="text-gray-900 font-semibold">"Warunki gwarancji"</strong> lub
+                      {t("Pendrive dołączony do urządzenia → plik", "USB drive included with the device → file")}{" "}
+                      <strong className="text-gray-900 font-semibold">"{t("Warunki gwarancji", "Warranty terms")}"</strong> {t("lub", "or")}
                     </li>
                     <li>
-                      Pendrive dołączony do urządzenia → plik{" "}
-                      <strong className="text-gray-900 font-semibold">"Instrukcja użytkownika"</strong> lub
+                      {t("Pendrive dołączony do urządzenia → plik", "USB drive included with the device → file")}{" "}
+                      <strong className="text-gray-900 font-semibold">"{t("Instrukcja użytkownika", "User manual")}"</strong> {t("lub", "or")}
                     </li>
                     <li>
-                      Zakładka <strong className="text-gray-900 font-semibold">"Info"</strong> w menu autoklawu.
+                      {t("Zakładka", "The")} <strong className="text-gray-900 font-semibold">"Info"</strong> {t("w menu autoklawu.", "tab in the autoclave menu.")}
                     </li>
                   </ul>
                 </div>
@@ -148,7 +158,7 @@ export default function SupportForm({ onNext }: SupportFormProps) {
         <div className="flex justify-center mt-6">
           <div className="text-gray-900 text-sm flex items-center gap-2">
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
-            Przechodzimy dalej...
+            {t("Przechodzimy dalej...", "Moving forward...")}
           </div>
         </div>
       )}

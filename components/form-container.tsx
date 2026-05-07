@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import SupportForm from "@/components/support-form-content"
 import WarrantyForm from "@/components/warranty-form-content"
 import SummaryForm from "@/components/summary-form"
@@ -13,6 +13,9 @@ type FormStep = "support" | "warranty" | "summary" | "success"
 
 export default function FormContainer() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const language = searchParams.get("lang") || "en"
+  const t = (pl: string, en: string) => (language === "pl" ? pl : en)
   const [currentStep, setCurrentStep] = useState<FormStep>("support")
   const [formData, setFormData] = useState<any>({})
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -102,13 +105,13 @@ export default function FormContainer() {
   const renderMainTitle = () => {
     switch (currentStep) {
       case "support":
-        return <h1 className="text-gray-900 text-center text-2xl font-medium mb-8">Jak możemy Ci pomóc?</h1>
+        return <h1 className="text-gray-900 text-center text-2xl font-medium mb-8">{t("Jak możemy Ci pomóc?", "How can we help you?")}</h1>
       case "warranty":
-        return <h1 className="text-gray-900 text-center text-2xl font-medium mb-8">Jak możemy Ci pomóc?</h1>
+        return <h1 className="text-gray-900 text-center text-2xl font-medium mb-8">{t("Jak możemy Ci pomóc?", "How can we help you?")}</h1>
       case "summary":
         return (
           <h1 className="text-gray-900 text-center text-2xl font-medium mb-8">
-            Dane rozpoznane z faktury, sprawdź poprawność
+            {t("Dane rozpoznane z faktury, sprawdź poprawność", "Invoice data recognized, please verify")}
           </h1>
         )
       default:
@@ -162,7 +165,7 @@ export default function FormContainer() {
             disabled={isSubmitting || currentStep === "support"} // Disable during submission and on first step
           >
             <ArrowLeft className="h-4 w-4" />
-            Wstecz
+            {t("Wstecz", "Back")}
           </button>
 
           <Button
@@ -171,7 +174,7 @@ export default function FormContainer() {
             className="bg-transparent hover:bg-transparent border border-gray-300 text-gray-900 hover:border-gray-500 rounded-md py-3 text-sm font-medium h-[64px] w-[240px]"
             disabled={isSubmitting} // Disable during submission
           >
-            {currentStep === "summary" ? (isSubmitting ? "Wysyłanie..." : "Wyślij formularz") : "Dalej"}
+            {currentStep === "summary" ? (isSubmitting ? t("Wysyłanie...", "Sending...") : t("Wyślij formularz", "Submit form")) : t("Dalej", "Next")}
           </Button>
         </div>
       )}

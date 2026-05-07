@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -19,6 +20,9 @@ interface WarrantyFormProps {
 }
 
 export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormProps) {
+  const searchParams = useSearchParams()
+  const language = searchParams.get("lang") || "en"
+  const t = (pl: string, en: string) => (language === "pl" ? pl : en)
   // Initialize state from passed formData
   const [serviceType, setServiceType] = useState(formData.serviceType || "warranty")
   const [contactData, setContactData] = useState({
@@ -166,7 +170,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
           {/* Left Column - Device Data */}
           <div>
-            <h2 className="text-gray-900 text-xl font-semibold mb-6 tracking-tight">1. Dane urządzenia</h2>
+            <h2 className="text-gray-900 text-xl font-semibold mb-6 tracking-tight">{t("1. Dane urządzenia", "1. Device data")}</h2>
 
             <div className="bg-gray-50 rounded-md p-5">
               <button
@@ -182,18 +186,18 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                 <div>
                   {serviceType === "post-warranty" ? (
                     <>
-                      <Label className="text-gray-900 font-medium text-base cursor-pointer">Serwis pogwarancyjny</Label>
-                      <p className="text-gray-600 text-sm mt-1">Jeśli gwarancja już wygasła lub nie masz pewności</p>
+                      <Label className="text-gray-900 font-medium text-base cursor-pointer">{t("Serwis pogwarancyjny", "Post-warranty service")}</Label>
+                      <p className="text-gray-600 text-sm mt-1">{t("Jeśli gwarancja już wygasła lub nie masz pewności", "If the warranty has expired or you are not sure")}</p>
                     </>
                   ) : (
                     <>
-                      <Label className="text-gray-900 font-medium text-base cursor-pointer">Serwis gwarancyjny</Label>
-                      <p className="text-gray-600 text-sm mt-1">Dla urządzeń objętych aktywną gwarancją producenta.</p>
+                      <Label className="text-gray-900 font-medium text-base cursor-pointer">{t("Serwis gwarancyjny", "Warranty service")}</Label>
+                      <p className="text-gray-600 text-sm mt-1">{t("Dla urządzeń objętych aktywną gwarancją producenta.", "For devices covered by an active manufacturer's warranty.")}</p>
                     </>
                   )}
                 </div>
               </button>
-              <p className="text-gray-600 text-xs mt-2 ml-8">Kliknij ponownie, aby zmienić wybór</p>
+              <p className="text-gray-600 text-xs mt-2 ml-8">{t("Kliknij ponownie, aby zmienić wybór", "Click again to change your selection")}</p>
 
               <div className="border-t border-gray-200 pt-8 mt-6">
                 <div className="space-y-11">
@@ -201,7 +205,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <Label className="text-gray-900 text-sm font-normal text-[14px]">
-                          Dodaj zdjęcie faktury lub świadectwa gwarancji
+                          {t("Dodaj zdjęcie faktury lub świadectwa gwarancji", "Add invoice or warranty document photo")}
                         </Label>
                         <TooltipProvider delayDuration={0}>
                           <Tooltip>
@@ -215,7 +219,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                               sideOffset={5}
                             >
                               <p className="text-sm">
-                                Jeśli dodałeś(-aś) fakturę do my.enbio, możesz ją pobrać z karty urządzenia.
+                                {t("Jeśli dodałeś(-aś) fakturę do my.enbio, możesz ją pobrać z karty urządzenia.", "If you added an invoice to my.enbio, you can download it from the device card.")}
                               </p>
                             </TooltipContent>
                           </Tooltip>
@@ -278,7 +282,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                                   <button
                                     type="button"
                                     className="w-5 h-5 rounded bg-transparent hover:bg-gray-600 flex items-center justify-center transition-colors"
-                                    title="Pobierz plik"
+                                    title={t("Pobierz plik", "Download file")}
                                   >
                                     <svg className="w-3 h-3 text-gray-900" fill="currentColor" viewBox="0 0 20 20">
                                       <path
@@ -306,7 +310,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                                     }))
                                   }}
                                   className="w-5 h-5 rounded bg-transparent hover:bg-gray-600 flex items-center justify-center transition-colors"
-                                  title="Usuń plik"
+                                  title={t("Usuń plik", "Remove file")}
                                 >
                                   <X className="h-3 w-3" />
                                 </button>
@@ -314,9 +318,9 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                             </div>
                           ) : (
                             <>
-                              <span>Przeciągnij, wybierz plik</span>
+                              <span>{t("Przeciągnij, wybierz plik", "Drag and choose file")}</span>
                               <Paperclip className="h-4 w-4" />
-                              <span>zrób zdjęcie</span>
+                              <span>{t("zrób zdjęcie", "take photo")}</span>
                               <Camera className="h-4 w-4" />
                             </>
                           )}
@@ -329,7 +333,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
 
                       {invoiceData && fileUploadStatus && fileUploadStatus.success && (
                         <div className="mt-2 text-sm text-green-500">
-                          Dane z faktury zostały rozpoznane i będą użyte w formularzu.
+                          {t("Dane z faktury zostały rozpoznane i będą użyte w formularzu.", "Invoice data has been recognized and will be used in the form.")}
                         </div>
                       )}
 
@@ -343,10 +347,10 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <Label className="text-gray-900 text-sm font-normal text-[14px]">
-                        Numery błędów lub/i komentarz
+                        {t("Numery błędów lub/i komentarz", "Error numbers and/or comment")}
                       </Label>
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-600 text-xs">Gdzie szukać</span>
+                        <span className="text-gray-600 text-xs">{t("Gdzie szukać", "Where to find")}</span>
                         <TooltipProvider delayDuration={0}>
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -359,8 +363,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                               sideOffset={5}
                             >
                               <p className="text-sm">
-                                Numer błędu wyświetla się na ekranie autoklawu. Dotknij go, by przejść do kolejnego.
-                                Powtarzaj, aż wszystkie numery zostaną wyświetlone.
+                                {t("Numer błędu wyświetla się na ekranie autoklawu. Dotknij go, by przejść do kolejnego. Powtarzaj, aż wszystkie numery zostaną wyświetlone.", "The error number appears on the autoclave screen. Tap it to move to the next one. Repeat until all numbers are displayed.")}
                               </p>
                             </TooltipContent>
                           </Tooltip>
@@ -377,8 +380,8 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                         >
                           <span className="text-gray-600 text-sm">
                             {selectedErrors.length > 0 || errorComment
-                              ? `${selectedErrors.length > 0 ? `Wybrano ${selectedErrors.length} błędów` : ""}${selectedErrors.length > 0 && errorComment ? " + " : ""}${errorComment ? "komentarz" : ""}`
-                              : "Wybierz numery błędów, zdjęcia lub komentarze"}
+                              ? `${selectedErrors.length > 0 ? t(`Wybrano ${selectedErrors.length} błędów`, `${selectedErrors.length} errors selected`) : ""}${selectedErrors.length > 0 && errorComment ? " + " : ""}${errorComment ? t("komentarz", "comment") : ""}`
+                              : t("Wybierz numery błędów, zdjęcia lub komentarze", "Choose error numbers, photos or comments")}
                           </span>
                           <ChevronDown className="h-4 w-4 text-gray-600" />
                         </button>
@@ -390,7 +393,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                               <div className="flex flex-wrap gap-2 mb-3">
                                 {selectedErrors.map((errorId) => {
                                   const errorNumber = errorId.match(/error(\d+)/)
-                                    ? `Błąd nr ${errorId.match(/error(\d+)/)![1]}`
+                                    ? t(`Błąd nr ${errorId.match(/error(\d+)/)![1]}`, `Error no. ${errorId.match(/error(\d+)/)![1]}`)
                                     : DESCRIPTIVE_ERRORS.find((error) => error.id === errorId)?.label || errorId
 
                                   return (
@@ -416,7 +419,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                               <Textarea
                                 value={errorComment}
                                 onChange={(e) => setErrorComment(e.target.value)}
-                                placeholder="Maszyna wydaje dziwne dźwięki."
+                                placeholder={t("Maszyna wydaje dziwne dźwięki.", "The machine makes strange noises.")}
                                 className="bg-gray-200 border-gray-300 text-gray-900 placeholder:text-gray-400 min-h-[80px] resize-none rounded-lg focus:border-gray-400 focus:ring-0 w-full"
                               />
                             )}
@@ -427,7 +430,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                           {/* Error Selection Section */}
                           <div className="bg-gray-50 p-4 rounded-lg">
                             <div className="flex items-center justify-between mb-3">
-                              <h4 className="text-gray-900 text-sm font-semibold">wybierz z listy błędów</h4>
+                              <h4 className="text-gray-900 text-sm font-semibold">{t("wybierz z listy błędów", "choose from the error list")}</h4>
                             </div>
 
                             <div className="flex flex-wrap items-start content-start p-0 gap-3 mb-4">
@@ -477,7 +480,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                               <div className="flex flex-wrap gap-2 mb-4">
                                 {selectedErrors.map((errorId) => {
                                   const errorNumber = errorId.match(/error(\d+)/)
-                                    ? `Błąd nr ${errorId.match(/error(\d+)/)![1]}`
+                                    ? t(`Błąd nr ${errorId.match(/error(\d+)/)![1]}`, `Error no. ${errorId.match(/error(\d+)/)![1]}`)
                                     : DESCRIPTIVE_ERRORS.find((error) => error.id === errorId)?.label || errorId
 
                                   return (
@@ -501,11 +504,11 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
 
                             {/* Comment Section */}
                             <div className="border-t border-gray-300 pt-4">
-                              <h4 className="text-gray-700 text-sm font-normal mb-3">Komentarz</h4>
+                              <h4 className="text-gray-700 text-sm font-normal mb-3">{t("Komentarz", "Comment")}</h4>
                               <Textarea
                                 value={errorComment}
                                 onChange={(e) => setErrorComment(e.target.value)}
-                                placeholder="Maszyna wydaje dziwne dźwięki."
+                                placeholder={t("Maszyna wydaje dziwne dźwięki.", "The machine makes strange noises.")}
                                 className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 min-h-[80px] resize-none rounded-lg focus:border-gray-400 focus:ring-0 w-full"
                               />
                             </div>
@@ -517,7 +520,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                                 onClick={() => setIsErrorSectionExpanded(false)}
                                 className="bg-transparent border border-gray-300 text-gray-900 hover:border-gray-400 hover:bg-[#5F6A77] px-6 py-2 rounded-full text-sm font-medium transition-colors"
                               >
-                                Potwierdź
+                                {t("Potwierdź", "Confirm")}
                               </button>
                             </div>
                           </div>
@@ -528,7 +531,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
 
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <Label className="text-gray-900 text-sm font-normal text-[14px]">Dodaj folder autokławu</Label>
+                      <Label className="text-gray-900 text-sm font-normal text-[14px]">{t("Dodaj folder autokławu", "Add autoclave folder")}</Label>
                       <TooltipProvider delayDuration={0}>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -541,7 +544,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                             sideOffset={5}
                           >
                             <p className="text-sm">
-                              Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).
+                              {t("Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).", "Attach the USB folder with autoclave logs (USB is located at the back of the device).")}
                             </p>
                           </TooltipContent>
                         </Tooltip>
@@ -579,12 +582,12 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                           <div className="flex items-center gap-2 text-gray-600">
                             <Folder className="h-4 w-4 text-gray-600" />
                             <span>{selectedFolder.name}</span>
-                            <span className="text-gray-600 text-xs">({selectedFolder.files.length} plików)</span>
+                            <span className="text-gray-600 text-xs">({selectedFolder.files.length} {t("plików", "files")})</span>
                           </div>
                         ) : (
                           <>
-                            <span>Przeciągnij lub</span>
-                            <span className="text-gray-600 underline">wybierz folder</span>
+                            <span>{t("Przeciągnij lub", "Drag and")}</span>
+                            <span className="text-gray-600 underline">{t("wybierz folder", "choose folder")}</span>
                             <Folder className="h-4 w-4 text-gray-600" />
                           </>
                         )}
@@ -592,7 +595,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                     </div>
 
                     <p className="text-gray-600 text-xs mt-4">
-                      Wybierz folder o numerze autoklawu,
+                      {t("Wybierz folder o numerze autoklawu,", "Choose folder with autoclave number,")}
                       <br />
                       np. ST01-PL-24-00001
                     </p>
@@ -605,20 +608,20 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
           {/* Right Column - Contact Data */}
           <div>
             <h2 className="text-gray-900 text-xl font-semibold mb-6 tracking-tight">
-              2. Dane kontaktowe <span className="text-gray-600 font-normal">(do przesyłki autoklawu)</span>
+              {t("2. Dane kontaktowe", "2. Contact details")} <span className="text-gray-600 font-normal">({t("do przesyłki autoklawu", "for autoclave shipment")})</span>
             </h2>
 
             <div className="bg-gray-50 rounded-md p-5 space-y-4">
               <div>
                 <Label htmlFor="name" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                  Imię i nazwisko
+                  {t("Imię i nazwisko", "Full name")}
                 </Label>
                 <Input
                   id="name"
                   name="name"
                   value={contactData.name}
                   onChange={handleChange}
-                  placeholder="Wpisz pełne imię i nazwisko"
+                  placeholder={t("Wpisz pełne imię i nazwisko", "Enter full name")}
                   className={getInputStyles(contactData.name)}
                   required
                 />
@@ -626,7 +629,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
 
               <div>
                 <Label htmlFor="email" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                  Adres e-mail
+                  {t("Adres e-mail", "Email address")}
                 </Label>
                 <Input
                   id="email"
@@ -634,7 +637,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                   type="email"
                   value={contactData.email}
                   onChange={handleChange}
-                  placeholder="Podaj adres e-mail"
+                  placeholder={t("Podaj adres e-mail", "Enter email address")}
                   className={getInputStyles(contactData.email)}
                   required
                 />
@@ -642,7 +645,7 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
 
               <div>
                 <Label htmlFor="phone" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                  Telefon
+                  {t("Telefon", "Phone")}
                 </Label>
                 <div className="flex gap-2">
                   <Input
@@ -671,14 +674,14 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
 
               <div>
                 <Label htmlFor="street" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                  Nazwa ulicy
+                  {t("Nazwa ulicy", "Street name")}
                 </Label>
                 <Input
                   id="street"
                   name="street"
                   value={contactData.street}
                   onChange={handleChange}
-                  placeholder="Wpisz pełną nazwę ulicy"
+                  placeholder={t("Wpisz pełną nazwę ulicy", "Enter full street name")}
                   className={getInputStyles(contactData.street)}
                   required
                 />
@@ -687,14 +690,14 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="buildingNumber" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                    Numer budynku
+                    {t("Numer budynku", "Building number")}
                   </Label>
                   <Input
                     id="buildingNumber"
                     name="buildingNumber"
                     value={contactData.buildingNumber}
                     onChange={handleChange}
-                    placeholder="Podaj numer"
+                    placeholder={t("Podaj numer", "Enter number")}
                     className={getInputStyles(contactData.buildingNumber)}
                     required
                   />
@@ -702,14 +705,14 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
 
                 <div>
                   <Label htmlFor="apartmentNumber" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                    Numer lokalu
+                    {t("Numer lokalu", "Apartment number")}
                   </Label>
                   <Input
                     id="apartmentNumber"
                     name="apartmentNumber"
                     value={contactData.apartmentNumber}
                     onChange={handleChange}
-                    placeholder="Wpisz jeżeli występuje"
+                    placeholder={t("Wpisz jeżeli występuje", "Enter if applicable")}
                     className={getInputStyles(contactData.apartmentNumber)}
                   />
                 </div>
