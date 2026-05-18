@@ -74,16 +74,26 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Republika Czeska": "República Checa",
     "Czechy": "Chéquia",
     "Słowacja": "Eslováquia",
-    "Wpisz nazwę firmy (opcjonalne)": "Introduza o nome da empresa (opcional)",
-    "Wpisz numer VAT (opcjonalne)": "Introduza o número de IVA (opcional)",
+    "Wpisz nazwę firmy": "Introduza o nome da empresa",
+    "Wpisz numer VAT": "Introduza o número de IVA",
+    "Nazwa firmy jest wymagana.": "O nome da empresa é obrigatório.",
+    "Numer VAT jest wymagany.": "O número de IVA é obrigatório.",
+    "Imię i nazwisko jest wymagane.": "O nome completo é obrigatório.",
+    "Adres e-mail jest wymagany.": "O endereço de e‑mail é obrigatório.",
+    "Numer telefonu jest wymagany.": "O número de telefone é obrigatório.",
+    "Nazwa ulicy jest wymagana.": "O nome da rua é obrigatório.",
+    "Numer lokalu jest wymagany.": "O número da porta é obrigatório.",
+    "Kod pocztowy jest wymagany.": "O código‑postal é obrigatório.",
+    "Miasto jest wymagane.": "A cidade é obrigatória.",
+    "Kraj jest wymagany.": "O país é obrigatório.",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Por favor, aceite todos os consentimentos obrigatórios antes de enviar o pedido.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
       "Concordo com a recolha e o tratamento dos dados fornecidos neste registo, caso o dispositivo tenha sido utilizado de forma incompatível com o manual de instruções. As disposições detalhadas encontram-se no documento \"Condições de garantia\". As instruções de utilização e as condições de garantia podem ser consultadas na nossa Lista de documentos disponíveis.",
-    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
-      "Ao preencher o formulário de reclamação, o Cliente autoriza o tratamento de dados pessoais para a execução do processo de reclamação pela Erbo Technology Sp. z o.o., com sede em Gdynia. O responsável pelo tratamento dos dados pessoais é a Erbo Technology Sp. z o.o., com sede em Gdynia. Os dados pessoais são protegidos em conformidade com a legislação aplicável, de forma a impedir o acesso por terceiros. O Cliente tem o direito de consultar os seus dados pessoais, corrigi-los e solicitar a sua eliminação ou atualização.",
-    "Akceptuję Politykę Prywatności Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Erbo Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
-      "Aceito a Política de Privacidade da Erbo Technology Sp. z o.o., com sede em Gdynia. Concordo em ser contactado por representantes da Erbo Technology Sp. z o.o., com sede em Gdynia, através dos dados de contacto que forneci no formulário.",
+    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
+      "Ao preencher o formulário de reclamação, o Cliente autoriza o tratamento de dados pessoais para a execução do processo de reclamação pela Enbio Technology Sp. z o.o., com sede em Gdynia. O responsável pelo tratamento dos dados pessoais é a Enbio Technology Sp. z o.o., com sede em Gdynia. Os dados pessoais são protegidos em conformidade com a legislação aplicável, de forma a impedir o acesso por terceiros. O Cliente tem o direito de consultar os seus dados pessoais, corrigi-los e solicitar a sua eliminação ou atualização.",
+    "Akceptuję Politykę Prywatności Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Enbio Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
+      "Aceito a Política de Privacidade da Enbio Technology Sp. z o.o., com sede em Gdynia. Concordo em ser contactado por representantes da Enbio Technology Sp. z o.o., com sede em Gdynia, através dos dados de contacto que forneci no formulário.",
   },
   en: {
     "1. Akcesorium": "1. Accessory",
@@ -140,14 +150,24 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Republika Czeska": "Czech Republic",
     "Czechy": "Czech Republic",
     "Słowacja": "Slovakia",
-    "Wpisz nazwę firmy (opcjonalne)": "Enter company name (optional)",
-    "Wpisz numer VAT (opcjonalne)": "Enter VAT number (optional)",
+    "Wpisz nazwę firmy": "Enter company name",
+    "Wpisz numer VAT": "Enter VAT number",
+    "Nazwa firmy jest wymagana.": "Company name is required.",
+    "Numer VAT jest wymagany.": "VAT number is required.",
+    "Imię i nazwisko jest wymagane.": "Full name is required.",
+    "Adres e-mail jest wymagany.": "E-mail address is required.",
+    "Numer telefonu jest wymagany.": "Phone number is required.",
+    "Nazwa ulicy jest wymagana.": "Street is required.",
+    "Numer lokalu jest wymagany.": "Apartment number is required.",
+    "Kod pocztowy jest wymagany.": "Postal code is required.",
+    "Miasto jest wymagane.": "City is required.",
+    "Kraj jest wymagany.": "Country is required.",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Please accept all required consents before submitting the request.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
       "I agree to the collection and processing of the data provided in this registration if the device was used in a way that does not comply with the operating instructions. Details are set out in the \"Warranty conditions\" document. User instructions and warranty conditions can be found on our List of available documents.",
-    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
-      "By completing the complaint form, the Customer consents to the processing of personal data for the purpose of the complaint process by Erbo Technology Sp. z o.o., based in Gdynia. The data controller is Erbo Technology Sp. z o.o., based in Gdynia. Personal data are protected in accordance with the Personal Data Protection Act of 29.08.1997 (Journal of Laws No. 101 of 2002, item 926 as amended) in a way that prevents access by third parties. The Customer has the right to access, correct and request deletion or update of their personal data.",
+    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
+      "By completing the complaint form, the Customer consents to the processing of personal data for the purpose of the complaint process by Enbio Technology Sp. z o.o., based in Gdynia. The data controller is Enbio Technology Sp. z o.o., based in Gdynia. Personal data are protected in accordance with the Personal Data Protection Act of 29.08.1997 (Journal of Laws No. 101 of 2002, item 926 as amended) in a way that prevents access by third parties. The Customer has the right to access, correct and request deletion or update of their personal data.",
     // Autoclave descriptive errors when stored as Polish labels
     "Błąd wyświetlacza": "Display error",
     "Główne działanie": "Main operation",
@@ -158,8 +178,8 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Niedopasowana obudowa drzwi": "Mismatched door housing",
     "Problem z otwieraniem drzwi": "Door opening problem",
     "Wyciek / przeciek wody": "Water leak",
-    "Akceptuję Politykę Prywatności Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Erbo Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
-      "I accept the Privacy Policy of Erbo Technology Sp. z o.o., based in Gdynia. I consent to being contacted by representatives of Erbo Technology Sp. z o.o., based in Gdynia, using the contact details I provided in the form.",
+    "Akceptuję Politykę Prywatności Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Enbio Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
+      "I accept the Privacy Policy of Enbio Technology Sp. z o.o., based in Gdynia. I consent to being contacted by representatives of Enbio Technology Sp. z o.o., based in Gdynia, using the contact details I provided in the form.",
   },
   es: {
     "1. Akcesorium": "1. Accesorio",
@@ -215,16 +235,26 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Republika Czeska": "República Checa",
     "Czechy": "República Checa",
     "Słowacja": "Eslovaquia",
-    "Wpisz nazwę firmy (opcjonalne)": "Introduzca el nombre de la empresa (opcional)",
-    "Wpisz numer VAT (opcjonalne)": "Introduzca el VAT (opcional)",
+    "Wpisz nazwę firmy": "Introduzca el nombre de la empresa",
+    "Wpisz numer VAT": "Introduzca el número de IVA",
+    "Nazwa firmy jest wymagana.": "El nombre de la empresa es obligatorio.",
+    "Numer VAT jest wymagany.": "El número de IVA es obligatorio.",
+    "Imię i nazwisko jest wymagane.": "El nombre y los apellidos son obligatorios.",
+    "Adres e-mail jest wymagany.": "El correo electrónico es obligatorio.",
+    "Numer telefonu jest wymagany.": "El número de teléfono es obligatorio.",
+    "Nazwa ulicy jest wymagana.": "La calle es obligatoria.",
+    "Numer lokalu jest wymagany.": "El número de local es obligatorio.",
+    "Kod pocztowy jest wymagany.": "El código postal es obligatorio.",
+    "Miasto jest wymagane.": "La ciudad es obligatoria.",
+    "Kraj jest wymagany.": "El país es obligatorio.",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Por favor acepte todos los consentimientos requeridos antes de enviar la solicitud.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
       "Acepto la recogida y el tratamiento de los datos facilitados en esta inscripción si el dispositivo se ha utilizado de forma no conforme a las instrucciones. Los detalles figuran en el documento \"Condiciones de garantía\". Las instrucciones y condiciones de garantía están en nuestra Lista de documentos disponibles.",
-    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
-      "Al cumplimentar el formulario de reclamación, el Cliente consiente el tratamiento de datos personales para el proceso de reclamación por Erbo Technology Sp. z o.o., con sede en Gdynia. El responsable del tratamiento es Erbo Technology Sp. z o.o., Gdynia. Los datos se protegen según la ley de protección de datos. El Cliente puede acceder, rectificar y solicitar la supresión o actualización de sus datos.",
-    "Akceptuję Politykę Prywatności Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Erbo Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
-      "Acepto la Política de Privacidad de Erbo Technology Sp. z o.o., Gdynia. Consiento el contacto por parte de Erbo Technology Sp. z o.o. mediante los datos facilitados en el formulario.",
+    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
+      "Al cumplimentar el formulario de reclamación, el Cliente consiente el tratamiento de datos personales para el proceso de reclamación por Enbio Technology Sp. z o.o., con sede en Gdynia. El responsable del tratamiento es Enbio Technology Sp. z o.o., Gdynia. Los datos se protegen según la ley de protección de datos. El Cliente puede acceder, rectificar y solicitar la supresión o actualización de sus datos.",
+    "Akceptuję Politykę Prywatności Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Enbio Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
+      "Acepto la Política de Privacidad de Enbio Technology Sp. z o.o., Gdynia. Consiento el contacto por parte de Enbio Technology Sp. z o.o. mediante los datos facilitados en el formulario.",
   },
   fr: {
     "1. Akcesorium": "1. Accessoire",
@@ -280,16 +310,26 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Republika Czeska": "République tchèque",
     "Czechy": "République tchèque",
     "Słowacja": "Slovaquie",
-    "Wpisz nazwę firmy (opcjonalne)": "Entrez le nom de l’entreprise (optionnel)",
-    "Wpisz numer VAT (opcjonalne)": "Entrez le n° TVA (optionnel)",
+    "Wpisz nazwę firmy": "Entrez le nom de l’entreprise",
+    "Wpisz numer VAT": "Entrez le numéro de TVA",
+    "Nazwa firmy jest wymagana.": "Le nom de l’entreprise est obligatoire.",
+    "Numer VAT jest wymagany.": "Le numéro de TVA est obligatoire.",
+    "Imię i nazwisko jest wymagane.": "Le nom et le prénom sont obligatoires.",
+    "Adres e-mail jest wymagany.": "L’adresse e‑mail est obligatoire.",
+    "Numer telefonu jest wymagany.": "Le numéro de téléphone est obligatoire.",
+    "Nazwa ulicy jest wymagana.": "La rue est obligatoire.",
+    "Numer lokalu jest wymagany.": "Le numéro de local est obligatoire.",
+    "Kod pocztowy jest wymagany.": "Le code postal est obligatoire.",
+    "Miasto jest wymagane.": "La ville est obligatoire.",
+    "Kraj jest wymagany.": "Le pays est obligatoire.",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Veuillez accepter tous les consentements requis avant d’envoyer la demande.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
       "J’accepte la collecte et le traitement des données fournies si l’appareil a été utilisé en dehors des instructions. Détails dans le document « Conditions de garantie ». Liste des documents disponibles sur notre site.",
-    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
-      "En remplissant le formulaire de réclamation, le Client consent au traitement des données personnelles par Erbo Technology Sp. z o.o., Gdynia. Le responsable du traitement est Erbo Technology Sp. z o.o. Les données sont protégées conformément à la loi. Le Client peut accéder, rectifier et demander la suppression ou la mise à jour de ses données.",
-    "Akceptuję Politykę Prywatności Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Erbo Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
-      "J’accepte la Politique de confidentialité d’Erbo Technology Sp. z o.o., Gdynia. J’accepte d’être contacté par Erbo Technology Sp. z o.o. via les coordonnées fournies.",
+    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
+      "En remplissant le formulaire de réclamation, le Client consent au traitement des données personnelles par Enbio Technology Sp. z o.o., Gdynia. Le responsable du traitement est Enbio Technology Sp. z o.o. Les données sont protégées conformément à la loi. Le Client peut accéder, rectifier et demander la suppression ou la mise à jour de ses données.",
+    "Akceptuję Politykę Prywatności Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Enbio Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
+      "J’accepte la Politique de confidentialité d’Enbio Technology Sp. z o.o., Gdynia. J’accepte d’être contacté par Enbio Technology Sp. z o.o. via les coordonnées fournies.",
   },
   de: {
     "1. Akcesorium": "1. Zubehör",
@@ -345,16 +385,26 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Republika Czeska": "Tschechische Republik",
     "Czechy": "Tschechische Republik",
     "Słowacja": "Slowakei",
-    "Wpisz nazwę firmy (opcjonalne)": "Firmenname eingeben (optional)",
-    "Wpisz numer VAT (opcjonalne)": "USt-IdNr. eingeben (optional)",
+    "Wpisz nazwę firmy": "Firmenname eingeben",
+    "Wpisz numer VAT": "USt-IdNr. eingeben",
+    "Nazwa firmy jest wymagana.": "Firmenname ist erforderlich.",
+    "Numer VAT jest wymagany.": "USt-IdNr. ist erforderlich.",
+    "Imię i nazwisko jest wymagane.": "Vor- und Nachname sind erforderlich.",
+    "Adres e-mail jest wymagany.": "E-Mail-Adresse ist erforderlich.",
+    "Numer telefonu jest wymagany.": "Telefonnummer ist erforderlich.",
+    "Nazwa ulicy jest wymagana.": "Straße ist erforderlich.",
+    "Numer lokalu jest wymagany.": "Hausnummer ist erforderlich.",
+    "Kod pocztowy jest wymagany.": "Postleitzahl ist erforderlich.",
+    "Miasto jest wymagane.": "Stadt ist erforderlich.",
+    "Kraj jest wymagany.": "Land ist erforderlich.",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Bitte akzeptieren Sie alle erforderlichen Einwilligungen vor dem Absenden.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
       "Ich stimme der Erhebung und Verarbeitung der Daten zu, sofern das Gerät nicht gemäß der Bedienungsanleitung verwendet wurde. Details siehe Dokument „Garantiebedingungen\".",
-    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
-      "Mit dem Ausfüllen des Reklamationsformulars willigt der Kunde in die Verarbeitung personenbezogener Daten durch Erbo Technology Sp. z o.o., Gdynia, ein. Verantwortlicher ist Erbo Technology Sp. z o.o. Der Kunde hat das Recht auf Zugang, Berichtigung und Löschung seiner Daten.",
-    "Akceptuję Politykę Prywatności Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Erbo Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
-      "Ich akzeptiere die Datenschutzrichtlinie von Erbo Technology Sp. z o.o., Gdynia. Ich stimme dem Kontakt durch Erbo Technology Sp. z o.o. über die im Formular angegebenen Daten zu.",
+    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
+      "Mit dem Ausfüllen des Reklamationsformulars willigt der Kunde in die Verarbeitung personenbezogener Daten durch Enbio Technology Sp. z o.o., Gdynia, ein. Verantwortlicher ist Enbio Technology Sp. z o.o. Der Kunde hat das Recht auf Zugang, Berichtigung und Löschung seiner Daten.",
+    "Akceptuję Politykę Prywatności Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Enbio Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
+      "Ich akzeptiere die Datenschutzrichtlinie von Enbio Technology Sp. z o.o., Gdynia. Ich stimme dem Kontakt durch Enbio Technology Sp. z o.o. über die im Formular angegebenen Daten zu.",
   },
   it: {
     "1. Akcesorium": "1. Accessorio",
@@ -410,16 +460,26 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Republika Czeska": "Repubblica Ceca",
     "Czechy": "Repubblica Ceca",
     "Słowacja": "Slovacchia",
-    "Wpisz nazwę firmy (opcjonalne)": "Inserire ragione sociale (opzionale)",
-    "Wpisz numer VAT (opcjonalne)": "Inserire P.IVA (opzionale)",
+    "Wpisz nazwę firmy": "Inserire ragione sociale",
+    "Wpisz numer VAT": "Inserire partita IVA",
+    "Nazwa firmy jest wymagana.": "Il nome dell'azienda è obbligatorio.",
+    "Numer VAT jest wymagany.": "La partita IVA è obbligatoria.",
+    "Imię i nazwisko jest wymagane.": "Nome e cognome obbligatori.",
+    "Adres e-mail jest wymagany.": "L'indirizzo e-mail è obbligatorio.",
+    "Numer telefonu jest wymagany.": "Il numero di telefono è obbligatorio.",
+    "Nazwa ulicy jest wymagana.": "La via è obbligatoria.",
+    "Numer lokalu jest wymagany.": "Il numero civico è obbligatorio.",
+    "Kod pocztowy jest wymagany.": "Il CAP è obbligatorio.",
+    "Miasto jest wymagane.": "La città è obbligatoria.",
+    "Kraj jest wymagany.": "Il paese è obbligatorio.",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Si prega di accettare tutti i consensi richiesti prima dell’invio.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
       "Acconsento alla raccolta e al trattamento dei dati se il dispositivo è stato usato in modo non conforme alle istruzioni. Dettagli nel documento \"Condizioni di garanzia\".",
-    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
-      "Compilando il modulo di reclamo, il Cliente consente al trattamento dei dati personali da parte di Erbo Technology Sp. z o.o., Gdynia. Titolare del trattamento: Erbo Technology Sp. z o.o. Il Cliente può accedere, rettificare e chiedere la cancellazione dei propri dati.",
-    "Akceptuję Politykę Prywatności Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Erbo Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
-      "Accetto l’Informativa sulla privacy di Erbo Technology Sp. z o.o., Gdynia. Consento al contatto da parte di Erbo Technology Sp. z o.o. tramite i dati forniti nel modulo.",
+    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
+      "Compilando il modulo di reclamo, il Cliente consente al trattamento dei dati personali da parte di Enbio Technology Sp. z o.o., Gdynia. Titolare del trattamento: Enbio Technology Sp. z o.o. Il Cliente può accedere, rettificare e chiedere la cancellazione dei propri dati.",
+    "Akceptuję Politykę Prywatności Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Enbio Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
+      "Accetto l’Informativa sulla privacy di Enbio Technology Sp. z o.o., Gdynia. Consento al contatto da parte di Enbio Technology Sp. z o.o. tramite i dati forniti nel modulo.",
   },
   uk: {
     "1. Akcesorium": "1. Аксесуар",
@@ -475,16 +535,26 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Republika Czeska": "Чеська Республіка",
     "Czechy": "Чеська Республіка",
     "Słowacja": "Словаччина",
-    "Wpisz nazwę firmy (opcjonalne)": "Введіть назву компанії (необов’язково)",
-    "Wpisz numer VAT (opcjonalne)": "Введіть ІПН (необов’язково)",
+    "Wpisz nazwę firmy": "Введіть назву компанії",
+    "Wpisz numer VAT": "Введіть номер ПДВ",
+    "Nazwa firmy jest wymagana.": "Назва компанії обов'язкова.",
+    "Numer VAT jest wymagany.": "Номер ПДВ обов'язковий.",
+    "Imię i nazwisko jest wymagane.": "Ім'я та прізвище обов'язкові.",
+    "Adres e-mail jest wymagany.": "Адреса e-mail обов'язкова.",
+    "Numer telefonu jest wymagany.": "Номер телефону обов'язковий.",
+    "Nazwa ulicy jest wymagana.": "Вулиця обов'язкова.",
+    "Numer lokalu jest wymagany.": "Номер приміщення обов'язковий.",
+    "Kod pocztowy jest wymagany.": "Поштовий індекс обов'язковий.",
+    "Miasto jest wymagane.": "Місто обов'язкове.",
+    "Kraj jest wymagany.": "Країна обов'язкова.",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Будь ласка, прийміть усі необхідні згоди перед надсиланням.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
       "Погоджуюсь на збір та обробку даних, якщо пристрій використовувався не згідно з інструкцією. Деталі в документі «Умови гарантії».",
-    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
-      "Заповнюючи форму скарги, Клієнт погоджується на обробку персональних даних Erbo Technology Sp. z o.o., Гдиня. Адміністратор: Erbo Technology Sp. z o.o. Клієнт має право доступу, виправлення та видалення даних.",
-    "Akceptuję Politykę Prywatności Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Erbo Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
-      "Приймаю Політику конфіденційності Erbo Technology Sp. z o.o., Гдиня. Погоджуюсь на контакт з представниками Erbo Technology Sp. z o.o. за вказаними в формі даними.",
+    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
+      "Заповнюючи форму скарги, Клієнт погоджується на обробку персональних даних Enbio Technology Sp. z o.o., Гдиня. Адміністратор: Enbio Technology Sp. z o.o. Клієнт має право доступу, виправлення та видалення даних.",
+    "Akceptuję Politykę Prywatności Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Enbio Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
+      "Приймаю Політику конфіденційності Enbio Technology Sp. z o.o., Гдиня. Погоджуюсь на контакт з представниками Enbio Technology Sp. z o.o. за вказаними в формі даними.",
   },
   ru: {
     "1. Akcesorium": "1. Аксессуар",
@@ -540,16 +610,26 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Republika Czeska": "Чешская Республика",
     "Czechy": "Чешская Республика",
     "Słowacja": "Словакия",
-    "Wpisz nazwę firmy (opcjonalne)": "Введите название компании (необязательно)",
-    "Wpisz numer VAT (opcjonalne)": "Введите ИНН (необязательно)",
+    "Wpisz nazwę firmy": "Введите название компании",
+    "Wpisz numer VAT": "Введите номер НДС",
+    "Nazwa firmy jest wymagana.": "Название компании обязательно.",
+    "Numer VAT jest wymagany.": "Номер НДС обязателен.",
+    "Imię i nazwisko jest wymagane.": "Имя и фамилия обязательны.",
+    "Adres e-mail jest wymagany.": "Адрес e-mail обязателен.",
+    "Numer telefonu jest wymagany.": "Номер телефона обязателен.",
+    "Nazwa ulicy jest wymagana.": "Улица обязательна.",
+    "Numer lokalu jest wymagany.": "Номер помещения обязателен.",
+    "Kod pocztowy jest wymagany.": "Почтовый индекс обязателен.",
+    "Miasto jest wymagane.": "Город обязателен.",
+    "Kraj jest wymagany.": "Страна обязательна.",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Пожалуйста, примите все необходимые согласия перед отправкой.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
       "Согласен на сбор и обработку данных, если устройство использовалось не по инструкции. Подробности в документе «Условия гарантии».",
-    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
-      "Заполняя форму жалобы, Клиент соглашается на обработку персональных данных Erbo Technology Sp. z o.o., Гдыня. Администратор: Erbo Technology Sp. z o.o. Клиент имеет право доступа, исправления и удаления данных.",
-    "Akceptuję Politykę Prywatności Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Erbo Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
-      "Принимаю Политику конфиденциальности Erbo Technology Sp. z o.o., Гдыня. Согласен на контакт с представителями Erbo Technology Sp. z o.o. по указанным в форме данным.",
+    "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.":
+      "Заполняя форму жалобы, Клиент соглашается на обработку персональных данных Enbio Technology Sp. z o.o., Гдыня. Администратор: Enbio Technology Sp. z o.o. Клиент имеет право доступа, исправления и удаления данных.",
+    "Akceptuję Politykę Prywatności Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Enbio Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.":
+      "Принимаю Политику конфиденциальности Enbio Technology Sp. z o.o., Гдыня. Согласен на контакт с представителями Enbio Technology Sp. z o.o. по указанным в форме данным.",
   },
 }
 function tr(lang: string, text: string): string {
@@ -614,6 +694,7 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
     (typeof window !== "undefined" ? localStorage.getItem("selectedCategory") : null);
 
   const isAccessory = resolvedCategory === "accessory";
+  const requiredMark = <span className="text-red-500 ml-1">*</span>
 
   // ✅ Lista do Selecta z twardym fallbackiem
   const errorsList = isAccessory
@@ -971,6 +1052,43 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
   }
 
   const handleSave = (section: string) => {
+    if (section === "contact") {
+      const errors: string[] = []
+      if (!(contactData.name || "").trim()) {
+        errors.push(tr(language, "Imię i nazwisko jest wymagane."))
+      }
+      if (!(contactData.email || "").trim()) {
+        errors.push(tr(language, "Adres e-mail jest wymagany."))
+      }
+      if (!(contactData.phone || "").trim()) {
+        errors.push(tr(language, "Numer telefonu jest wymagany."))
+      }
+      if (!(contactData.companyName || "").trim()) {
+        errors.push(tr(language, "Nazwa firmy jest wymagana."))
+      }
+      if (!(contactData.vatNumber || "").trim()) {
+        errors.push(tr(language, "Numer VAT jest wymagany."))
+      }
+      if (!(contactData.street || "").trim()) {
+        errors.push(tr(language, "Nazwa ulicy jest wymagana."))
+      }
+      if (!(contactData.buildingNumber || "").trim()) {
+        errors.push(tr(language, "Numer lokalu jest wymagany."))
+      }
+      if (!(contactData.postalCode || "").trim()) {
+        errors.push(tr(language, "Kod pocztowy jest wymagany."))
+      }
+      if (!(contactData.city || "").trim()) {
+        errors.push(tr(language, "Miasto jest wymagane."))
+      }
+      if (!(contactData.country || "").trim()) {
+        errors.push(tr(language, "Kraj jest wymagany."))
+      }
+      if (errors.length > 0) {
+        alert(errors.join("\n"))
+        return
+      }
+    }
     setEditingSection(null)
     // Here you would typically save the data to a backend
     //alert(`Zmiany w sekcji "${section}" zostały zapisane.`)
@@ -1403,90 +1521,130 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
           {editingSection === "contact" ? (
             <div className="space-y-4">
               <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Imię i Nazwisko")}</Label>
+                <Label className="text-gray-900 text-sm mb-2 block">
+                  {tr(language, "Imię i Nazwisko")}
+                  {requiredMark}
+                </Label>
                 <Input
                   value={contactData.name}
                   onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
                   className={getInputStyles(contactData.name)}
+                  required
                 />
               </div>
 
               <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "E-mail")}</Label>
+                <Label className="text-gray-900 text-sm mb-2 block">
+                  {tr(language, "E-mail")}
+                  {requiredMark}
+                </Label>
                 <Input
+                  type="email"
                   value={contactData.email}
                   onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
                   className={getInputStyles(contactData.email)}
+                  required
                 />
               </div>
 
               <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Numer telefonu")}</Label>
+                <Label className="text-gray-900 text-sm mb-2 block">
+                  {tr(language, "Numer telefonu")}
+                  {requiredMark}
+                </Label>
                 <Input
                   value={contactData.phone}
                   onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
                   className={getInputStyles(contactData.phone)}
+                  required
                 />
               </div>
 
               <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Nazwa firmy")}</Label>
+                <Label className="text-gray-900 text-sm mb-2 block">
+                  {tr(language, "Nazwa firmy")}
+                  {requiredMark}
+                </Label>
                 <Input
                   value={contactData.companyName || ""}
                   onChange={(e) => setContactData({ ...contactData, companyName: e.target.value })}
                   className={getInputStyles(contactData.companyName || "")}
-                  placeholder={tr(language, "Wpisz nazwę firmy (opcjonalne)")}
+                  placeholder={tr(language, "Wpisz nazwę firmy")}
+                  required
                 />
               </div>
 
               <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Numer VAT")}</Label>
+                <Label className="text-gray-900 text-sm mb-2 block">
+                  {tr(language, "Numer VAT")}
+                  {requiredMark}
+                </Label>
                 <Input
                   value={contactData.vatNumber || ""}
                   onChange={(e) => setContactData({ ...contactData, vatNumber: e.target.value })}
                   className={getInputStyles(contactData.vatNumber || "")}
-                  placeholder={tr(language, "Wpisz numer VAT (opcjonalne)")}
+                  placeholder={tr(language, "Wpisz numer VAT")}
+                  required
                 />
               </div>
 
               <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Ulica")}</Label>
+                <Label className="text-gray-900 text-sm mb-2 block">
+                  {tr(language, "Ulica")}
+                  {requiredMark}
+                </Label>
                 <Input
                   value={contactData.street}
                   onChange={(e) => setContactData({ ...contactData, street: e.target.value })}
                   className={getInputStyles(contactData.street)}
+                  required
                 />
               </div>
 
               <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Numer lokalu")}</Label>
+                <Label className="text-gray-900 text-sm mb-2 block">
+                  {tr(language, "Numer lokalu")}
+                  {requiredMark}
+                </Label>
                 <Input
                   value={contactData.buildingNumber}
                   onChange={(e) => setContactData({ ...contactData, buildingNumber: e.target.value })}
                   className={getInputStyles(contactData.buildingNumber)}
+                  required
                 />
               </div>
 
               <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Kod pocztowy")}</Label>
+                <Label className="text-gray-900 text-sm mb-2 block">
+                  {tr(language, "Kod pocztowy")}
+                  {requiredMark}
+                </Label>
                 <Input
                   value={contactData.postalCode}
                   onChange={(e) => setContactData({ ...contactData, postalCode: e.target.value })}
                   className={getInputStyles(contactData.postalCode)}
+                  required
                 />
               </div>
 
               <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Miasto")}</Label>
+                <Label className="text-gray-900 text-sm mb-2 block">
+                  {tr(language, "Miasto")}
+                  {requiredMark}
+                </Label>
                 <Input
                   value={contactData.city}
                   onChange={(e) => setContactData({ ...contactData, city: e.target.value })}
                   className={getInputStyles(contactData.city)}
+                  required
                 />
               </div>
 
               <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Kraj")}</Label>
+                <Label className="text-gray-900 text-sm mb-2 block">
+                  {tr(language, "Kraj")}
+                  {requiredMark}
+                </Label>
                 <Select
                   value={contactData.country || "poland"}
                   onValueChange={(value) => setContactData({ ...contactData, country: value })}
@@ -1581,8 +1739,8 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
               {renderField("Imię i Nazwisko", contactData.name)}
               {renderField("E-mail", contactData.email)}
               {renderField("Numer telefonu", contactData.phone)}
-              {contactData.companyName && renderField("Nazwa firmy", contactData.companyName)}
-              {contactData.vatNumber && renderField("Numer VAT", contactData.vatNumber)}
+              {renderField("Nazwa firmy", contactData.companyName || tr(language, "brak danych"))}
+              {renderField("Numer VAT", contactData.vatNumber || tr(language, "brak danych"))}
               {renderField("Ulica", contactData.street)}
               {renderField("Numer lokalu", contactData.buildingNumber)}
               {renderField("Kod pocztowy", contactData.postalCode)}
@@ -1694,7 +1852,7 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
               </div>
               <div>
                 <Label className="text-gray-700 text-xs font-normal cursor-pointer">
-                  {tr(language, "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.")}
+                  {tr(language, "Wypełniając formularz reklamacyjny, Klient wyraża zgodę na przetwarzanie danych osobowych w celu realizacji procesu reklamacyjnego przez Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Administratorem danych osobowych jest Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Dane osobowe są chronione zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych (Dz.U. Nr 101 z 2002 r., poz. 926 z późn. zm.) w sposób uniemożliwiający dostęp do nich osobom trzecim. Klient ma prawo wglądu do swoich danych osobowych, ich poprawiania oraz żądania usunięcia lub aktualizacji.")}
                 </Label>
               </div>
             </div>
@@ -1707,7 +1865,7 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
               </div>
               <div>
                 <Label className="text-gray-700 text-xs font-normal cursor-pointer">
-                  {tr(language, "Akceptuję Politykę Prywatności Erbo Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Erbo Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.")}
+                  {tr(language, "Akceptuję Politykę Prywatności Enbio Technology Sp. z o.o., z siedzibą w Gdyni. Wyrażam zgodę na kontakt przedstawiciele Enbio Technology Sp. z o.o., z siedzibą w Gdyni za pomocą danych kontaktowych, które podałem w formularzu.")}
                 </Label>
               </div>
             </div>

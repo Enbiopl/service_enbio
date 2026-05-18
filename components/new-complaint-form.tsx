@@ -205,6 +205,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Numer budynku jest wymagany.": "O número do edifício é obrigatório.",
     "Kod pocztowy jest wymagany.": "O código‑postal é obrigatório.",
     "Miasto jest wymagane.": "A cidade é obrigatória.",
+    "Nazwa firmy jest wymagana.": "O nome da empresa é obrigatório.",
+    "Numer VAT jest wymagany.": "O número de IVA é obrigatório.",
     "Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).":
       "Anexe a pasta da pen USB com os registos do autoclave (a pen está na parte traseira do dispositivo).",
     "Krótki opis (np. otrzymałem inny produkt niż zamawiałem)...":
@@ -362,6 +364,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Numer budynku jest wymagany.": "Building number is required.",
     "Kod pocztowy jest wymagany.": "Postal code is required.",
     "Miasto jest wymagane.": "City is required.",
+    "Nazwa firmy jest wymagana.": "Company name is required.",
+    "Numer VAT jest wymagany.": "VAT number is required.",
     "Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).":
       "Attach the folder from the USB stick with autoclave logs (the USB stick is located at the back of the device).",
     "Krótki opis (np. otrzymałem inny produkt niż zamawiałem)...":
@@ -521,6 +525,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Numer budynku jest wymagany.": "Le numéro du bâtiment est obligatoire.",
     "Kod pocztowy jest wymagany.": "Le code postal est obligatoire.",
     "Miasto jest wymagane.": "La ville est obligatoire.",
+    "Nazwa firmy jest wymagana.": "Le nom de l’entreprise est obligatoire.",
+    "Numer VAT jest wymagany.": "Le numéro de TVA est obligatoire.",
     "Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).":
       "Joignez le dossier du lecteur USB contenant les journaux de l’autoclave (le lecteur se trouve à l’arrière de l’appareil).",
     "Krótki opis (np. otrzymałem inny produkt niż zamawiałem)...":
@@ -683,6 +689,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Numer budynku jest wymagany.": "El número del edificio es obligatorio.",
     "Kod pocztowy jest wymagany.": "El código postal es obligatorio.",
     "Miasto jest wymagane.": "La ciudad es obligatoria.",
+    "Nazwa firmy jest wymagana.": "El nombre de la empresa es obligatorio.",
+    "Numer VAT jest wymagany.": "El número de IVA es obligatorio.",
     "Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).":
       "Adjunta la carpeta del pendrive con los registros del autoclave (el pendrive se encuentra en la parte trasera del dispositivo).",
     "Krótki opis (np. otrzymałem inny produkt niż zamawiałem)...":
@@ -823,6 +831,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Numer budynku jest wymagany.": "Hausnummer ist erforderlich.",
     "Kod pocztowy jest wymagany.": "Postleitzahl ist erforderlich.",
     "Miasto jest wymagane.": "Stadt ist erforderlich.",
+    "Nazwa firmy jest wymagana.": "Firmenname ist erforderlich.",
+    "Numer VAT jest wymagany.": "USt-IdNr. ist erforderlich.",
     "Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).":
       "Fügen Sie den Ordner vom USB-Stick mit Autoklaven-Logs bei (der USB-Stick befindet sich auf der Geräterückseite).",
     "Krótki opis (np. otrzymałem inny produkt niż zamawiałem)...":
@@ -980,6 +990,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Numer budynku jest wymagany.": "Numero civico obbligatorio.",
     "Kod pocztowy jest wymagany.": "CAP obbligatorio.",
     "Miasto jest wymagane.": "Città obbligatoria.",
+    "Nazwa firmy jest wymagana.": "Il nome dell'azienda è obbligatorio.",
+    "Numer VAT jest wymagany.": "La partita IVA è obbligatoria.",
     "Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).":
       "Allega la cartella dalla pen drive con i log dell'autoclave (la pen drive si trova sul retro del dispositivo).",
     "Krótki opis (np. otrzymałem inny produkt niż zamawiałem)...":
@@ -1134,6 +1146,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Numer budynku jest wymagany.": "Номер будинку обов'язковий.",
     "Kod pocztowy jest wymagany.": "Поштовий індекс обов'язковий.",
     "Miasto jest wymagane.": "Місто обов'язкове.",
+    "Nazwa firmy jest wymagana.": "Назва компанії обов'язкова.",
+    "Numer VAT jest wymagany.": "Номер ПДВ обов'язковий.",
     "Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).":
       "Додайте папку з USB-накопичувача з логами автоклава (USB ззаду пристрою).",
     "Krótki opis (np. otrzymałem inny produkt niż zamawiałem)...":
@@ -1288,6 +1302,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Numer budynku jest wymagany.": "Номер дома обязателен.",
     "Kod pocztowy jest wymagany.": "Почтовый индекс обязателен.",
     "Miasto jest wymagane.": "Город обязателен.",
+    "Nazwa firmy jest wymagana.": "Название компании обязательно.",
+    "Numer VAT jest wymagany.": "Номер НДС обязателен.",
     "Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).":
       "Приложите папку с USB-накопителя с логами автоклава (USB сзади устройства).",
     "Krótki opis (np. otrzymałem inny produkt niż zamawiałem)...":
@@ -1867,6 +1883,42 @@ export default function NewComplaintForm() {
     }))
   }
 
+  const renderCompanyVatFields = () => (
+    <>
+      <div>
+        <Label htmlFor="companyName" className="text-gray-900 text-[14px] font-normal mb-2 block">
+          {tr(language, "Nazwa firmy")}
+          <span className="text-red-500 ml-1">*</span>
+        </Label>
+        <Input
+          id="companyName"
+          name="companyName"
+          value={formData.companyName || ""}
+          onChange={(e) => handleInputChange("companyName", e.target.value)}
+          placeholder={tr(language, "Wpisz nazwę firmy")}
+          className={getInputStyles(formData.companyName || "")}
+          required
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="vatNumber" className="text-gray-900 text-[14px] font-normal mb-2 block">
+          {tr(language, "Numer VAT")}
+          <span className="text-red-500 ml-1">*</span>
+        </Label>
+        <Input
+          id="vatNumber"
+          name="vatNumber"
+          value={formData.vatNumber || ""}
+          onChange={(e) => handleInputChange("vatNumber", e.target.value)}
+          placeholder={tr(language, "Wpisz numer VAT")}
+          className={getInputStyles(formData.vatNumber || "")}
+          required
+        />
+      </div>
+    </>
+  )
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -1886,6 +1938,8 @@ export default function NewComplaintForm() {
     if (!formData.buildingNumber.trim()) errors.push(tr(language, "Numer budynku jest wymagany."))
     if (!formData.postalCode.trim()) errors.push(tr(language, "Kod pocztowy jest wymagany."))
     if (!formData.city.trim()) errors.push(tr(language, "Miasto jest wymagane."))
+    if (!formData.companyName.trim()) errors.push(tr(language, "Nazwa firmy jest wymagana."))
+    if (!formData.vatNumber.trim()) errors.push(tr(language, "Numer VAT jest wymagany."))
     if (errors.length > 0) {
       alert(errors.join("\n"))
       return
@@ -1904,6 +1958,8 @@ export default function NewComplaintForm() {
       postalCode: formData.postalCode,
       city: formData.city,
       country: formData.country,
+      companyName: formData.companyName || "",
+      vatNumber: formData.vatNumber || "",
 
       // Category selection
       selectedCategory,
@@ -1930,9 +1986,6 @@ export default function NewComplaintForm() {
         uploadedFolder: formData.uploadedFolder ? Array.from(formData.uploadedFolder).map((f) => f.name) : null,
         uploadedFolderZipName: formData.uploadedFolderZipName || null,
         attachedDocuments: [selectedFile?.name],
-        // Post-warranty service company fields
-        companyName: formData.companyName || "",
-        vatNumber: formData.vatNumber || "",
         // Other delivery address
         otherDeliveryAddress: formData.otherDeliveryAddress || false,
         deliveryCompanyName: formData.deliveryCompanyName || "",
@@ -2015,6 +2068,14 @@ export default function NewComplaintForm() {
     }
     if (finalCategory === "autoclave" && !finalSerial) {
       finalErrors.push(tr(language, "Numer seryjny jest wymagany."))
+    }
+    const finalCompanyName = (summaryData?.companyName ?? formData.companyName ?? "").toString().trim()
+    const finalVatNumber = (summaryData?.vatNumber ?? formData.vatNumber ?? "").toString().trim()
+    if (!finalCompanyName) {
+      finalErrors.push(tr(language, "Nazwa firmy jest wymagana."))
+    }
+    if (!finalVatNumber) {
+      finalErrors.push(tr(language, "Numer VAT jest wymagany."))
     }
     if (finalErrors.length > 0) {
       alert(finalErrors.join("\n"))
@@ -2852,40 +2913,6 @@ export default function NewComplaintForm() {
         </h2>
 
               <div className="bg-white rounded-md p-4 sm:p-5 space-y-4">
-                {/* Company fields for post-warranty service with autoclave products */}
-                {serviceType === "post-warranty" && 
-                 selectedCategory === "autoclave" && (
-                  <>
-                    <div>
-                      <Label htmlFor="companyName" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                        {tr(language, "Nazwa firmy")}
-                      </Label>
-                      <Input
-                          id="companyName"
-                          name="companyName"
-                          value={formData.companyName || ""}
-                          onChange={(e) => handleInputChange("companyName", e.target.value)}
-                          placeholder={tr(language, "Wpisz nazwę firmy")}
-                          className={getInputStyles(formData.companyName || "")}
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="vatNumber" className="text-gray-900 text-[14px] font-normal mb-2 block">
-                        {tr(language, "Numer VAT")}
-                      </Label>
-                      <Input
-                          id="vatNumber"
-                          name="vatNumber"
-                          value={formData.vatNumber || ""}
-                          onChange={(e) => handleInputChange("vatNumber", e.target.value)}
-                          placeholder={tr(language, "Wpisz numer VAT")}
-                          className={getInputStyles(formData.vatNumber || "")}
-                      />
-                    </div>
-                  </>
-                )}
-
                 {selectedCategory === "autoclave" && (serviceType === "warranty" || serviceType === "post-warranty") && (
                   <div>
                     <Label htmlFor="serialNumber" className="text-gray-900 text-[14px] font-normal mb-2 block">
@@ -2959,6 +2986,8 @@ export default function NewComplaintForm() {
                     />
                   </div>
                 </div>
+
+                {renderCompanyVatFields()}
 
                 <div>
                   <Label htmlFor="street" className="text-gray-900 text-[14px] font-normal mb-2 block">
@@ -3651,6 +3680,8 @@ export default function NewComplaintForm() {
                     />
                   </div>
                 </div>
+
+                {renderCompanyVatFields()}
 
                 <div>
                   <Label htmlFor="street" className="text-gray-900 text-[14px] font-normal mb-2 block">
