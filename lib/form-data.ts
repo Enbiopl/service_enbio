@@ -651,3 +651,27 @@ export const COUNTRY_NAMES_EN: Record<string, string> = Object.keys(COUNTRY_NAME
   },
   {} as Record<string, string>
 )
+
+/** Maps invoice/OCR country text to internal slug used in selects (matches COUNTRY_NAMES_PL keys). */
+export function normalizeCountryKeyFromAny(input: string | undefined | null): string {
+  const raw = (input ?? "").trim()
+  if (!raw) return ""
+  if (raw in COUNTRY_NAMES_PL) return raw
+  const lower = raw.toLowerCase()
+  for (const [key, plLabel] of Object.entries(COUNTRY_NAMES_PL)) {
+    if ((plLabel as string).toLowerCase() === lower) return key
+  }
+  const synonyms: Record<string, string> = {
+    schweiz: "switzerland",
+    switzerland: "switzerland",
+    schwajcaria: "switzerland",
+    polska: "poland",
+    poland: "poland",
+    deutschland: "germany",
+    germany: "germany",
+    österreich: "austria",
+    osterreich: "austria",
+  }
+  if (synonyms[lower]) return synonyms[lower]
+  return ""
+}

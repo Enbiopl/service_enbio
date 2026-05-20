@@ -4,17 +4,19 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Paperclip, ArrowRight } from "lucide-react"
+import { Paperclip, ArrowRight, ChevronDown } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { cn } from "@/lib/utils"
 import {
   AUTOCLAVE_ERRORS,
   ACCESSORIES_ERRORS,
   getErrorLabel,
   getAccessoriesErrorLabel,
 } from "@/lib/constants"
-import { COUNTRY_NAMES_EN } from "@/lib/form-data"
+import { COUNTRY_NAMES_EN, COUNTRY_NAMES_PL, normalizeCountryKeyFromAny } from "@/lib/form-data"
 
 type SummaryLang = "pl" | "en" | "es" | "fr" | "de" | "it" | "uk" | "ru" | "pt"
 const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
@@ -86,6 +88,14 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Kod pocztowy jest wymagany.": "O código‑postal é obrigatório.",
     "Miasto jest wymagane.": "A cidade é obrigatória.",
     "Kraj jest wymagany.": "O país é obrigatório.",
+    "Nazwa produktu jest wymagana.": "O nome do produto é obrigatório.",
+    "Numer seryjny jest wymagany.": "O número de série é obrigatório.",
+    "Data zakupu jest wymagana.": "A data de compra é obrigatória.",
+    "NIP jest wymagany.": "O NIF é obrigatório.",
+    "Nazwa wystawcy jest wymagana.": "O nome do emissor é obrigatório.",
+    "Numer faktury jest wymagany.": "O número da fatura é obrigatório.",
+    "Należy załączyć fakturę lub dokument.": "É necessário anexar a fatura ou um documento.",
+    "Wymaga uzupełnienia": "Por completar",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Por favor, aceite todos os consentimentos obrigatórios antes de enviar o pedido.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
@@ -162,6 +172,14 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Kod pocztowy jest wymagany.": "Postal code is required.",
     "Miasto jest wymagane.": "City is required.",
     "Kraj jest wymagany.": "Country is required.",
+    "Nazwa produktu jest wymagana.": "Product name is required.",
+    "Numer seryjny jest wymagany.": "Serial number is required.",
+    "Data zakupu jest wymagana.": "Purchase date is required.",
+    "NIP jest wymagany.": "Tax ID is required.",
+    "Nazwa wystawcy jest wymagana.": "Issuer name is required.",
+    "Numer faktury jest wymagany.": "Invoice number is required.",
+    "Należy załączyć fakturę lub dokument.": "Please attach an invoice or document.",
+    "Wymaga uzupełnienia": "Incomplete",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Please accept all required consents before submitting the request.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
@@ -247,6 +265,14 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Kod pocztowy jest wymagany.": "El código postal es obligatorio.",
     "Miasto jest wymagane.": "La ciudad es obligatoria.",
     "Kraj jest wymagany.": "El país es obligatorio.",
+    "Nazwa produktu jest wymagana.": "El nombre del producto es obligatorio.",
+    "Numer seryjny jest wymagany.": "El número de serie es obligatorio.",
+    "Data zakupu jest wymagana.": "La fecha de compra es obligatoria.",
+    "NIP jest wymagany.": "El NIF/código fiscal es obligatorio.",
+    "Nazwa wystawcy jest wymagana.": "El nombre del emisor es obligatorio.",
+    "Numer faktury jest wymagany.": "El número de factura es obligatorio.",
+    "Należy załączyć fakturę lub dokument.": "Debe adjuntar la factura o un documento.",
+    "Wymaga uzupełnienia": "Incompleto",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Por favor acepte todos los consentimientos requeridos antes de enviar la solicitud.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
@@ -322,6 +348,14 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Kod pocztowy jest wymagany.": "Le code postal est obligatoire.",
     "Miasto jest wymagane.": "La ville est obligatoire.",
     "Kraj jest wymagany.": "Le pays est obligatoire.",
+    "Nazwa produktu jest wymagana.": "Le nom du produit est obligatoire.",
+    "Numer seryjny jest wymagany.": "Le numéro de série est obligatoire.",
+    "Data zakupu jest wymagana.": "La date d’achat est obligatoire.",
+    "NIP jest wymagany.": "Le numéro fiscal est obligatoire.",
+    "Nazwa wystawcy jest wymagana.": "Le nom de l’émetteur est obligatoire.",
+    "Numer faktury jest wymagany.": "Le numéro de facture est obligatoire.",
+    "Należy załączyć fakturę lub dokument.": "Veuillez joindre la facture ou un document.",
+    "Wymaga uzupełnienia": "À compléter",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Veuillez accepter tous les consentements requis avant d’envoyer la demande.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
@@ -397,6 +431,14 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Kod pocztowy jest wymagany.": "Postleitzahl ist erforderlich.",
     "Miasto jest wymagane.": "Stadt ist erforderlich.",
     "Kraj jest wymagany.": "Land ist erforderlich.",
+    "Nazwa produktu jest wymagana.": "Produktname ist erforderlich.",
+    "Numer seryjny jest wymagany.": "Seriennummer ist erforderlich.",
+    "Data zakupu jest wymagana.": "Kaufdatum ist erforderlich.",
+    "NIP jest wymagany.": "Steuer-ID ist erforderlich.",
+    "Nazwa wystawcy jest wymagana.": "Ausstellername ist erforderlich.",
+    "Numer faktury jest wymagany.": "Rechnungsnummer ist erforderlich.",
+    "Należy załączyć fakturę lub dokument.": "Bitte Rechnung oder Dokument anhängen.",
+    "Wymaga uzupełnienia": "Unvollständig",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Bitte akzeptieren Sie alle erforderlichen Einwilligungen vor dem Absenden.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
@@ -472,6 +514,14 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Kod pocztowy jest wymagany.": "Il CAP è obbligatorio.",
     "Miasto jest wymagane.": "La città è obbligatoria.",
     "Kraj jest wymagany.": "Il paese è obbligatorio.",
+    "Nazwa produktu jest wymagana.": "Il nome del prodotto è obbligatorio.",
+    "Numer seryjny jest wymagany.": "Il numero di serie è obbligatorio.",
+    "Data zakupu jest wymagana.": "La data di acquisto è obbligatoria.",
+    "NIP jest wymagany.": "Il codice fiscale / P.IVA è obbligatorio.",
+    "Nazwa wystawcy jest wymagana.": "Il nome dell’emittente è obbligatorio.",
+    "Numer faktury jest wymagany.": "Il numero di fattura è obbligatorio.",
+    "Należy załączyć fakturę lub dokument.": "Allegare fattura o documento.",
+    "Wymaga uzupełnienia": "Da completare",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Si prega di accettare tutti i consensi richiesti prima dell’invio.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
@@ -547,6 +597,14 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Kod pocztowy jest wymagany.": "Поштовий індекс обов'язковий.",
     "Miasto jest wymagane.": "Місто обов'язкове.",
     "Kraj jest wymagany.": "Країна обов'язкова.",
+    "Nazwa produktu jest wymagana.": "Назва продукту обов'язкова.",
+    "Numer seryjny jest wymagany.": "Серійний номер обов'язковий.",
+    "Data zakupu jest wymagana.": "Дата покупки обов'язкова.",
+    "NIP jest wymagany.": "Податковий номер обов'язковий.",
+    "Nazwa wystawcy jest wymagana.": "Назва постачальника обов'язкова.",
+    "Numer faktury jest wymagany.": "Номер рахунку-фактури обов'язковий.",
+    "Należy załączyć fakturę lub dokument.": "Потрібно додати рахунок-фактуру або документ.",
+    "Wymaga uzupełnienia": "Потрібно заповнити",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Будь ласка, прийміть усі необхідні згоди перед надсиланням.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
@@ -622,6 +680,14 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Kod pocztowy jest wymagany.": "Почтовый индекс обязателен.",
     "Miasto jest wymagane.": "Город обязателен.",
     "Kraj jest wymagany.": "Страна обязательна.",
+    "Nazwa produktu jest wymagana.": "Название продукта обязательно.",
+    "Numer seryjny jest wymagany.": "Серийный номер обязателен.",
+    "Data zakupu jest wymagana.": "Дата покупки обязательна.",
+    "NIP jest wymagany.": "ИНН / налоговый номер обязателен.",
+    "Nazwa wystawcy jest wymagana.": "Название поставщика обязательно.",
+    "Numer faktury jest wymagany.": "Номер счёта-фактуры обязателен.",
+    "Należy załączyć fakturę lub dokument.": "Приложите счёт-фактуру или документ.",
+    "Wymaga uzupełnienia": "Неполные данные",
     "Proszę zaakceptować wszystkie wymagane zgody przed wysłaniem zgłoszenia.":
       "Пожалуйста, примите все необходимые согласия перед отправкой.",
     "Zgadzam się na zbieranie i przetwarzanie podanych w ramach niniejszej rejestracji, jeśli urządzenie było użytkowane niezgodnie z instrukcją obsługi. Szczegółowe postanowienia znajdują się w dokumencie „Warunki gwarancji\". Instrukcje użytkowania i warunki gwarancji można znaleźć na naszej Liście dostępnych dokumentów.":
@@ -695,6 +761,7 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
 
   const isAccessory = resolvedCategory === "accessory";
   const requiredMark = <span className="text-red-500 ml-1">*</span>
+  const strictAutoclaveDevice = !isAccessory
 
   // ✅ Lista do Selecta z twardym fallbackiem
   const errorsList = isAccessory
@@ -726,6 +793,29 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
     invoiceNumber: "",
     attachedDocuments: [] as string[], // Changed to array of strings for file names
   })
+
+  const isAutoclaveSummaryDevice = () => !isAccessory
+
+  function isDeviceSectionComplete() {
+    if (!isAutoclaveSummaryDevice()) return true
+    const d = deviceData
+    if (!(d.productName || "").trim()) return false
+    if (!(d.serialNumber || "").trim()) return false
+    if (!(d.purchaseDate || "").trim()) return false
+    if (!(d.companyName || "").trim()) return false
+    if (!(d.street || "").trim()) return false
+    if (!(d.buildingNumber || "").trim()) return false
+    if (!(d.postalCode || "").trim()) return false
+    if (!(d.city || "").trim()) return false
+    const ck = (d.country || "").trim()
+    if (!ck || !COUNTRY_NAMES_PL[ck]) return false
+    if (!(d.supplierName || "").trim()) return false
+    if (!(d.invoiceNumber || "").trim()) return false
+    if (!d.attachedDocuments?.length) return false
+    return true
+  }
+
+  const [deviceSectionOpen, setDeviceSectionOpen] = useState(true)
 
   const [issueData, setIssueData] = useState({
     attachedIssueDocuments: [] as string[], // Changed to array of strings for file names
@@ -867,13 +957,20 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
                     : newDeviceData.apartmentNumber,
                 city: invoiceData?.nabywca?.miasto || newDeviceData.city,
                 postalCode: invoiceData?.nabywca?.kod_pocztowy || newDeviceData.postalCode,
-                country: invoiceData?.nabywca?.kraj || newDeviceData.country,
+                country:
+                  normalizeCountryKeyFromAny(invoiceData?.nabywca?.kraj) ||
+                  normalizeCountryKeyFromAny(newDeviceData.country) ||
+                  "",
                 taxId: invoiceData?.nabywca?.nip || newDeviceData.taxId,
                 purchaseDate: invoiceData?.nabywca?.data_faktury || newDeviceData.purchaseDate,
                 supplierName: invoiceData?.wystawca?.nazwa_firmy || newDeviceData.supplierName,
                 invoiceNumber: invoiceData?.wystawca?.numer_faktury || newDeviceData.invoiceNumber,
               })
             }
+            const cCountry = newDeviceData.country
+            const nkCountry = normalizeCountryKeyFromAny(cCountry)
+            newDeviceData.country =
+              nkCountry || (cCountry && COUNTRY_NAMES_PL[cCountry] ? cCountry : "")
             return newDeviceData
           })
 
@@ -955,6 +1052,30 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
 
     }
   }, [])
+
+  useEffect(() => {
+    if (!isAutoclaveSummaryDevice() || isDeviceSectionComplete()) return
+
+    setDeviceSectionOpen(true)
+
+    if (editingSection !== "device") {
+      setOriginalDeviceData({ ...deviceData })
+    } else {
+      setOriginalDeviceData((orig) => {
+        const origEmptyLike =
+          !(orig.serialNumber || "").trim() &&
+          !(orig.companyName || "").trim() &&
+          !(orig.attachedDocuments?.length)
+        const deviceHasData =
+          !!(deviceData.serialNumber || "").trim() ||
+          !!(deviceData.companyName || "").trim() ||
+          !!(deviceData.attachedDocuments?.length)
+        return origEmptyLike && deviceHasData ? { ...deviceData } : orig
+      })
+    }
+
+    setEditingSection("device")
+  }, [deviceData, isAccessory, editingSection])
 
   // Zawsze zapisuj zmiany z Summary do formData rodzica
   useEffect(() => {
@@ -1052,6 +1173,50 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
   }
 
   const handleSave = (section: string) => {
+    if (section === "device" && isAutoclaveSummaryDevice()) {
+      const errors: string[] = []
+      if (!(deviceData.productName || "").trim()) {
+        errors.push(tr(language, "Nazwa produktu jest wymagana."))
+      }
+      if (!(deviceData.serialNumber || "").trim()) {
+        errors.push(tr(language, "Numer seryjny jest wymagany."))
+      }
+      if (!(deviceData.purchaseDate || "").trim()) {
+        errors.push(tr(language, "Data zakupu jest wymagana."))
+      }
+      if (!(deviceData.companyName || "").trim()) {
+        errors.push(tr(language, "Nazwa firmy jest wymagana."))
+      }
+      if (!(deviceData.street || "").trim()) {
+        errors.push(tr(language, "Nazwa ulicy jest wymagana."))
+      }
+      if (!(deviceData.buildingNumber || "").trim()) {
+        errors.push(tr(language, "Numer lokalu jest wymagany."))
+      }
+      if (!(deviceData.postalCode || "").trim()) {
+        errors.push(tr(language, "Kod pocztowy jest wymagany."))
+      }
+      if (!(deviceData.city || "").trim()) {
+        errors.push(tr(language, "Miasto jest wymagane."))
+      }
+      const c = (deviceData.country || "").trim()
+      if (!c || !COUNTRY_NAMES_PL[c]) {
+        errors.push(tr(language, "Kraj jest wymagany."))
+      }
+      if (!(deviceData.supplierName || "").trim()) {
+        errors.push(tr(language, "Nazwa wystawcy jest wymagana."))
+      }
+      if (!(deviceData.invoiceNumber || "").trim()) {
+        errors.push(tr(language, "Numer faktury jest wymagany."))
+      }
+      if (!deviceData.attachedDocuments?.length) {
+        errors.push(tr(language, "Należy załączyć fakturę lub dokument."))
+      }
+      if (errors.length > 0) {
+        alert(errors.join("\n"))
+        return
+      }
+    }
     if (section === "contact") {
       const errors: string[] = []
       if (!(contactData.name || "").trim()) {
@@ -1172,200 +1337,303 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
     )
   }
 
+  const deviceSectionInner = (
+    <>
+      {editingSection === "device" ? (
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-y-4 text-sm">
+            <div className="text-gray-600">{tr(language, "Rodzaj zgłoszenia")}</div>
+            <div className="text-gray-900 text-right">{tr(language, deviceData.type)}</div>
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">
+              {tr(language, "Nazwa produktu")}
+              {strictAutoclaveDevice && requiredMark}
+            </Label>
+            <Input
+              value={deviceData.productName}
+              onChange={(e) => setDeviceData({ ...deviceData, productName: e.target.value })}
+              className={getInputStyles(deviceData.productName)}
+              {...(strictAutoclaveDevice ? { required: true } : {})}
+            />
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">
+              {tr(language, "Numer seryjny")}
+              {strictAutoclaveDevice && requiredMark}
+            </Label>
+            <Input
+              value={deviceData.serialNumber}
+              onChange={(e) => setDeviceData({ ...deviceData, serialNumber: e.target.value })}
+              className={getInputStyles(deviceData.serialNumber)}
+              {...(strictAutoclaveDevice ? { required: true } : {})}
+            />
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">
+              {tr(language, "Data zakupu")}
+              {strictAutoclaveDevice && requiredMark}
+            </Label>
+            <Input
+              value={deviceData.purchaseDate}
+              onChange={(e) => setDeviceData({ ...deviceData, purchaseDate: e.target.value })}
+              className={getInputStyles(deviceData.purchaseDate)}
+              {...(strictAutoclaveDevice ? { required: true } : {})}
+            />
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">
+              {tr(language, "Nazwa firmy")}
+              {strictAutoclaveDevice && requiredMark}
+            </Label>
+            <Input
+              value={deviceData.companyName}
+              onChange={(e) => setDeviceData({ ...deviceData, companyName: e.target.value })}
+              className={getInputStyles(deviceData.companyName)}
+              {...(strictAutoclaveDevice ? { required: true } : {})}
+            />
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "NIP")}</Label>
+            <Input
+              value={deviceData.taxId}
+              onChange={(e) => setDeviceData({ ...deviceData, taxId: e.target.value })}
+              className={getInputStyles(deviceData.taxId)}
+            />
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">
+              {tr(language, "Ulica")}
+              {strictAutoclaveDevice && requiredMark}
+            </Label>
+            <Input
+              value={deviceData.street}
+              onChange={(e) => setDeviceData({ ...deviceData, street: e.target.value })}
+              className={getInputStyles(deviceData.street)}
+              {...(strictAutoclaveDevice ? { required: true } : {})}
+            />
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">
+              {tr(language, "Numer lokalu")}
+              {strictAutoclaveDevice && requiredMark}
+            </Label>
+            <Input
+              value={deviceData.buildingNumber}
+              onChange={(e) => setDeviceData({ ...deviceData, buildingNumber: e.target.value })}
+              className={getInputStyles(deviceData.buildingNumber)}
+              {...(strictAutoclaveDevice ? { required: true } : {})}
+            />
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">
+              {tr(language, "Kod pocztowy")}
+              {strictAutoclaveDevice && requiredMark}
+            </Label>
+            <Input
+              value={deviceData.postalCode}
+              onChange={(e) => setDeviceData({ ...deviceData, postalCode: e.target.value })}
+              className={getInputStyles(deviceData.postalCode)}
+              {...(strictAutoclaveDevice ? { required: true } : {})}
+            />
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">
+              {tr(language, "Miasto")}
+              {strictAutoclaveDevice && requiredMark}
+            </Label>
+            <Input
+              value={deviceData.city}
+              onChange={(e) => setDeviceData({ ...deviceData, city: e.target.value })}
+              className={getInputStyles(deviceData.city)}
+              {...(strictAutoclaveDevice ? { required: true } : {})}
+            />
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">
+              {tr(language, "Kraj")}
+              {strictAutoclaveDevice && requiredMark}
+            </Label>
+            <Select
+              value={deviceData.country || undefined}
+              onValueChange={(value) => setDeviceData({ ...deviceData, country: value })}
+            >
+              <SelectTrigger className={getInputStyles(deviceData.country)}>
+                <SelectValue placeholder={tr(language, "Wybierz z listy")} />
+              </SelectTrigger>
+              <SelectContent className="select-dark-content bg-white border-gray-300">
+                {Object.entries(COUNTRY_NAMES_EN)
+                  .sort(([, nameA], [, nameB]) => nameA.localeCompare(nameB))
+                  .map(([value, label]) => (
+                    <SelectItem key={value} value={value} className="select-dark-item text-gray-600">
+                      {label}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">
+              {tr(language, "Nazwa wystawcy")}
+              {strictAutoclaveDevice && requiredMark}
+            </Label>
+            <Input
+              value={deviceData.supplierName}
+              onChange={(e) => setDeviceData({ ...deviceData, supplierName: e.target.value })}
+              className={getInputStyles(deviceData.supplierName)}
+              {...(strictAutoclaveDevice ? { required: true } : {})}
+            />
+          </div>
+
+          <div>
+            <Label className="text-gray-900 text-sm mb-2 block">
+              {tr(language, "Numer faktury")}
+              {strictAutoclaveDevice && requiredMark}
+            </Label>
+            <Input
+              value={deviceData.invoiceNumber}
+              onChange={(e) => setDeviceData({ ...deviceData, invoiceNumber: e.target.value })}
+              className={getInputStyles(deviceData.invoiceNumber)}
+              {...(strictAutoclaveDevice ? { required: true } : {})}
+            />
+          </div>
+
+          {(strictAutoclaveDevice || deviceData.attachedDocuments.length > 0) && (
+            <div className="grid grid-cols-2 gap-y-4 text-sm mt-4">
+              <div className="text-gray-600">
+                {tr(language, "Dodane dokumenty")}
+                {strictAutoclaveDevice && requiredMark}
+              </div>
+              <div className="text-gray-900 text-right flex justify-end items-center">
+                {deviceData.attachedDocuments.length > 0 ? (
+                  <>
+                    <Paperclip className="h-4 w-4 mr-1 text-gray-600" />
+                    <span>{deviceData.attachedDocuments.join(", ")}</span>
+                  </>
+                ) : (
+                  <span className="text-gray-600">{tr(language, "brak danych")}</span>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-y-4 text-sm">
+          {renderField("Rodzaj zgłoszenia", deviceData.type)}
+          {renderField("Nazwa produktu", deviceData.productName)}
+          {renderField("Numer seryjny", deviceData.serialNumber)}
+          {renderField("Data zakupu", deviceData.purchaseDate)}
+          {renderField("Nazwa firmy", deviceData.companyName)}
+          {renderField("NIP", deviceData.taxId)}
+          {renderField("Ulica", deviceData.street)}
+          {renderField("Numer lokalu", deviceData.buildingNumber)}
+          {renderField("Kod pocztowy", deviceData.postalCode)}
+          {renderField("Miasto", deviceData.city)}
+          {renderField(
+            "Kraj",
+            deviceData.country ? COUNTRY_NAMES_EN[deviceData.country] || deviceData.country : ""
+          )}
+          {renderField("Nazwa wystawcy", deviceData.supplierName)}
+          {renderField("Numer faktury", deviceData.invoiceNumber)}
+          {renderField("Dodane dokumenty", deviceData.attachedDocuments, true)}
+        </div>
+      )}
+
+      <div className="flex justify-end mt-4">
+        {editingSection === "device" ? (
+          <div className="flex gap-2">
+            <Button
+              variant="link"
+              onClick={() => handleCancel()}
+              className="text-gray-600 hover:text-gray-300 p-0 h-auto flex items-center"
+            >
+              {tr(language, "Anuluj")}
+            </Button>
+            <Button
+              variant="link"
+              onClick={() => handleSave("device")}
+              className="text-blue-400 hover:text-blue-300 p-0 h-auto flex items-center"
+            >
+              {tr(language, "Zapisz")}
+            </Button>
+          </div>
+        ) : (
+          <button
+            onClick={() => handleEdit("device")}
+            type="button"
+            className="flex items-center gap-2 text-[#3B82F6] hover:text-[#60A5FA] transition-colors cursor-pointer bg-transparent border-none"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontStyle: "normal",
+              fontWeight: 500,
+              fontSize: "14px",
+            }}
+          >
+            <span>{tr(language, "Edytuj dane")}</span>
+            <div className="w-6 h-6 bg-[#3B82F6] rounded-full flex items-center justify-center">
+              <ArrowRight className="h-3 w-3 text-gray-900" />
+            </div>
+          </button>
+        )}
+      </div>
+    </>
+  )
+
   return (
     <>
       {/* Main h1 title is now in FormContainer */}
 
       {/* Section 1: Device Data */}
-      <div className="mb-6">
-        <h2 className="text-gray-900 text-xl font-medium mb-4">
-          {tr(language, isAccessory ? "1. Akcesorium" : "1. Autoklaw")}
-        </h2>
-        <div className="bg-white rounded-md p-6">
-          {editingSection === "device" ? (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-y-4 text-sm">
-                <div className="text-gray-600">{tr(language, "Rodzaj zgłoszenia")}</div>
-                <div className="text-gray-900 text-right">{tr(language, deviceData.type)}</div>
-              </div>
-
-              {deviceData.productName && (
-                <div>
-                  <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Nazwa produktu")}</Label>
-                  <Input
-                    value={deviceData.productName}
-                    onChange={(e) => setDeviceData({ ...deviceData, productName: e.target.value })}
-                    className={getInputStyles(deviceData.productName)}
-                  />
-                </div>
-              )}
-
-              <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Numer seryjny")}</Label>
-                <Input
-                  value={deviceData.serialNumber}
-                  onChange={(e) => setDeviceData({ ...deviceData, serialNumber: e.target.value })}
-                  className={getInputStyles(deviceData.serialNumber)}
-                />
-              </div>
-
-              <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Data zakupu")}</Label>
-                <Input
-                  value={deviceData.purchaseDate}
-                  onChange={(e) => setDeviceData({ ...deviceData, purchaseDate: e.target.value })}
-                  className={getInputStyles(deviceData.purchaseDate)}
-                />
-              </div>
-
-              <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Nazwa firmy")}</Label>
-                <Input
-                  value={deviceData.companyName}
-                  onChange={(e) => setDeviceData({ ...deviceData, companyName: e.target.value })}
-                  className={getInputStyles(deviceData.companyName)}
-                />
-              </div>
-
-              <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "NIP")}</Label>
-                <Input
-                  value={deviceData.taxId}
-                  onChange={(e) => setDeviceData({ ...deviceData, taxId: e.target.value })}
-                  className={getInputStyles(deviceData.taxId)}
-                />
-              </div>
-
-              <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Ulica")}</Label>
-                <Input
-                  value={deviceData.street}
-                  onChange={(e) => setDeviceData({ ...deviceData, street: e.target.value })}
-                  className={getInputStyles(deviceData.street)}
-                />
-              </div>
-
-              <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Numer lokalu")}</Label>
-                <Input
-                  value={deviceData.buildingNumber}
-                  onChange={(e) => setDeviceData({ ...deviceData, buildingNumber: e.target.value })}
-                  className={getInputStyles(deviceData.buildingNumber)}
-                />
-              </div>
-
-              <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Kod pocztowy")}</Label>
-                <Input
-                  value={deviceData.postalCode}
-                  onChange={(e) => setDeviceData({ ...deviceData, postalCode: e.target.value })}
-                  className={getInputStyles(deviceData.postalCode)}
-                />
-              </div>
-
-              <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Miasto")}</Label>
-                <Input
-                  value={deviceData.city}
-                  onChange={(e) => setDeviceData({ ...deviceData, city: e.target.value })}
-                  className={getInputStyles(deviceData.city)}
-                />
-              </div>
-
-              <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Kraj")}</Label>
-                <Input
-                  value={deviceData.country}
-                  onChange={(e) => setDeviceData({ ...deviceData, country: e.target.value })}
-                  className={getInputStyles(deviceData.country)}
-                />
-              </div>
-
-              <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Nazwa wystawcy")}</Label>
-                <Input
-                  value={deviceData.supplierName}
-                  onChange={(e) => setDeviceData({ ...deviceData, supplierName: e.target.value })}
-                  className={getInputStyles(deviceData.supplierName)}
-                />
-              </div>
-
-              <div>
-                <Label className="text-gray-900 text-sm mb-2 block">{tr(language, "Numer faktury")}</Label>
-                <Input
-                  value={deviceData.invoiceNumber}
-                  onChange={(e) => setDeviceData({ ...deviceData, invoiceNumber: e.target.value })}
-                  className={getInputStyles(deviceData.invoiceNumber)}
-                />
-              </div>
-
-              {deviceData.attachedDocuments.length > 0 && (
-                <div className="grid grid-cols-2 gap-y-4 text-sm mt-4">
-                  <div className="text-gray-600">{tr(language, "Dodane dokumenty")}</div>
-                  <div className="text-gray-900 text-right flex justify-end items-center">
-                    <Paperclip className="h-4 w-4 mr-1 text-gray-600" />
-                    <span>{deviceData?.attachedDocuments}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-y-4 text-sm">
-              {renderField("Rodzaj zgłoszenia", deviceData.type)}
-              {renderField("Nazwa produktu", deviceData.productName)}
-              {renderField("Numer seryjny", deviceData.serialNumber)}
-              {renderField("Data zakupu", deviceData.purchaseDate)}
-              {renderField("Nazwa firmy", deviceData.companyName)}
-              {renderField("NIP", deviceData.taxId)}
-              {renderField("Ulica", deviceData.street)}
-              {renderField("Numer lokalu", deviceData.buildingNumber)}
-              {renderField("Kod pocztowy", deviceData.postalCode)}
-              {renderField("Miasto", deviceData.city)}
-              {renderField("Kraj", deviceData.country)}
-              {renderField("Nazwa wystawcy", deviceData.supplierName)}
-              {renderField("Numer faktury", deviceData.invoiceNumber)}
-              {renderField("Dodane dokumenty", deviceData.attachedDocuments, true)}
-            </div>
-          )}
-
-          <div className="flex justify-end mt-4">
-            {editingSection === "device" ? (
-              <div className="flex gap-2">
-                <Button
-                  variant="link"
-                  onClick={() => handleCancel()}
-                  className="text-gray-600 hover:text-gray-300 p-0 h-auto flex items-center"
-                >
-                  {tr(language, "Anuluj")}
-                </Button>
-                <Button
-                  variant="link"
-                  onClick={() => handleSave("device")}
-                  className="text-blue-400 hover:text-blue-300 p-0 h-auto flex items-center"
-                >
-                  {tr(language, "Zapisz")}
-                </Button>
-              </div>
-            ) : (
-              <button
-                onClick={() => handleEdit("device")}
-                className="flex items-center gap-2 text-[#3B82F6] hover:text-[#60A5FA] transition-colors cursor-pointer bg-transparent border-none"
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontStyle: "normal",
-                  fontWeight: 500,
-                  fontSize: "14px",
-                }}
-              >
-                <span>{tr(language, "Edytuj dane")}</span>
-                <div className="w-6 h-6 bg-[#3B82F6] rounded-full flex items-center justify-center">
-                  <ArrowRight className="h-3 w-3 text-gray-900" />
-                </div>
-              </button>
-            )}
-          </div>
+      {isAccessory ? (
+        <div className="mb-6">
+          <h2 className="text-gray-900 text-xl font-medium mb-4">{tr(language, "1. Akcesorium")}</h2>
+          <div className="bg-white rounded-md p-6">{deviceSectionInner}</div>
         </div>
-      </div>
+      ) : (
+        <Collapsible
+          open={deviceSectionOpen}
+          onOpenChange={(open) => {
+            if (!open && !isDeviceSectionComplete()) {
+              setDeviceSectionOpen(true)
+              return
+            }
+            setDeviceSectionOpen(open)
+          }}
+        >
+          <div className="mb-6">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <CollapsibleTrigger asChild>
+                <button
+                  type="button"
+                  className="flex items-center gap-2 rounded-md text-left bg-transparent border-0 p-0 cursor-pointer hover:opacity-90"
+                >
+                  <ChevronDown
+                    className={cn(
+                      "h-5 w-5 shrink-0 text-gray-700 transition-transform duration-200",
+                      deviceSectionOpen && "rotate-180"
+                    )}
+                  />
+                  <span className="text-gray-900 text-xl font-medium">{tr(language, "1. Autoklaw")}</span>
+                </button>
+              </CollapsibleTrigger>
+            </div>
+            <CollapsibleContent>
+              <div className="bg-white rounded-md p-6">{deviceSectionInner}</div>
+            </CollapsibleContent>
+          </div>
+        </Collapsible>
+      )}
 
       {/* Section 2: Reported Issue */}
       <div className="mb-6">
