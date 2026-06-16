@@ -17,6 +17,7 @@ import { Switch } from "@/components/ui/switch"
 import { useMeasureHeight } from "@/hooks/use-measure-height"
 import SummaryForm from "@/components/summary-form"
 import { COUNTRY_NAMES_EN } from "@/lib/form-data"
+import { INVOICE_UPLOAD_ENABLED } from "@/lib/constants"
 
 type FormStep = "product-selection" | "complaint-form" | "service-selection" | "service-form" | "summary"
 
@@ -1922,7 +1923,12 @@ export default function NewComplaintForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (selectedCategory === "autoclave" && serviceType === "warranty" && fileUploadProgress !== 100) {
+    if (
+      INVOICE_UPLOAD_ENABLED &&
+      selectedCategory === "autoclave" &&
+      serviceType === "warranty" &&
+      fileUploadProgress !== 100
+    ) {
       alert(tr(language, "Proszę dodać zdjęcie faktury lub świadectwa gwarancji."))
       return
     }
@@ -2187,6 +2193,8 @@ export default function NewComplaintForm() {
       currentUploadProgress: number,
       isRequired: boolean, // New prop for required
   ) => {
+    if (!INVOICE_UPLOAD_ENABLED) return null
+
     const fileInputId = `file-upload-${Math.random().toString(36).substring(7)}` // Unique ID for input
 
     return (

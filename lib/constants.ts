@@ -39,6 +39,9 @@ export function getErrorLabel(errorId: string): string {
   return error ? error.label : errorId
 }
 
+/** Tymczasowo wyłączone – upload faktury / świadectwa gwarancji */
+export const INVOICE_UPLOAD_ENABLED = false
+
 // Funkcja pomocnicza do konwersji ID błędu na pełną etykietę
 export function getAccessoriesErrorLabel(errorId: string): string {
   const error = ACCESSORIES_ERRORS.find((err) => err.id === errorId)

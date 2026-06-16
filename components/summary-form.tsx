@@ -15,6 +15,7 @@ import {
   ACCESSORIES_ERRORS,
   getErrorLabel,
   getAccessoriesErrorLabel,
+  INVOICE_UPLOAD_ENABLED,
 } from "@/lib/constants"
 import { COUNTRY_NAMES_EN, COUNTRY_NAMES_PL, normalizeCountryKeyFromAny } from "@/lib/form-data"
 
@@ -811,7 +812,7 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
     if (!ck || !COUNTRY_NAMES_PL[ck]) return false
     if (!(d.supplierName || "").trim()) return false
     if (!(d.invoiceNumber || "").trim()) return false
-    if (!d.attachedDocuments?.length) return false
+    if (INVOICE_UPLOAD_ENABLED && !d.attachedDocuments?.length) return false
     return true
   }
 
@@ -1209,7 +1210,7 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
       if (!(deviceData.invoiceNumber || "").trim()) {
         errors.push(tr(language, "Numer faktury jest wymagany."))
       }
-      if (!deviceData.attachedDocuments?.length) {
+      if (INVOICE_UPLOAD_ENABLED && !deviceData.attachedDocuments?.length) {
         errors.push(tr(language, "Należy załączyć fakturę lub dokument."))
       }
       if (errors.length > 0) {
@@ -1509,7 +1510,7 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
             />
           </div>
 
-          {(strictAutoclaveDevice || deviceData.attachedDocuments.length > 0) && (
+          {INVOICE_UPLOAD_ENABLED && (strictAutoclaveDevice || deviceData.attachedDocuments.length > 0) && (
             <div className="grid grid-cols-2 gap-y-4 text-sm mt-4">
               <div className="text-gray-600">
                 {tr(language, "Dodane dokumenty")}
@@ -1546,7 +1547,7 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
           )}
           {renderField("Nazwa wystawcy", deviceData.supplierName)}
           {renderField("Numer faktury", deviceData.invoiceNumber)}
-          {renderField("Dodane dokumenty", deviceData.attachedDocuments, true)}
+          {INVOICE_UPLOAD_ENABLED && renderField("Dodane dokumenty", deviceData.attachedDocuments, true)}
         </div>
       )}
 
