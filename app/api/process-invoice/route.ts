@@ -6,10 +6,48 @@ const GOOGLE_SCRIPT_URL =
 
 export const runtime = "nodejs"
 
+function isTruthyFormFlag(value: FormDataEntryValue | null): boolean {
+  const v = (value ?? "").toString().trim().toLowerCase()
+  return v === "1" || v === "true" || v === "yes"
+}
+
+async function uploadInvoiceToGoogleDrive(payload: {
+  fileName: string
+  mimeType: string
+  base64Data: string
+  invoiceNumber: string
+  subfolder: string
+}) {
+  return fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then(async (res) => {
+      if (!res.ok) {
+        const text = await res.text().catch(() => "")
+        console.error("Google Apps Script upload error:", res.status, text)
+        return null
+      }
+      try {
+        return await res.json()
+      } catch {
+        return await res.text()
+      }
+    })
+    .catch((err) => {
+      console.error("Google Apps Script upload exception:", err)
+      return null
+    })
+}
+
 /**
  * Proxy dla uploadu faktury – omija CORS (żądanie z przeglądarki idzie na naszą domenę,
  * serwer Next.js przekazuje je do enbiocom.usermd.net) ORAZ równolegle wysyła plik
  * do Google Apps Script (Google Drive).
+ * Parametr formData skipOcr=1 pomija OCR (tylko zapis pliku na Drive).
  */
 export async function POST(request: Request) {
   try {
@@ -18,6 +56,8 @@ export async function POST(request: Request) {
     if (!file || !(file instanceof Blob)) {
       return NextResponse.json({ success: false, error: "Brak pliku" }, { status: 400 })
     }
+
+    const skipOcr = isTruthyFormFlag(formData.get("skipOcr"))
 
     // Wspólne dane pliku
     const fileName = file instanceof File && file.name ? file.name : "invoice"
@@ -44,6 +84,26 @@ export async function POST(request: Request) {
 
     const invoiceNumber = (formData.get("invoiceNumber") ?? "").toString()
 
+    const googlePayload = {
+      fileName,
+      mimeType,
+      base64Data,
+      invoiceNumber,
+      subfolder,
+    }
+
+    if (skipOcr) {
+      const googleResult = await uploadInvoiceToGoogleDrive(googlePayload)
+      return NextResponse.json(
+        {
+          success: true,
+          ocrSkipped: true,
+          google: googleResult,
+        },
+        { status: 200 }
+      )
+    }
+
     // 1) Wywołanie istniejącego PHP (OCR)
     const proxyFormData = new FormData()
     proxyFormData.append("file", file, file instanceof File ? file.name : undefined)
@@ -67,38 +127,7 @@ export async function POST(request: Request) {
       headers,
     })
 
-    // 2) Równoległe wysłanie pliku do Google Apps Script (Google Drive)
-    const googlePayload = {
-      fileName,
-      mimeType,
-      base64Data,
-      invoiceNumber,
-      subfolder,
-    }
-
-    const googlePromise = fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(googlePayload),
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          const text = await res.text().catch(() => "")
-          console.error("Google Apps Script upload error:", res.status, text)
-          return null
-        }
-        try {
-          return await res.json()
-        } catch {
-          return await res.text()
-        }
-      })
-      .catch((err) => {
-        console.error("Google Apps Script upload exception:", err)
-        return null
-      })
+    const googlePromise = uploadInvoiceToGoogleDrive(googlePayload)
 
     const [phpResponse, googleResult] = await Promise.all([phpPromise, googlePromise])
 

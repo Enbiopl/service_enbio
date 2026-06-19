@@ -17,7 +17,7 @@ import { Switch } from "@/components/ui/switch"
 import { useMeasureHeight } from "@/hooks/use-measure-height"
 import SummaryForm from "@/components/summary-form"
 import { COUNTRY_NAMES_EN } from "@/lib/form-data"
-import { INVOICE_UPLOAD_ENABLED } from "@/lib/constants"
+import { INVOICE_OCR_ENABLED, INVOICE_UPLOAD_ENABLED } from "@/lib/constants"
 
 type FormStep = "product-selection" | "complaint-form" | "service-selection" | "service-form" | "summary"
 
@@ -251,6 +251,7 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Dodaj zdjęcie faktury lub świadectwa gwarancji": "Add an invoice or warranty document photo",
     "Dodaj zdjęcie faktury lub dokumentu gwarancyjnego": "Add an invoice or warranty document photo",
     "Przetwarzanie faktury...": "Processing invoice...",
+    "Przesyłanie pliku...": "Uploading file...",
     "Przeciągnij lub wybierz plik": "Drag and drop or choose a file",
     "zrób zdjęcie": "take a photo",
     "Dane z faktury zostały rozpoznane i będą użyte w formularzu.":
@@ -373,6 +374,7 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
       "Short description (e.g. I received a different product than ordered)...",
     "Dane rozpoznane z faktury, sprawdź poprawność":
       "Data recognized from the invoice, please verify correctness",
+    "Sprawdź poprawność danych": "Please verify the details",
     "Zaznaczenie wszystkich zgód jest wymagane":
       "Selecting all consents is required",
     "Błąd nr": "Error no.",
@@ -1664,6 +1666,8 @@ export default function NewComplaintForm() {
     setInvoiceData(null);
     setFileUploadProgress(0);
     setIsFileUploading(false);
+    setFormData((prev) => ({ ...prev, serviceUploadedFile: null, uploadedFile: null }));
+    setSummaryData((prev: any) => ({ ...prev, attachment1: null }));
     const fileInput = document.getElementById('fileUpload') as HTMLInputElement;
     if (fileInput) fileInput.value = '';
   };
@@ -1684,6 +1688,7 @@ export default function NewComplaintForm() {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
       setSelectedFile(file)
+      setFormData((prev) => ({ ...prev, serviceUploadedFile: file }))
 
       // Rozpocznij upload
       setIsFileUploading(true)
@@ -1692,16 +1697,19 @@ export default function NewComplaintForm() {
       setSummaryData((prev:any) => ({...prev, attachment1: file}))
 
       try {
-        const formData = new FormData()
-        formData.append("file", file)
+        const uploadFormData = new FormData()
+        uploadFormData.append("file", file)
 
-        // przekaż formId również do backendu OCR/Google Apps Script
+        // przekaż formId również do backendu / Google Apps Script
         const formId =
           (typeof window !== "undefined" && window.localStorage.getItem("enbio_form_id")) ||
           (summaryData?.formId as string | undefined) ||
           ""
         if (formId) {
-          formData.append("formId", formId)
+          uploadFormData.append("formId", formId)
+        }
+        if (!INVOICE_OCR_ENABLED) {
+          uploadFormData.append("skipOcr", "1")
         }
 
         // Symulacja postępu uploadu
@@ -1718,32 +1726,30 @@ export default function NewComplaintForm() {
         // Wyślij plik przez proxy (omija CORS)
         const response = await fetch("/api/process-invoice", {
           method: "POST",
-          body: formData,
+          body: uploadFormData,
         })
 
         clearInterval(progressInterval)
 
         if (response.ok) {
           const result = await response.json()
-          console.log("Invoice processing response:", result)
+          console.log("Invoice upload response:", result)
           setFileUploadProgress(100)
 
           if (result.success === false) {
             setFileUploadStatus({
               success: false,
-              error: result.error || tr(language, "Wystąpił błąd podczas przetwarzania faktury"),
+              error: result.error || tr(language, "Wystąpił błąd podczas przesyłania pliku. Spróbuj ponownie."),
             })
           } else {
-            // Zapisz dane faktury
-            console.log("Otrzymane dane faktury:", result) // Dodaj logowanie
-            setInvoiceData(result)
             setFileUploadStatus({
               success: true,
             })
 
-            // Jeśli mamy dane nabywcy, uzupełnij formularz
-            console.log(result.data)
-            console.log(fileUploadStatus)
+            if (INVOICE_OCR_ENABLED && !result.ocrSkipped) {
+              console.log("Otrzymane dane faktury:", result)
+              setInvoiceData(result)
+            }
           }
         } else {
           const errorData = await response.json().catch(() => ({}))
@@ -1927,6 +1933,7 @@ export default function NewComplaintForm() {
       INVOICE_UPLOAD_ENABLED &&
       selectedCategory === "autoclave" &&
       serviceType === "warranty" &&
+      !selectedFile &&
       fileUploadProgress !== 100
     ) {
       alert(tr(language, "Proszę dodać zdjęcie faktury lub świadectwa gwarancji."))
@@ -1974,8 +1981,8 @@ export default function NewComplaintForm() {
       serviceType, // Only relevant for autoclave
       invoiceData,
       comment,
-      attachedDocuments: [selectedFile?.name],
-       attachedissueDocuments: [selectedFile?.name],
+      attachedDocuments: selectedFile?.name ? [selectedFile.name] : [],
+       attachedissueDocuments: selectedFile?.name ? [selectedFile.name] : [],
     }
 
     if (selectedCategory === "autoclave") {
@@ -1991,7 +1998,7 @@ export default function NewComplaintForm() {
         serviceUploadedFile: formData.serviceUploadedFile ? formData.serviceUploadedFile.name : null,
         uploadedFolder: formData.uploadedFolder ? Array.from(formData.uploadedFolder).map((f) => f.name) : null,
         uploadedFolderZipName: formData.uploadedFolderZipName || null,
-        attachedDocuments: [selectedFile?.name],
+        attachedDocuments: selectedFile?.name ? [selectedFile.name] : [],
         // Other delivery address
         otherDeliveryAddress: formData.otherDeliveryAddress || false,
         deliveryCompanyName: formData.deliveryCompanyName || "",
@@ -2240,7 +2247,10 @@ export default function NewComplaintForm() {
                       <div className="w-full">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-gray-900">
-                            {tr(language, "Przetwarzanie faktury...")}
+                            {tr(
+                              language,
+                              INVOICE_OCR_ENABLED ? "Przetwarzanie faktury..." : "Przesyłanie pliku..."
+                            )}
                           </span>
                           <span className="text-gray-900">{fileUploadProgress}%</span>
                         </div>
@@ -2285,7 +2295,7 @@ export default function NewComplaintForm() {
                   </div>
               )}
 
-              {invoiceData && (
+              {INVOICE_OCR_ENABLED && invoiceData && (
                   <div className="mt-2 text-sm text-green-500">
                     {tr(
                       language,
@@ -3845,7 +3855,12 @@ export default function NewComplaintForm() {
           </div>
           <h1 className="text-gray-900 text-center text-xl sm:text-2xl font-medium mb-6 sm:mb-8">
             {currentStep === "summary"
-              ? tr(language, "Dane rozpoznane z faktury, sprawdź poprawność")
+              ? tr(
+                  language,
+                  INVOICE_OCR_ENABLED
+                    ? "Dane rozpoznane z faktury, sprawdź poprawność"
+                    : "Sprawdź poprawność danych"
+                )
               : HEADING_TRANSLATIONS[language]}
           </h1>
 
