@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { ChevronDown, Info, ArrowLeft, Paperclip, Camera, Folder, X, Download, Trash2, CheckCircle } from "lucide-react"
+import { ChevronDown, Info, ArrowLeft, Paperclip, Camera, X, Download, CheckCircle } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, TooltipArrow } from "@/components/ui/tooltip"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Switch } from "@/components/ui/switch"
@@ -41,6 +41,107 @@ const ACCESSORY_OPTIONS: ProductOption[] = [
 const SUPPORTED_LANGUAGES = ["en", "pl", "es", "fr", "de", "it", "uk", "ru", "pt"] as const
 
 type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number]
+
+type DevicePhotoKey =
+  | "serialNumberLabel"
+  | "trayUnderside"
+  | "deviceHoseConnections"
+  | "waterTankHoseConnections"
+  | "chamberInterior"
+  | "powerCableConnection"
+  | "devicePlacement"
+  | "cycleCountScreen"
+
+const DEVICE_PHOTO_FIELDS: Array<{
+  key: DevicePhotoKey
+  title: string
+  description: string
+}> = [
+  {
+    key: "serialNumberLabel",
+    title: "Etykieta z numerem seryjnym",
+    description: "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.",
+  },
+  {
+    key: "trayUnderside",
+    title: "Spód tacki",
+    description: "Wyjmij szufladę autoklawu i zrób zdjęcie spodu tacki.",
+  },
+  {
+    key: "deviceHoseConnections",
+    title: "Podłączenie węży – urządzenie",
+    description: "Pokaż, jak oba węże są podłączone do urządzenia.",
+  },
+  {
+    key: "waterTankHoseConnections",
+    title: "Podłączenie węży – zbiornik wody",
+    description: "Pokaż, jak węże są podłączone do zbiornika wody.",
+  },
+  {
+    key: "chamberInterior",
+    title: "Wnętrze komory",
+    description: "Wyjmij tackę i zrób wyraźne zdjęcie wnętrza komory.",
+  },
+  {
+    key: "powerCableConnection",
+    title: "Podłączenie przewodu zasilającego",
+    description: "Pokaż przewód zasilający podłączony do urządzenia.",
+  },
+  {
+    key: "devicePlacement",
+    title: "Ustawienie urządzenia",
+    description: "Zrób szersze zdjęcie urządzenia i jego otoczenia, pokazujące odległość od ścian i innych przedmiotów.",
+  },
+  {
+    key: "cycleCountScreen",
+    title: "Ekran urządzenia – licznik cykli",
+    description: "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).",
+  },
+]
+
+const compressDevicePhoto = async (file: File): Promise<File> => {
+  const bitmap = await createImageBitmap(file)
+  const maxDimension = 1920
+  const targetSize = 2 * 1024 * 1024
+  let scale = Math.min(1, maxDimension / Math.max(bitmap.width, bitmap.height))
+  let quality = 0.84
+  let compressedBlob: Blob | null = null
+
+  try {
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const canvas = document.createElement("canvas")
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale))
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale))
+
+      const context = canvas.getContext("2d")
+      if (!context) throw new Error("Canvas is not supported")
+
+      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+      compressedBlob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob(
+          (blob) => (blob ? resolve(blob) : reject(new Error("Photo compression failed"))),
+          "image/jpeg",
+          quality
+        )
+      })
+
+      if (compressedBlob.size <= targetSize) break
+
+      scale *= 0.8
+      quality = Math.max(0.65, quality - 0.05)
+    }
+  } finally {
+    bitmap.close()
+  }
+
+  if (!compressedBlob || compressedBlob.size >= file.size) return file
+
+  const compressedName = file.name.replace(/\.[^.]+$/, "") + ".jpg"
+  return new File([compressedBlob], compressedName, {
+    type: "image/jpeg",
+    lastModified: file.lastModified,
+  })
+}
 
 const LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
   en: "English",
@@ -109,6 +210,45 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "np. ST01-PL-24-00001": "p.ex. ST01-PL-24-00001",
     "Przesyłanie folderu...": "A enviar pasta...",
     "1. Dane urządzenia": "1. Dados do dispositivo",
+    "Zdjęcia urządzenia": "Fotografias do dispositivo",
+    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Carregue as 8 fotografias abaixo. Elas ajudarão a nossa equipa de assistência a diagnosticar o problema mais rapidamente.",
+    "Etykieta z numerem seryjnym": "Etiqueta do número de série",
+    "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
+      "Fotografia da parte traseira do dispositivo com o número de série claramente visível.",
+    "Spód tacki": "Parte inferior da bandeja",
+    "Wyjmij szufladę autoklawu i zrób zdjęcie spodu tacki.":
+      "Retire a gaveta do autoclave e fotografe a parte inferior da bandeja.",
+    "Podłączenie węży – urządzenie": "Ligações das mangueiras – dispositivo",
+    "Pokaż, jak oba węże są podłączone do urządzenia.":
+      "Mostre como ambas as mangueiras estão ligadas ao dispositivo.",
+    "Podłączenie węży – zbiornik wody": "Ligações das mangueiras – depósito de água",
+    "Pokaż, jak węże są podłączone do zbiornika wody.":
+      "Mostre como as mangueiras estão ligadas ao depósito de água.",
+    "Wnętrze komory": "Interior da câmara",
+    "Wyjmij tackę i zrób wyraźne zdjęcie wnętrza komory.":
+      "Retire a bandeja e tire uma fotografia nítida do interior da câmara.",
+    "Podłączenie przewodu zasilającego": "Ligação do cabo de alimentação",
+    "Pokaż przewód zasilający podłączony do urządzenia.":
+      "Mostre o cabo de alimentação ligado ao dispositivo.",
+    "Ustawienie urządzenia": "Posicionamento do dispositivo",
+    "Zrób szersze zdjęcie urządzenia i jego otoczenia, pokazujące odległość od ścian i innych przedmiotów.":
+      "Tire uma fotografia mais ampla do dispositivo e da área envolvente, incluindo a distância às paredes e a outros objetos.",
+    "Ekran urządzenia – licznik cykli": "Ecrã do dispositivo – contador de ciclos",
+    "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
+      "Fotografe o ecrã do autoclave com o número de processos concluídos (Info → Contadores).",
+    "Przeciągnij lub wybierz zdjęcie": "Arraste e largue ou escolha uma fotografia",
+    "maks. 15 MB": "máx. 15 MB",
+    "Kompresowanie zdjęcia...": "A comprimir a fotografia...",
+    "Przesyłanie zdjęcia...": "A enviar a fotografia...",
+    "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
+      "Não foi possível processar a fotografia. Tente novamente.",
+    "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
+      "Não foi possível enviar a fotografia. Tente novamente.",
+    "Maksymalny rozmiar zdjęcia to 15 MB.": "O tamanho máximo da fotografia é 15 MB.",
+    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Carregue as 8 fotografias do dispositivo.",
+    "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
+      "Aguarde até que todas as fotografias do dispositivo terminem de ser enviadas.",
     "1. Dane produktu": "1. Dados do produto",
     "Autoklaw": "Autoclave",
     "Kliknij ponownie, aby zmienić wybór": "Clique novamente para alterar a seleção",
@@ -135,6 +275,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "do przesyłki": "para envio",
     "Nazwa firmy": "Nome da empresa",
     "Wpisz nazwę firmy": "Introduza o nome da empresa",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Introduza o nome da sua empresa ou o seu nome completo",
     "Numer VAT": "Número de IVA",
     "Wpisz numer VAT": "Introduza o número de IVA",
     "Imię i nazwisko": "Nome completo",
@@ -269,6 +411,43 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "np. ST01-PL-24-00001": "e.g. ST01-PL-24-00001",
     "Przesyłanie folderu...": "Uploading folder...",
     "1. Dane urządzenia": "1. Device data",
+    "Zdjęcia urządzenia": "Device photos",
+    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Please upload all 8 photos below. They will help our service team diagnose the issue faster.",
+    "Etykieta z numerem seryjnym": "Serial number label",
+    "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
+      "Photo of the back of the device with the serial number clearly visible.",
+    "Spód tacki": "Tray underside",
+    "Wyjmij szufladę autoklawu i zrób zdjęcie spodu tacki.":
+      "Pull out the autoclave drawer and take a photo of the underside of the tray.",
+    "Podłączenie węży – urządzenie": "Hose connections – device",
+    "Pokaż, jak oba węże są podłączone do urządzenia.":
+      "Show how both hoses are connected to the device.",
+    "Podłączenie węży – zbiornik wody": "Hose connections – water tank",
+    "Pokaż, jak węże są podłączone do zbiornika wody.":
+      "Show how the hoses are connected to the water tank.",
+    "Wnętrze komory": "Chamber interior",
+    "Wyjmij tackę i zrób wyraźne zdjęcie wnętrza komory.":
+      "Remove the tray and take a clear photo of the inside of the chamber.",
+    "Podłączenie przewodu zasilającego": "Power cable connection",
+    "Pokaż przewód zasilający podłączony do urządzenia.":
+      "Show the power cable connected to the device.",
+    "Ustawienie urządzenia": "Device placement",
+    "Zrób szersze zdjęcie urządzenia i jego otoczenia, pokazujące odległość od ścian i innych przedmiotów.":
+      "Take a wider photo showing the device and the surrounding area, including its distance from walls or other objects.",
+    "Ekran urządzenia – licznik cykli": "Device screen – cycle count",
+    "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
+      "Take a photo of the autoclave screen showing the number of completed processes (Info → Counters).",
+    "Przeciągnij lub wybierz zdjęcie": "Drag & drop or choose a photo",
+    "maks. 15 MB": "max. 15 MB",
+    "Kompresowanie zdjęcia...": "Compressing photo...",
+    "Przesyłanie zdjęcia...": "Uploading photo...",
+    "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
+      "The photo could not be processed. Please try again.",
+    "Nie udało się przesłać zdjęcia. Spróbuj ponownie.": "The photo could not be uploaded. Please try again.",
+    "Maksymalny rozmiar zdjęcia to 15 MB.": "The maximum photo size is 15 MB.",
+    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Please upload all 8 device photos.",
+    "Poczekaj na zakończenie przesyłania zdjęć urządzenia.": "Please wait until all device photos finish uploading.",
     "1. Dane produktu": "1. Product data",
     "Autoklaw": "Autoclave",
     "Kliknij ponownie, aby zmienić wybór": "Click again to change your selection",
@@ -295,6 +474,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "do przesyłki": "for shipment",
     "Nazwa firmy": "Company name",
     "Wpisz nazwę firmy": "Enter company name",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Enter your company name or your full name",
     "Numer VAT": "VAT number",
     "Wpisz numer VAT": "Enter VAT number",
     "Imię i nazwisko": "Full name",
@@ -429,6 +610,45 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "np. ST01-PL-24-00001": "par ex. ST01-PL-24-00001",
     "Przesyłanie folderu...": "Téléchargement du dossier...",
     "1. Dane urządzenia": "1. Données de l’appareil",
+    "Zdjęcia urządzenia": "Photos de l’appareil",
+    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Téléchargez les 8 photos ci-dessous. Elles aideront notre équipe de service à diagnostiquer le problème plus rapidement.",
+    "Etykieta z numerem seryjnym": "Étiquette du numéro de série",
+    "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
+      "Photo de l’arrière de l’appareil avec le numéro de série clairement visible.",
+    "Spód tacki": "Dessous du plateau",
+    "Wyjmij szufladę autoklawu i zrób zdjęcie spodu tacki.":
+      "Retirez le tiroir de l’autoclave et photographiez le dessous du plateau.",
+    "Podłączenie węży – urządzenie": "Raccordement des tuyaux – appareil",
+    "Pokaż, jak oba węże są podłączone do urządzenia.":
+      "Montrez comment les deux tuyaux sont raccordés à l’appareil.",
+    "Podłączenie węży – zbiornik wody": "Raccordement des tuyaux – réservoir d’eau",
+    "Pokaż, jak węże są podłączone do zbiornika wody.":
+      "Montrez comment les tuyaux sont raccordés au réservoir d’eau.",
+    "Wnętrze komory": "Intérieur de la chambre",
+    "Wyjmij tackę i zrób wyraźne zdjęcie wnętrza komory.":
+      "Retirez le plateau et prenez une photo nette de l’intérieur de la chambre.",
+    "Podłączenie przewodu zasilającego": "Branchement du câble d’alimentation",
+    "Pokaż przewód zasilający podłączony do urządzenia.":
+      "Montrez le câble d’alimentation branché à l’appareil.",
+    "Ustawienie urządzenia": "Positionnement de l’appareil",
+    "Zrób szersze zdjęcie urządzenia i jego otoczenia, pokazujące odległość od ścian i innych przedmiotów.":
+      "Prenez une photo plus large de l’appareil et de son environnement, montrant sa distance par rapport aux murs et aux autres objets.",
+    "Ekran urządzenia – licznik cykli": "Écran de l’appareil – compteur de cycles",
+    "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
+      "Photographiez l’écran de l’autoclave affichant le nombre de processus terminés (Info → Compteurs).",
+    "Przeciągnij lub wybierz zdjęcie": "Glissez-déposez ou choisissez une photo",
+    "maks. 15 MB": "15 Mo max.",
+    "Kompresowanie zdjęcia...": "Compression de la photo...",
+    "Przesyłanie zdjęcia...": "Téléchargement de la photo...",
+    "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
+      "La photo n’a pas pu être traitée. Réessayez.",
+    "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
+      "La photo n’a pas pu être téléchargée. Réessayez.",
+    "Maksymalny rozmiar zdjęcia to 15 MB.": "La taille maximale de la photo est de 15 Mo.",
+    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Veuillez télécharger les 8 photos de l’appareil.",
+    "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
+      "Attendez la fin du téléchargement de toutes les photos de l’appareil.",
     "Autoklaw": "Autoclave",
     "1. Dane produktu": "1. Données du produit",
     "Kliknij ponownie, aby zmienić wybór": "Cliquez à nouveau pour modifier le choix",
@@ -457,6 +677,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "do przesyłki": "pour l'envoi",
     "Nazwa firmy": "Nom de l’entreprise",
     "Wpisz nazwę firmy": "Saisissez le nom de l’entreprise",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Saisissez le nom de votre entreprise ou vos nom et prénom",
     "Numer VAT": "Numéro de TVA",
     "Wpisz numer VAT": "Saisissez le numéro de TVA",
     "Imię i nazwisko": "Nom et prénom",
@@ -591,6 +813,45 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Wybierz folder o numerze autoklawu,": "Elige la carpeta con el número del autoclave,",
     "np. ST01-PL-24-00001": "p. ej. ST01-PL-24-00001",
     "1. Dane urządzenia": "1. Datos del dispositivo",
+    "Zdjęcia urządzenia": "Fotos del dispositivo",
+    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Sube las 8 fotos que aparecen a continuación. Ayudarán a nuestro equipo técnico a diagnosticar el problema más rápidamente.",
+    "Etykieta z numerem seryjnym": "Etiqueta del número de serie",
+    "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
+      "Foto de la parte trasera del dispositivo con el número de serie claramente visible.",
+    "Spód tacki": "Parte inferior de la bandeja",
+    "Wyjmij szufladę autoklawu i zrób zdjęcie spodu tacki.":
+      "Extrae el cajón del autoclave y fotografía la parte inferior de la bandeja.",
+    "Podłączenie węży – urządzenie": "Conexiones de las mangueras – dispositivo",
+    "Pokaż, jak oba węże są podłączone do urządzenia.":
+      "Muestra cómo están conectadas ambas mangueras al dispositivo.",
+    "Podłączenie węży – zbiornik wody": "Conexiones de las mangueras – depósito de agua",
+    "Pokaż, jak węże są podłączone do zbiornika wody.":
+      "Muestra cómo están conectadas las mangueras al depósito de agua.",
+    "Wnętrze komory": "Interior de la cámara",
+    "Wyjmij tackę i zrób wyraźne zdjęcie wnętrza komory.":
+      "Retira la bandeja y toma una foto clara del interior de la cámara.",
+    "Podłączenie przewodu zasilającego": "Conexión del cable de alimentación",
+    "Pokaż przewód zasilający podłączony do urządzenia.":
+      "Muestra el cable de alimentación conectado al dispositivo.",
+    "Ustawienie urządzenia": "Ubicación del dispositivo",
+    "Zrób szersze zdjęcie urządzenia i jego otoczenia, pokazujące odległość od ścian i innych przedmiotów.":
+      "Toma una foto más amplia del dispositivo y su entorno, mostrando la distancia a las paredes y otros objetos.",
+    "Ekran urządzenia – licznik cykli": "Pantalla del dispositivo – contador de ciclos",
+    "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
+      "Fotografía la pantalla del autoclave mostrando el número de procesos completados (Info → Contadores).",
+    "Przeciągnij lub wybierz zdjęcie": "Arrastra y suelta o elige una foto",
+    "maks. 15 MB": "máx. 15 MB",
+    "Kompresowanie zdjęcia...": "Comprimiendo la foto...",
+    "Przesyłanie zdjęcia...": "Subiendo la foto...",
+    "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
+      "No se pudo procesar la foto. Inténtalo de nuevo.",
+    "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
+      "No se pudo subir la foto. Inténtalo de nuevo.",
+    "Maksymalny rozmiar zdjęcia to 15 MB.": "El tamaño máximo de la foto es de 15 MB.",
+    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Sube las 8 fotos del dispositivo.",
+    "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
+      "Espera a que terminen de subirse todas las fotos del dispositivo.",
     "1. Dane produktu": "1. Datos del producto",
     "Autoklaw": "Autoclave",
     "Kliknij ponownie, aby zmienić wybór": "Haz clic de nuevo para cambiar la selección",
@@ -622,6 +883,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "do przesyłki": "para envío",
     "Nazwa firmy": "Nombre de la empresa",
     "Wpisz nazwę firmy": "Introduce el nombre de la empresa",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Introduce el nombre de tu empresa o tu nombre completo",
     "Numer VAT": "Número de IVA",
     "Wpisz numer VAT": "Introduce el número de IVA",
     "Imię i nazwisko": "Nombre y apellidos",
@@ -753,6 +1016,45 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Wybierz folder o numerze autoklawu,": "Wählen Sie den Ordner mit der Autoklaven-Nummer,",
     "np. ST01-PL-24-00001": "z. B. ST01-PL-24-00001",
     "1. Dane urządzenia": "1. Gerätedaten",
+    "Zdjęcia urządzenia": "Gerätefotos",
+    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Laden Sie alle 8 unten aufgeführten Fotos hoch. Sie helfen unserem Serviceteam, das Problem schneller zu diagnostizieren.",
+    "Etykieta z numerem seryjnym": "Seriennummernetikett",
+    "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
+      "Foto der Geräterückseite mit deutlich sichtbarer Seriennummer.",
+    "Spód tacki": "Unterseite des Tabletts",
+    "Wyjmij szufladę autoklawu i zrób zdjęcie spodu tacki.":
+      "Ziehen Sie die Autoklavenschublade heraus und fotografieren Sie die Unterseite des Tabletts.",
+    "Podłączenie węży – urządzenie": "Schlauchanschlüsse – Gerät",
+    "Pokaż, jak oba węże są podłączone do urządzenia.":
+      "Zeigen Sie, wie beide Schläuche am Gerät angeschlossen sind.",
+    "Podłączenie węży – zbiornik wody": "Schlauchanschlüsse – Wassertank",
+    "Pokaż, jak węże są podłączone do zbiornika wody.":
+      "Zeigen Sie, wie die Schläuche am Wassertank angeschlossen sind.",
+    "Wnętrze komory": "Kammerinnenraum",
+    "Wyjmij tackę i zrób wyraźne zdjęcie wnętrza komory.":
+      "Nehmen Sie das Tablett heraus und fotografieren Sie den Innenraum der Kammer deutlich.",
+    "Podłączenie przewodu zasilającego": "Netzkabelanschluss",
+    "Pokaż przewód zasilający podłączony do urządzenia.":
+      "Zeigen Sie das am Gerät angeschlossene Netzkabel.",
+    "Ustawienie urządzenia": "Geräteaufstellung",
+    "Zrób szersze zdjęcie urządzenia i jego otoczenia, pokazujące odległość od ścian i innych przedmiotów.":
+      "Machen Sie ein Übersichtsbild des Geräts und seiner Umgebung, auf dem der Abstand zu Wänden und anderen Gegenständen zu sehen ist.",
+    "Ekran urządzenia – licznik cykli": "Gerätebildschirm – Zykluszähler",
+    "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
+      "Fotografieren Sie den Autoklavenbildschirm mit der Anzahl der abgeschlossenen Prozesse (Info → Zähler).",
+    "Przeciągnij lub wybierz zdjęcie": "Foto hierher ziehen oder auswählen",
+    "maks. 15 MB": "max. 15 MB",
+    "Kompresowanie zdjęcia...": "Foto wird komprimiert...",
+    "Przesyłanie zdjęcia...": "Foto wird hochgeladen...",
+    "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
+      "Das Foto konnte nicht verarbeitet werden. Versuchen Sie es erneut.",
+    "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
+      "Das Foto konnte nicht hochgeladen werden. Versuchen Sie es erneut.",
+    "Maksymalny rozmiar zdjęcia to 15 MB.": "Die maximale Fotogröße beträgt 15 MB.",
+    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Bitte laden Sie alle 8 Gerätefotos hoch.",
+    "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
+      "Warten Sie, bis alle Gerätefotos vollständig hochgeladen wurden.",
     "1. Dane produktu": "1. Produktdaten",
     "Autoklaw": "Autoklav",
     "Kliknij ponownie, aby zmienić wybór": "Klicken Sie erneut, um die Auswahl zu ändern",
@@ -779,6 +1081,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "do przesyłki": "für den Versand",
     "Nazwa firmy": "Firmenname",
     "Wpisz nazwę firmy": "Firmenname eingeben",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Geben Sie den Namen Ihres Unternehmens oder Ihren vollständigen Namen ein",
     "Numer VAT": "USt-IdNr.",
     "Wpisz numer VAT": "USt-IdNr. eingeben",
     "Imię i nazwisko": "Vor- und Nachname",
@@ -912,6 +1216,45 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Wybierz folder o numerze autoklawu,": "Scegli la cartella con il numero dell'autoclave,",
     "np. ST01-PL-24-00001": "es. ST01-PL-24-00001",
     "1. Dane urządzenia": "1. Dati dispositivo",
+    "Zdjęcia urządzenia": "Foto del dispositivo",
+    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Carica tutte le 8 foto riportate di seguito. Aiuteranno il nostro team di assistenza a diagnosticare il problema più rapidamente.",
+    "Etykieta z numerem seryjnym": "Etichetta del numero di serie",
+    "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
+      "Foto del retro del dispositivo con il numero di serie chiaramente visibile.",
+    "Spód tacki": "Parte inferiore del vassoio",
+    "Wyjmij szufladę autoklawu i zrób zdjęcie spodu tacki.":
+      "Estrai il cassetto dell’autoclave e fotografa la parte inferiore del vassoio.",
+    "Podłączenie węży – urządzenie": "Collegamenti dei tubi – dispositivo",
+    "Pokaż, jak oba węże są podłączone do urządzenia.":
+      "Mostra come entrambi i tubi sono collegati al dispositivo.",
+    "Podłączenie węży – zbiornik wody": "Collegamenti dei tubi – serbatoio dell’acqua",
+    "Pokaż, jak węże są podłączone do zbiornika wody.":
+      "Mostra come i tubi sono collegati al serbatoio dell’acqua.",
+    "Wnętrze komory": "Interno della camera",
+    "Wyjmij tackę i zrób wyraźne zdjęcie wnętrza komory.":
+      "Rimuovi il vassoio e scatta una foto nitida dell’interno della camera.",
+    "Podłączenie przewodu zasilającego": "Collegamento del cavo di alimentazione",
+    "Pokaż przewód zasilający podłączony do urządzenia.":
+      "Mostra il cavo di alimentazione collegato al dispositivo.",
+    "Ustawienie urządzenia": "Posizionamento del dispositivo",
+    "Zrób szersze zdjęcie urządzenia i jego otoczenia, pokazujące odległość od ścian i innych przedmiotów.":
+      "Scatta una foto più ampia del dispositivo e dell’area circostante, mostrando la distanza da pareti e altri oggetti.",
+    "Ekran urządzenia – licznik cykli": "Schermo del dispositivo – contatore cicli",
+    "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
+      "Fotografa lo schermo dell’autoclave con il numero di processi completati (Info → Contatori).",
+    "Przeciągnij lub wybierz zdjęcie": "Trascina e rilascia oppure scegli una foto",
+    "maks. 15 MB": "max. 15 MB",
+    "Kompresowanie zdjęcia...": "Compressione della foto...",
+    "Przesyłanie zdjęcia...": "Caricamento della foto...",
+    "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
+      "Impossibile elaborare la foto. Riprova.",
+    "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
+      "Impossibile caricare la foto. Riprova.",
+    "Maksymalny rozmiar zdjęcia to 15 MB.": "La dimensione massima della foto è 15 MB.",
+    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Carica tutte le 8 foto del dispositivo.",
+    "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
+      "Attendi il completamento del caricamento di tutte le foto del dispositivo.",
     "1. Dane produktu": "1. Dati prodotto",
     "Autoklaw": "Autoclave",
     "Kliknij ponownie, aby zmienić wybór": "Clicca di nuovo per cambiare la selezione",
@@ -938,6 +1281,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "do przesyłki": "per la spedizione",
     "Nazwa firmy": "Nome azienda",
     "Wpisz nazwę firmy": "Inserisci il nome dell'azienda",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Inserisci il nome della tua azienda oppure il tuo nome e cognome",
     "Numer VAT": "Partita IVA",
     "Wpisz numer VAT": "Inserisci la partita IVA",
     "Imię i nazwisko": "Nome e cognome",
@@ -1068,6 +1413,45 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Wybierz folder o numerze autoklawu,": "Виберіть папку з номером автоклава,",
     "np. ST01-PL-24-00001": "напр. ST01-PL-24-00001",
     "1. Dane urządzenia": "1. Дані пристрою",
+    "Zdjęcia urządzenia": "Фотографії пристрою",
+    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Завантажте всі 8 фотографій нижче. Вони допоможуть нашій сервісній команді швидше діагностувати проблему.",
+    "Etykieta z numerem seryjnym": "Етикетка із серійним номером",
+    "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
+      "Фотографія задньої панелі пристрою з чітко видимим серійним номером.",
+    "Spód tacki": "Нижня сторона лотка",
+    "Wyjmij szufladę autoklawu i zrób zdjęcie spodu tacki.":
+      "Витягніть шухляду автоклава та сфотографуйте нижню сторону лотка.",
+    "Podłączenie węży – urządzenie": "Підключення шлангів – пристрій",
+    "Pokaż, jak oba węże są podłączone do urządzenia.":
+      "Покажіть, як обидва шланги підключені до пристрою.",
+    "Podłączenie węży – zbiornik wody": "Підключення шлангів – резервуар для води",
+    "Pokaż, jak węże są podłączone do zbiornika wody.":
+      "Покажіть, як шланги підключені до резервуара для води.",
+    "Wnętrze komory": "Внутрішня частина камери",
+    "Wyjmij tackę i zrób wyraźne zdjęcie wnętrza komory.":
+      "Вийміть лоток і зробіть чітку фотографію внутрішньої частини камери.",
+    "Podłączenie przewodu zasilającego": "Підключення кабелю живлення",
+    "Pokaż przewód zasilający podłączony do urządzenia.":
+      "Покажіть кабель живлення, підключений до пристрою.",
+    "Ustawienie urządzenia": "Розміщення пристрою",
+    "Zrób szersze zdjęcie urządzenia i jego otoczenia, pokazujące odległość od ścian i innych przedmiotów.":
+      "Зробіть ширшу фотографію пристрою та навколишнього простору, показавши відстань до стін та інших предметів.",
+    "Ekran urządzenia – licznik cykli": "Екран пристрою – лічильник циклів",
+    "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
+      "Сфотографуйте екран автоклава з кількістю завершених процесів (Info → Лічильники).",
+    "Przeciągnij lub wybierz zdjęcie": "Перетягніть або виберіть фотографію",
+    "maks. 15 MB": "макс. 15 МБ",
+    "Kompresowanie zdjęcia...": "Стиснення фотографії...",
+    "Przesyłanie zdjęcia...": "Завантаження фотографії...",
+    "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
+      "Не вдалося обробити фотографію. Спробуйте ще раз.",
+    "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
+      "Не вдалося завантажити фотографію. Спробуйте ще раз.",
+    "Maksymalny rozmiar zdjęcia to 15 MB.": "Максимальний розмір фотографії — 15 МБ.",
+    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Завантажте всі 8 фотографій пристрою.",
+    "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
+      "Зачекайте, доки завершиться завантаження всіх фотографій пристрою.",
     "1. Dane produktu": "1. Дані продукту",
     "Autoklaw": "Автоклав",
     "Kliknij ponownie, aby zmienić wybór": "Натисніть знову, щоб змінити вибір",
@@ -1094,6 +1478,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "do przesyłki": "для відправки",
     "Nazwa firmy": "Назва компанії",
     "Wpisz nazwę firmy": "Введіть назву компанії",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Введіть назву вашої компанії або ваше ім’я та прізвище",
     "Numer VAT": "ІПН",
     "Wpisz numer VAT": "Введіть ІПН",
     "Imię i nazwisko": "Ім'я та прізвище",
@@ -1224,6 +1610,45 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Wybierz folder o numerze autoklawu,": "Выберите папку с номером автоклава,",
     "np. ST01-PL-24-00001": "напр. ST01-PL-24-00001",
     "1. Dane urządzenia": "1. Данные устройства",
+    "Zdjęcia urządzenia": "Фотографии устройства",
+    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Загрузите все 8 фотографий ниже. Они помогут нашей сервисной команде быстрее диагностировать проблему.",
+    "Etykieta z numerem seryjnym": "Этикетка с серийным номером",
+    "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
+      "Фотография задней панели устройства с чётко видимым серийным номером.",
+    "Spód tacki": "Нижняя сторона лотка",
+    "Wyjmij szufladę autoklawu i zrób zdjęcie spodu tacki.":
+      "Выдвиньте ящик автоклава и сфотографируйте нижнюю сторону лотка.",
+    "Podłączenie węży – urządzenie": "Подключение шлангов – устройство",
+    "Pokaż, jak oba węże są podłączone do urządzenia.":
+      "Покажите, как оба шланга подключены к устройству.",
+    "Podłączenie węży – zbiornik wody": "Подключение шлангов – резервуар для воды",
+    "Pokaż, jak węże są podłączone do zbiornika wody.":
+      "Покажите, как шланги подключены к резервуару для воды.",
+    "Wnętrze komory": "Внутренняя часть камеры",
+    "Wyjmij tackę i zrób wyraźne zdjęcie wnętrza komory.":
+      "Извлеките лоток и сделайте чёткую фотографию внутренней части камеры.",
+    "Podłączenie przewodu zasilającego": "Подключение кабеля питания",
+    "Pokaż przewód zasilający podłączony do urządzenia.":
+      "Покажите кабель питания, подключённый к устройству.",
+    "Ustawienie urządzenia": "Размещение устройства",
+    "Zrób szersze zdjęcie urządzenia i jego otoczenia, pokazujące odległość od ścian i innych przedmiotów.":
+      "Сделайте более общий снимок устройства и окружающего пространства, показав расстояние до стен и других предметов.",
+    "Ekran urządzenia – licznik cykli": "Экран устройства – счётчик циклов",
+    "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
+      "Сфотографируйте экран автоклава с количеством завершённых процессов (Info → Счётчики).",
+    "Przeciągnij lub wybierz zdjęcie": "Перетащите или выберите фотографию",
+    "maks. 15 MB": "макс. 15 МБ",
+    "Kompresowanie zdjęcia...": "Сжатие фотографии...",
+    "Przesyłanie zdjęcia...": "Загрузка фотографии...",
+    "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
+      "Не удалось обработать фотографию. Попробуйте ещё раз.",
+    "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
+      "Не удалось загрузить фотографию. Попробуйте ещё раз.",
+    "Maksymalny rozmiar zdjęcia to 15 MB.": "Максимальный размер фотографии — 15 МБ.",
+    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Загрузите все 8 фотографий устройства.",
+    "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
+      "Дождитесь завершения загрузки всех фотографий устройства.",
     "1. Dane produktu": "1. Данные продукта",
     "Autoklaw": "Автоклав",
     "Kliknij ponownie, aby zmienić wybór": "Нажмите снова, чтобы изменить выбор",
@@ -1250,6 +1675,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "do przesyłki": "для отправки",
     "Nazwa firmy": "Название компании",
     "Wpisz nazwę firmy": "Введите название компании",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Введите название вашей компании или ваши имя и фамилию",
     "Numer VAT": "ИНН",
     "Wpisz numer VAT": "Введите ИНН",
     "Imię i nazwisko": "Имя и фамилия",
@@ -1366,8 +1793,6 @@ export default function NewComplaintForm() {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [serviceType, setServiceType] = useState<string>("")
   const [isServiceOpen, setIsServiceOpen] = useState(false)
-  const [isFolderUploading, setIsFolderUploading] = useState(false) // State for folder upload animation
-  const [folderUploadProgress, setFolderUploadProgress] = useState(0) // State for folder upload progress
   const [isErrorSelectionOpen, setIsErrorSelectionOpen] = useState(false) // State for error selection collapsible
   const [isFileUploading, setIsFileUploading] = useState(false)
     const [isConfirmed, setIsConfirmed] = useState(false);
@@ -1401,11 +1826,23 @@ export default function NewComplaintForm() {
     }
   } | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [devicePhotos, setDevicePhotos] = useState<Record<DevicePhotoKey, File | null>>({
+    serialNumberLabel: null,
+    trayUnderside: null,
+    deviceHoseConnections: null,
+    waterTankHoseConnections: null,
+    chamberInterior: null,
+    powerCableConnection: null,
+    devicePlacement: null,
+    cycleCountScreen: null,
+  })
+  const [devicePhotoUploading, setDevicePhotoUploading] = useState<Partial<Record<DevicePhotoKey, boolean>>>({})
+  const [devicePhotoCompressing, setDevicePhotoCompressing] = useState<Partial<Record<DevicePhotoKey, boolean>>>({})
+  const [devicePhotoErrors, setDevicePhotoErrors] = useState<Partial<Record<DevicePhotoKey, string>>>({})
   const [selectedErrors, setSelectedErrors] = useState<string[]>([])
   const [showImageUpload, setShowImageUpload] = useState(false)
   const [showCommentInput, setShowCommentInput] = useState(false)
   const [errorComment, setErrorComment] = useState("")
-  const [selectedFolder, setSelectedFolder] = useState<{ name: string; files: File[] } | null>(null)
  const [selectedImageFile, setSelectedImageFile] = useState(null);
    const [tempComment, setTempComment] = useState('');
 
@@ -1508,9 +1945,6 @@ export default function NewComplaintForm() {
     invoiceData: [],
     serviceUploadedFile: null as File | null,
     selectedErrorCodes: [] as string[], // Error codes for autoclave
-    uploadedFolder: null as FileList | null, // Autoclave logs folder
-    uploadedFolderName: "",
-    uploadedFolderZipName: "",
 
     // Accessory Complaint Form specific details
     complaintReason: "", // e.g., "damaged", "not-this-item", "other"
@@ -1615,29 +2049,6 @@ export default function NewComplaintForm() {
       } else {
         clearInterval(interval)
         setFileState(file) // Set the file after simulation
-        setIsUploadingState(false)
-        setUploadProgressState(0) // Reset progress for next upload
-      }
-    }, 100) // Update every 100ms
-  }
-
-  const simulateFolderUpload = (
-      files: FileList,
-      setFolderState: (files: FileList | null) => void,
-      setIsUploadingState: (isUploading: boolean) => void,
-      setUploadProgressState: (progress: number) => void,
-  ) => {
-    setIsUploadingState(true)
-    setUploadProgressState(0)
-
-    let progress = 0
-    const interval = setInterval(() => {
-      progress += 10 // Increment by 10%
-      if (progress <= 100) {
-        setUploadProgressState(progress)
-      } else {
-        clearInterval(interval)
-        setFolderState(files) // Set the folder after simulation
         setIsUploadingState(false)
         setUploadProgressState(0) // Reset progress for next upload
       }
@@ -1785,116 +2196,154 @@ export default function NewComplaintForm() {
     }
   };
 
-  const handleFolderUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = event.target.files
-    if (!fileList || fileList.length === 0) return
+  const handleDevicePhotoUpload = async (key: DevicePhotoKey, file: File | null) => {
+    if (!file) return
 
-    const files = Array.from(fileList)
+    if (file.size > 15 * 1024 * 1024) {
+      setDevicePhotoErrors((prev) => ({ ...prev, [key]: tr(language, "Maksymalny rozmiar zdjęcia to 15 MB.") }))
+      return
+    }
 
-    // wyciągnij nazwę folderu z pierwszego pliku
-    const first = files[0] as File & { webkitRelativePath?: string }
-    const firstPath = first.webkitRelativePath || ""
-    const folderName = firstPath.split("/")[0] || "folder"
+    setDevicePhotoUploading((prev) => ({ ...prev, [key]: true }))
+    setDevicePhotoCompressing((prev) => ({ ...prev, [key]: true }))
+    setDevicePhotoErrors((prev) => ({ ...prev, [key]: "" }))
 
-    // zapisz do formData: lista plików + nazwy folderu + numer seryjny (nazwa folderu)
-    setFormData((prev) => ({
-      ...prev,
-      uploadedFolder: fileList,
-      uploadedFolderName: folderName,
-      uploadedFolderZipName: `${folderName}.zip`,
-      serialNumber: folderName,
-    }))
-
-    setSummaryData((prev: any) => ({ ...prev, attachment2: fileList }))
-
-    // Realny upload do zipowania (new_zipapp/upload.php przez /api/upload-folder)
-    setIsFolderUploading(true)
-    setFolderUploadProgress(0)
-
+    let compressionComplete = false
     try {
-      // Ten sam identyfikator formularza, który trafia do process-invoice / process-submit
-      const formId =
-        (typeof window !== "undefined" && window.localStorage.getItem("enbio_form_id")) ||
-        (summaryData?.formId as string | undefined) ||
-        ""
+      const compressedFile = await compressDevicePhoto(file)
+      compressionComplete = true
+      setDevicePhotoCompressing((prev) => ({ ...prev, [key]: false }))
 
-      const formDataUpload = new FormData()
-      files.forEach((file) => {
-        const relPath = (file as File & { webkitRelativePath?: string }).webkitRelativePath || file.name
-        formDataUpload.append("files[]", file, relPath)
+      const fieldNumber = DEVICE_PHOTO_FIELDS.findIndex((field) => field.key === key) + 1
+      const uploadName = `device-photo-${fieldNumber}-${key}-${compressedFile.name}`
+      const uploadFile = new File([compressedFile], uploadName, {
+        type: compressedFile.type,
+        lastModified: compressedFile.lastModified,
       })
-      formDataUpload.append("folderName", folderName)
-      if (formId) {
-        formDataUpload.append("formId", formId)
-      }
+      const uploadData = new FormData()
+      uploadData.append("file", uploadFile)
+      uploadData.append("skipOcr", "1")
+      uploadData.append("formId", window.localStorage.getItem("enbio_form_id") || summaryData.formId || "")
 
-      const progressInterval = setInterval(() => {
-        setFolderUploadProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(progressInterval)
-            return 90
-          }
-          return prev + 10
-        })
-      }, 300)
-
-      const response = await fetch("/api/upload-folder", {
+      const response = await fetch("/api/process-invoice", {
         method: "POST",
-        body: formDataUpload,
+        body: uploadData,
       })
+      const result = await response.json().catch(() => ({}))
 
-      clearInterval(progressInterval)
-
-      if (response.ok) {
-        const result = await response.json().catch(() => ({}))
-        console.log("Folder upload response:", result)
-        setFolderUploadProgress(100)
-
-        if ((result as any).success) {
-          const zipFileName = (result as any).zipFileName as string | undefined
-          const originalFolder = (result as any).originalFolder as string | undefined
-
-          setFormData((prev) => ({
-            ...prev,
-            uploadedFolderName: originalFolder || folderName,
-            uploadedFolderZipName: zipFileName || prev.uploadedFolderZipName,
-          }))
-
-          setSummaryData((prev: any) => ({
-            ...prev,
-            uploadedFolderName: originalFolder || folderName,
-            uploadedFolderZipName: zipFileName || prev.uploadedFolderZipName,
-          }))
-        } else {
-          console.error("Folder upload returned error:", (result as any).message)
-        }
-      } else {
-        const errorText = await response.text().catch(() => "")
-        console.error("Folder upload server error:", response.status, errorText)
+      if (!response.ok || result.success === false) {
+        throw new Error(result.error || "Device photo upload failed")
       }
+
+      setDevicePhotos((prev) => ({ ...prev, [key]: compressedFile }))
     } catch (error) {
-      console.error("Folder upload exception:", error)
+      console.error("Device photo processing or upload error:", error)
+      setDevicePhotos((prev) => ({ ...prev, [key]: null }))
+      setDevicePhotoErrors((prev) => ({
+        ...prev,
+        [key]: compressionComplete
+          ? tr(language, "Nie udało się przesłać zdjęcia. Spróbuj ponownie.")
+          : tr(language, "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie."),
+      }))
     } finally {
-      setIsFolderUploading(false)
-      setTimeout(() => setFolderUploadProgress(0), 500)
+      setDevicePhotoCompressing((prev) => ({ ...prev, [key]: false }))
+      setDevicePhotoUploading((prev) => ({ ...prev, [key]: false }))
     }
   }
 
-  const handleDeleteFolder = () => {
-    setFormData((prev) => ({
-      ...prev,
-      uploadedFolder: null,
-      uploadedFolderName: "",
-      uploadedFolderZipName: "",
-      serialNumber: prev.serialNumber === prev.uploadedFolderName ? "" : prev.serialNumber,
-    }))
+  const removeDevicePhoto = (key: DevicePhotoKey) => {
+    setDevicePhotos((prev) => ({ ...prev, [key]: null }))
+    setDevicePhotoErrors((prev) => ({ ...prev, [key]: "" }))
   }
+
+  const renderDevicePhotoFields = () => (
+    <div className="border-t border-gray-200 pt-8">
+      <h3 className="text-gray-900 text-base sm:text-lg font-semibold">
+        {tr(language, "Zdjęcia urządzenia")}
+      </h3>
+      <p className="mt-3 mb-6 text-sm leading-6 text-gray-600">
+        {tr(
+          language,
+          "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem."
+        )}
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+        {DEVICE_PHOTO_FIELDS.map((field, index) => {
+          const file = devicePhotos[field.key]
+          const isUploadingPhoto = devicePhotoUploading[field.key]
+          const isCompressingPhoto = devicePhotoCompressing[field.key]
+          const inputId = `device-photo-${field.key}`
+
+          return (
+            <div key={field.key}>
+              <Label htmlFor={inputId} className="text-gray-900 text-sm font-semibold block">
+                {index + 1}. {tr(language, field.title)}
+                <span className="text-red-500 ml-1">*</span>
+              </Label>
+              <p className="text-gray-600 text-sm leading-5 mt-2 min-h-[40px]">
+                {tr(language, field.description)}
+              </p>
+
+              <div className="relative mt-3 min-h-[64px] rounded-lg border border-dashed border-gray-300 bg-white px-3 py-4 flex items-center">
+                <input
+                  id={inputId}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  capture="environment"
+                  onChange={(event) => handleDevicePhotoUpload(field.key, event.target.files?.[0] || null)}
+                  disabled={isUploadingPhoto}
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
+                />
+
+                <div className="flex items-center gap-2 text-sm text-gray-600 min-w-0 w-full">
+                  {isCompressingPhoto ? (
+                    <span>{tr(language, "Kompresowanie zdjęcia...")}</span>
+                  ) : isUploadingPhoto ? (
+                    <span>{tr(language, "Przesyłanie zdjęcia...")}</span>
+                  ) : file ? (
+                    <>
+                      <Camera className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate text-gray-900">{file.name}</span>
+                      <button
+                        type="button"
+                        aria-label="Remove photo"
+                        onClick={(event) => {
+                          event.preventDefault()
+                          event.stopPropagation()
+                          removeDevicePhoto(field.key)
+                        }}
+                        className="relative z-20 ml-auto p-1 text-gray-600 hover:text-gray-900"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <span>
+                        {tr(language, "Przeciągnij lub wybierz zdjęcie")} ({tr(language, "maks. 15 MB")})
+                      </span>
+                      <Camera className="h-4 w-4 flex-shrink-0" />
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {devicePhotoErrors[field.key] && (
+                <p className="mt-2 text-sm text-red-500">{devicePhotoErrors[field.key]}</p>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
 
   const renderCompanyVatFields = () => (
     <>
       <div>
         <Label htmlFor="companyName" className="text-gray-900 text-[14px] font-normal mb-2 block">
-          {tr(language, "Nazwa firmy")}
+          {tr(language, "Wpisz nazwę swojej firmy lub swoje imię i nazwisko")}
           <span className="text-red-500 ml-1">*</span>
         </Label>
         <Input
@@ -1911,7 +2360,6 @@ export default function NewComplaintForm() {
       <div>
         <Label htmlFor="vatNumber" className="text-gray-900 text-[14px] font-normal mb-2 block">
           {tr(language, "Numer VAT")}
-          <span className="text-red-500 ml-1">*</span>
         </Label>
         <Input
           id="vatNumber"
@@ -1920,7 +2368,6 @@ export default function NewComplaintForm() {
           onChange={(e) => handleInputChange("vatNumber", e.target.value)}
           placeholder={tr(language, "Wpisz numer VAT")}
           className={getInputStyles(formData.vatNumber || "")}
-          required
         />
       </div>
     </>
@@ -1952,7 +2399,13 @@ export default function NewComplaintForm() {
     if (!formData.postalCode.trim()) errors.push(tr(language, "Kod pocztowy jest wymagany."))
     if (!formData.city.trim()) errors.push(tr(language, "Miasto jest wymagane."))
     if (!formData.companyName.trim()) errors.push(tr(language, "Nazwa firmy jest wymagana."))
-    if (!formData.vatNumber.trim()) errors.push(tr(language, "Numer VAT jest wymagany."))
+    if (serviceType === "warranty") {
+      if (Object.values(devicePhotoUploading).some(Boolean)) {
+        errors.push(tr(language, "Poczekaj na zakończenie przesyłania zdjęć urządzenia."))
+      } else if (DEVICE_PHOTO_FIELDS.some((field) => !devicePhotos[field.key])) {
+        errors.push(tr(language, "Proszę dodać wszystkie 8 zdjęć urządzenia."))
+      }
+    }
     if (errors.length > 0) {
       alert(errors.join("\n"))
       return
@@ -1996,9 +2449,15 @@ export default function NewComplaintForm() {
         issueDescription: formData.issueDescription, // Autoclave comment
         selectedErrorCodes: formData.selectedErrorCodes, // Autoclave errors
         serviceUploadedFile: formData.serviceUploadedFile ? formData.serviceUploadedFile.name : null,
-        uploadedFolder: formData.uploadedFolder ? Array.from(formData.uploadedFolder).map((f) => f.name) : null,
-        uploadedFolderZipName: formData.uploadedFolderZipName || null,
         attachedDocuments: selectedFile?.name ? [selectedFile.name] : [],
+        devicePhotos:
+          serviceType === "warranty"
+            ? DEVICE_PHOTO_FIELDS.filter((field) => devicePhotos[field.key]).map((field) => ({
+                type: field.key,
+                fileName: devicePhotos[field.key]?.name || "",
+                driveFileName: `device-photo-${DEVICE_PHOTO_FIELDS.findIndex((item) => item.key === field.key) + 1}-${field.key}-${devicePhotos[field.key]?.name || ""}`,
+              }))
+            : [],
         // Other delivery address
         otherDeliveryAddress: formData.otherDeliveryAddress || false,
         deliveryCompanyName: formData.deliveryCompanyName || "",
@@ -2083,12 +2542,8 @@ export default function NewComplaintForm() {
       finalErrors.push(tr(language, "Numer seryjny jest wymagany."))
     }
     const finalCompanyName = (summaryData?.companyName ?? formData.companyName ?? "").toString().trim()
-    const finalVatNumber = (summaryData?.vatNumber ?? formData.vatNumber ?? "").toString().trim()
     if (!finalCompanyName) {
       finalErrors.push(tr(language, "Nazwa firmy jest wymagana."))
-    }
-    if (!finalVatNumber) {
-      finalErrors.push(tr(language, "Numer VAT jest wymagany."))
     }
     if (finalErrors.length > 0) {
       alert(finalErrors.join("\n"))
@@ -2179,7 +2634,6 @@ export default function NewComplaintForm() {
       serviceUploadedFile: null,
       selectedErrorCodes: [],
       issueDescription: "",
-      uploadedFolder: null,
     }));
 
     setIsTransitioning(true);
@@ -2314,128 +2768,6 @@ export default function NewComplaintForm() {
               </div>
             </div>
           </div>
-        </div>
-    )
-  }
-
-  const renderFolderUploadSection = (
-      folder: FileList | null,
-      onFolderUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
-      onFolderDelete: () => void,
-      tooltipContent: string,
-      isCurrentlyUploading: boolean,
-      currentUploadProgress: number,
-  ) => {
-    const folderInputId = `folder-upload-${Math.random().toString(36).substring(7)}` // Unique ID for input
-    const folderName = folder && folder.length > 0 ? folder[0].webkitRelativePath.split("/")[0] : ""
-
-    return (
-        <div>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2">
-            <Label htmlFor={folderInputId} className="text-gray-900 text-sm font-normal text-[14px]">
-              {tr(language, "Dodaj folder autokławu")}
-            </Label>
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Info className="h-4 w-4 text-gray-600 cursor-help flex-shrink-0" />
-                </TooltipTrigger>
-                <TooltipContent
-                    side="top"
-                    align="end"
-                    className="bg-blue-100 border border-blue-200 text-blue-900 max-w-[280px] p-3 [border-radius:0.375rem_0.375rem_0px_0.375rem!important] z-50 -translate-x-2"
-                    sideOffset={5}
-                >
-                  <p className="text-sm">{tooltipContent}</p>
-                  <TooltipArrow className="fill-blue-100" offset={8} />
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-
-          <div
-              className={`border border-solid rounded-md p-4 py-8 min-h-[100px] flex items-center relative transition-all duration-200 ${
-                  folder
-                      ? "bg-white border-gray-300"
-                      : isCurrentlyUploading
-                          ? "bg-white border-gray-300 cursor-not-allowed"
-                          : "bg-white border-gray-300 hover:bg-gray-50 hover:text-gray-900 cursor-pointer group"
-              }`}
-          >
-            <input
-                id={folderInputId}
-                type="file"
-                // @ts-ignore - webkitdirectory nie jest standardową właściwością, ale działa w większości przeglądarek
-                webkitdirectory=""
-                directory=""
-                onChange={onFolderUpload}
-                className={`absolute inset-0 w-full h-full opacity-0 ${
-                    isCurrentlyUploading || !!folder ? "pointer-events-none" : "cursor-pointer"
-                }`}
-                disabled={isCurrentlyUploading || !!folder} 
-                // Disable input during upload or if folder exists
-            />
-            {isCurrentlyUploading ? (
-                <div className="flex flex-col items-center justify-center gap-2 text-gray-600 text-sm w-full px-2">
-                  <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                        className="absolute top-0 left-0 h-full bg-green-500 transition-all duration-100 ease-linear"
-                        style={{ width: `${currentUploadProgress}%` }}
-                    ></div>
-                  </div>
-                  <span>
-                    {tr(language, "Przesyłanie folderu...")} {currentUploadProgress}%
-                  </span>
-                </div>
-            ) : !folder ? (
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-gray-600 text-sm w-full group-hover:text-gray-900 transition-colors duration-200 px-2">
-                  <div className="flex items-center gap-1">
-                    <span>{tr(language, "Przeciągnij lub")}</span>
-                    <span className="text-gray-600 underline">
-                      {tr(language, "wybierz folder")}
-                    </span>
-                    <Folder className="h-4 w-4 text-gray-600 flex-shrink-0" />
-                  </div>
-                </div>
-            ) : (
-                <div className="flex items-center justify-center gap-2 text-gray-600 text-sm w-full px-2">
-                  <div className="flex items-center justify-between w-full">
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <span className="text-gray-900 text-base flex-1 truncate">
-                    {tr(language, "Folder:")} {folderName} ({folder.length}{" "}
-                    {tr(language, "plików")})
-                  </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {/* No direct download for folder via URL.createObjectURL, so omitting download button */}
-                      <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation() // Stop propagation
-                            onFolderDelete()
-                          }}
-                          className="w-5 h-5 rounded bg-transparent flex items-center justify-center transition-colors"
-                          title={tr(language, "Usuń folder")}
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-            )}
-          </div>
-
-          {folder && (
-            <div className="mt-2 text-sm text-green-600">
-              {tr(language, "Folder został pomyślnie dodany.")}
-            </div>
-          )}
-
-          <p className="text-gray-600 text-xs mt-4">
-            {tr(language, "Wybierz folder o numerze autoklawu,")}
-            <br />
-            {tr(language, "np. ST01-PL-24-00001")}
-          </p>
         </div>
     )
   }
@@ -2910,15 +3242,7 @@ export default function NewComplaintForm() {
                       </Collapsible>
                     </div>
 
-                    {/* Autoclave Folder Upload */}
-                    {renderFolderUploadSection(
-                        formData.uploadedFolder,
-                        handleFolderUpload,
-                        handleDeleteFolder,
-                        "Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).",
-                        isFolderUploading,
-                        folderUploadProgress,
-                    )}
+                    {serviceType === "warranty" && renderDevicePhotoFields()}
                   </div>
                 </div>
               </div>

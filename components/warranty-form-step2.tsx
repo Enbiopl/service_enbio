@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Paperclip, Camera, Info, Folder, ArrowLeft, ChevronDown, X } from "lucide-react"
+import { Paperclip, Camera, Info, ArrowLeft, ChevronDown, X } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Textarea } from "@/components/ui/textarea"
 
@@ -182,18 +182,8 @@ export default function WarrantyFormStep2() {
   const [showImageUpload, setShowImageUpload] = useState<boolean>(false)
   const [showCommentInput, setShowCommentInput] = useState<boolean>(false)
   const [errorComment, setErrorComment] = useState<string>("")
-  const [selectedFolder, setSelectedFolder] = useState<{ name: string; files: File[] } | null>(null)
   const [serviceType, setServiceType] = useState<string>("warranty")
   const [isErrorSectionExpanded, setIsErrorSectionExpanded] = useState<boolean>(false)
-
-  const [isUploading, setIsUploading] = useState<boolean>(false)
-  const [uploadProgress, setUploadProgress] = useState<number>(0)
-  const [uploadStatus, setUploadStatus] = useState<{
-    success?: boolean
-    message?: string
-    originalFolder?: string
-    zipFileName?: string
-  } | null>(null)
 
   const [isFileUploading, setIsFileUploading] = useState(false)
   const [fileUploadProgress, setFileUploadProgress] = useState(0)
@@ -373,73 +363,6 @@ export default function WarrantyFormStep2() {
     }
   }
 
-  const handleFolderSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || [])
-
-    if (files.length === 0) {
-      return
-    }
-
-    const folderName = files[0].webkitRelativePath.split("/")[0]
-
-    setSelectedFolder({ name: folderName, files: files })
-    setUploadStatus(null)
-    setIsUploading(true)
-    setUploadProgress(0)
-
-    try {
-      const formData = new FormData()
-      files.forEach((file) => {
-        formData.append("files[]", file, file.webkitRelativePath)
-      })
-
-      formData.append("folderName", folderName)
-
-      const progressInterval = setInterval(() => {
-        setUploadProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(progressInterval)
-            return 90
-          }
-          return prev + 10
-        })
-      }, 300)
-
-      const response = await fetch("/api/upload-folder", {
-        method: "POST",
-        body: formData,
-      })
-
-      clearInterval(progressInterval)
-
-      if (response.ok) {
-        const result = await response.json()
-        console.log("Folder upload response:", result)
-        setUploadProgress(100)
-
-        if (result.success) {
-          setUploadStatus({
-            success: true,
-            message: `Folder ${folderName} został przesłany.`,
-            originalFolder: result.originalFolder,
-            zipFileName: result.zipFileName,
-          })
-        } else {
-          setUploadStatus({ success: false, message: result.message || "Wystąpił błąd podczas przesyłania folderu." })
-        }
-      } else {
-        const errorText = await response.text()
-        console.error("Server error:", errorText)
-        throw new Error(`Server responded with status: ${response.status}`)
-      }
-    } catch (error) {
-      console.error("Upload error:", error)
-      setUploadStatus({ success: false, message: "Wystąpił błąd podczas przesyłania folderu. Spróbuj ponownie." })
-    } finally {
-      setIsUploading(false)
-    }
-  }
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -451,12 +374,6 @@ export default function WarrantyFormStep2() {
       selectedErrors,
       errorComment,
       attachedFile: selectedFile ? selectedFile.name : null,
-      selectedFolder: selectedFolder
-        ? {
-            name: selectedFolder.name,
-            fileCount: selectedFolder.files.length,
-          }
-        : null,
       // Upewnij się, że dane faktury są poprawnie zapisywane
       invoiceData: invoiceData,
     }
@@ -882,99 +799,6 @@ export default function WarrantyFormStep2() {
                       </div>
                     </div>
 
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <Label className="text-white text-sm font-normal text-[14px]">Dodaj folder autokławu</Label>
-                        <TooltipProvider delayDuration={0}>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Info className="h-4 w-4 text-gray-400 cursor-help" />
-                            </TooltipTrigger>
-                            <TooltipContent
-                              side="top"
-                              align="end"
-                              className="bg-blue-100 border border-blue-200 text-blue-900 max-w-[280px] p-3 rounded-md z-50"
-                              sideOffset={5}
-                            >
-                              <p className="text-sm">
-                                Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).
-                              </p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </div>
-
-                      <div
-                        className={`border border-dashed border-gray-600 rounded-md p-4 bg-[#181e25] relative transition-all duration-200 ${
-                          selectedFolder
-                            ? "bg-[#252D37] border-solid border-[#495563]"
-                            : "bg-[#181e25] hover:bg-[#4a5568] hover:text-white cursor-pointer group"
-                        }`}
-                      >
-                        <input
-                          type="file"
-                          id="folderUpload"
-                          // @ts-ignore - webkitdirectory nie jest standardową właściwością, ale działa w większości przeglądarek
-                          webkitdirectory=""
-                          directory=""
-                          onChange={handleFolderSelect}
-                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                          disabled={isUploading}
-                        />
-                        <div
-                          className={`flex items-center justify-center gap-2 text-[#9098A2] text-sm ${
-                            selectedFolder ? "" : "group-hover:text-white transition-colors duration-200 px-2"
-                          }`}
-                        >
-                          {isUploading ? (
-                            <div className="w-full">
-                              <div className="flex items-center justify-between mb-2">
-                                <span className="text-[#9098A2]">Przesyłanie folderu...</span>
-                                <span className="text-[#9098A2]">{uploadProgress}%</span>
-                              </div>
-                              <div className="w-full bg-[#0C1217] rounded-full h-2">
-                                <div
-                                  className="bg-blue-500 h-2 rounded-full transition-all duration-300 ease-in-out"
-                                  style={{ width: `${uploadProgress}%` }}
-                                ></div>
-                              </div>
-                            </div>
-                          ) : selectedFolder ? (
-                            <div className="flex items-center gap-2 text-[#9098A2]">
-                              <Folder className="h-4 w-4 text-[#9098A2]" />
-                              <span>{selectedFolder.name}</span>
-                              <span className="text-gray-400 text-xs">({selectedFolder.files.length} plików)</span>
-
-                              {uploadStatus && (
-                                <span
-                                  className={`ml-2 text-xs ${uploadStatus.success ? "text-green-500" : "text-red-500"}`}
-                                >
-                                  {uploadStatus.success ? "✓ Przesłano" : "✗ Błąd"}
-                                </span>
-                              )}
-                            </div>
-                          ) : (
-                            <>
-                              <span>Przeciągnij lub</span>
-                              <span className="text-[#9098A2] underline">wybierz folder</span>
-                              <Folder className="h-4 w-4 text-[#9098A2]" />
-                            </>
-                          )}
-                        </div>
-                      </div>
-
-                      {uploadStatus && (
-                        <div className={`mt-2 text-sm ${uploadStatus.success ? "text-green-500" : "text-red-500"}`}>
-                          {uploadStatus.message}
-                        </div>
-                      )}
-
-                      <p className="text-gray-400 text-xs mt-4">
-                        Wybierz folder o numerze autoklawu,
-                        <br />
-                        np. ST01-PL-24-00001
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>

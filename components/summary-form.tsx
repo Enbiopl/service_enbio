@@ -78,6 +78,8 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Czechy": "Chéquia",
     "Słowacja": "Eslováquia",
     "Wpisz nazwę firmy": "Introduza o nome da empresa",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Introduza o nome da sua empresa ou o seu nome completo",
     "Wpisz numer VAT": "Introduza o número de IVA",
     "Nazwa firmy jest wymagana.": "O nome da empresa é obrigatório.",
     "Numer VAT jest wymagany.": "O número de IVA é obrigatório.",
@@ -162,6 +164,8 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Czechy": "Czech Republic",
     "Słowacja": "Slovakia",
     "Wpisz nazwę firmy": "Enter company name",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Enter your company name or your full name",
     "Wpisz numer VAT": "Enter VAT number",
     "Nazwa firmy jest wymagana.": "Company name is required.",
     "Numer VAT jest wymagany.": "VAT number is required.",
@@ -255,6 +259,8 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Czechy": "República Checa",
     "Słowacja": "Eslovaquia",
     "Wpisz nazwę firmy": "Introduzca el nombre de la empresa",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Introduzca el nombre de su empresa o su nombre completo",
     "Wpisz numer VAT": "Introduzca el número de IVA",
     "Nazwa firmy jest wymagana.": "El nombre de la empresa es obligatorio.",
     "Numer VAT jest wymagany.": "El número de IVA es obligatorio.",
@@ -338,6 +344,8 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Czechy": "République tchèque",
     "Słowacja": "Slovaquie",
     "Wpisz nazwę firmy": "Entrez le nom de l’entreprise",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Saisissez le nom de votre entreprise ou vos nom et prénom",
     "Wpisz numer VAT": "Entrez le numéro de TVA",
     "Nazwa firmy jest wymagana.": "Le nom de l’entreprise est obligatoire.",
     "Numer VAT jest wymagany.": "Le numéro de TVA est obligatoire.",
@@ -421,6 +429,8 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Czechy": "Tschechische Republik",
     "Słowacja": "Slowakei",
     "Wpisz nazwę firmy": "Firmenname eingeben",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Geben Sie den Namen Ihres Unternehmens oder Ihren vollständigen Namen ein",
     "Wpisz numer VAT": "USt-IdNr. eingeben",
     "Nazwa firmy jest wymagana.": "Firmenname ist erforderlich.",
     "Numer VAT jest wymagany.": "USt-IdNr. ist erforderlich.",
@@ -504,6 +514,8 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Czechy": "Repubblica Ceca",
     "Słowacja": "Slovacchia",
     "Wpisz nazwę firmy": "Inserire ragione sociale",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Inserisci il nome della tua azienda oppure il tuo nome e cognome",
     "Wpisz numer VAT": "Inserire partita IVA",
     "Nazwa firmy jest wymagana.": "Il nome dell'azienda è obbligatorio.",
     "Numer VAT jest wymagany.": "La partita IVA è obbligatoria.",
@@ -587,6 +599,8 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Czechy": "Чеська Республіка",
     "Słowacja": "Словаччина",
     "Wpisz nazwę firmy": "Введіть назву компанії",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Введіть назву вашої компанії або ваше ім’я та прізвище",
     "Wpisz numer VAT": "Введіть номер ПДВ",
     "Nazwa firmy jest wymagana.": "Назва компанії обов'язкова.",
     "Numer VAT jest wymagany.": "Номер ПДВ обов'язковий.",
@@ -670,6 +684,8 @@ const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
     "Czechy": "Чешская Республика",
     "Słowacja": "Словакия",
     "Wpisz nazwę firmy": "Введите название компании",
+    "Wpisz nazwę swojej firmy lub swoje imię i nazwisko":
+      "Введите название вашей компании или ваши имя и фамилию",
     "Wpisz numer VAT": "Введите номер НДС",
     "Nazwa firmy jest wymagana.": "Название компании обязательно.",
     "Numer VAT jest wymagany.": "Номер НДС обязателен.",
@@ -818,8 +834,14 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
 
   const [deviceSectionOpen, setDeviceSectionOpen] = useState(true)
 
-  const [issueData, setIssueData] = useState({
+  const [issueData, setIssueData] = useState<{
+    attachedIssueDocuments: string[]
+    devicePhotos: Array<{ type: string; fileName: string; driveFileName?: string }>
+    reportedErrors: string[]
+    comments: string
+  }>({
     attachedIssueDocuments: [] as string[], // Changed to array of strings for file names
+    devicePhotos: [],
     reportedErrors: [] as string[],
     comments: "",
   })
@@ -982,8 +1004,10 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
                 ? (parsedData.accessoryComplaintReason ? [parsedData.accessoryComplaintReason] : [])
                 : (parsedData.selectedErrorCodes || []),
             comments: parsedData.issueDescription || "", // Autoclave comment
-            attachedIssueFolderZipName: parsedData.uploadedFolderZipName || "",
-            attachedIssueDocuments: [parsedData.attachedIssueDocuments, parsedData.uploadedFolder],
+            attachedIssueDocuments: [parsedData.attachedIssueDocuments],
+            devicePhotos: Array.isArray(parsedData.devicePhotos)
+              ? parsedData.devicePhotos.filter((photo: any) => photo?.fileName)
+              : [],
           }))
           // Zainicjalizuj rodzica bieżącymi danymi po odczycie
 
@@ -1029,7 +1053,6 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
             vatNumber: contactData.vatNumber || "",
             
             // --- Dane zgłoszenia serwisowego ---
-            autoclaveSerialNumber: issueData.attachedIssueFolderZipName,
             repairType: deviceData.type,
             errorCode: issueData.reportedErrors,
             problemDescription: issueData.comments,
@@ -1122,7 +1145,6 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
       vatNumber: contactData.vatNumber || "",
       
       // --- Dane zgłoszenia serwisowego ---
-      autoclaveSerialNumber: issueData.attachedIssueFolderZipName,
       repairType: deviceData.type,
       errorCode: issueData.reportedErrors,
       problemDescription: issueData.comments,
@@ -1231,9 +1253,6 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
       }
       if (!(contactData.companyName || "").trim()) {
         errors.push(tr(language, "Nazwa firmy jest wymagana."))
-      }
-      if (!(contactData.vatNumber || "").trim()) {
-        errors.push(tr(language, "Numer VAT jest wymagany."))
       }
       if (!(contactData.street || "").trim()) {
         errors.push(tr(language, "Nazwa ulicy jest wymagana."))
@@ -1591,6 +1610,21 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
     </>
   )
 
+  const renderIssueAttachments = () => {
+    const attachmentNames = issueData.devicePhotos.map((photo) => photo.fileName).filter(Boolean)
+
+    return (
+      <ul className="space-y-2">
+        {attachmentNames.map((fileName, index) => (
+          <li key={`${fileName}-${index}`} className="flex items-center justify-end gap-1">
+            <Paperclip className="h-4 w-4 flex-shrink-0 text-gray-600" />
+            <span className="break-all">{fileName}</span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
   return (
     <>
       {/* Main h1 title is now in FormContainer */}
@@ -1644,12 +1678,8 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
             <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-y-4 text-sm mb-4">
                   <div className="text-gray-600">{tr(language, "Dodane dokumenty przypisane do urządzenia")}</div>
-                  <div className="text-gray-900 text-right flex justify-end items-center">
-                    <Paperclip className="h-4 w-4 mr-1 text-gray-600" />
-                    <ul>
-                      {issueData.attachedIssueFolderZipName}
-                    </ul>
-            
+                  <div className="text-gray-900 text-right">
+                    {renderIssueAttachments()}
                   </div>
                 </div>
       
@@ -1712,11 +1742,8 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
             <div className="grid grid-cols-2 gap-y-4 text-sm">
 
               <div className="text-gray-600">{tr(language, "Dodane dokumenty przypisane do urządzenia")}</div>
-              <div className="text-gray-900 text-right flex justify-end items-center">
-                <Paperclip className="h-4 w-4 mr-1 text-gray-600" />
-                    <ul>
-                      {issueData.attachedIssueFolderZipName}
-                    </ul>
+              <div className="text-gray-900 text-right">
+                {renderIssueAttachments()}
               </div>
       
               <div className="text-gray-600">
@@ -1831,7 +1858,7 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
 
               <div>
                 <Label className="text-gray-900 text-sm mb-2 block">
-                  {tr(language, "Nazwa firmy")}
+                  {tr(language, "Wpisz nazwę swojej firmy lub swoje imię i nazwisko")}
                   {requiredMark}
                 </Label>
                 <Input
@@ -1846,14 +1873,12 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
               <div>
                 <Label className="text-gray-900 text-sm mb-2 block">
                   {tr(language, "Numer VAT")}
-                  {requiredMark}
                 </Label>
                 <Input
                   value={contactData.vatNumber || ""}
                   onChange={(e) => setContactData({ ...contactData, vatNumber: e.target.value })}
                   className={getInputStyles(contactData.vatNumber || "")}
                   placeholder={tr(language, "Wpisz numer VAT")}
-                  required
                 />
               </div>
 

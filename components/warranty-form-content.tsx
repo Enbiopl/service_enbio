@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { Info, Paperclip, Camera, ChevronDown, X, Folder } from "lucide-react"
+import { Info, Paperclip, Camera, ChevronDown, X } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { DESCRIPTIVE_ERRORS, COUNTRY_PHONE_PREFIXES, COUNTRY_NAMES_EN } from "@/lib/form-data"
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible" // Import Collapsible and CollapsibleContent
@@ -41,7 +41,6 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [selectedErrors, setSelectedErrors] = useState<string[]>(formData.selectedErrors || [])
   const [errorComment, setErrorComment] = useState<string>(formData.errorComment || "")
-  const [selectedFolder, setSelectedFolder] = useState<{ name: string; files: File[] } | null>(null)
   const [isErrorSectionExpanded, setIsErrorSectionExpanded] = useState<boolean>(false)
 
   // Mock states for UI functionality
@@ -83,12 +82,6 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
       selectedErrors,
       errorComment,
       attachedFile: selectedFile ? selectedFile.name : null,
-      selectedFolder: selectedFolder
-        ? {
-            name: selectedFolder.name,
-            fileCount: selectedFolder.files.length,
-          }
-        : null,
       invoiceData,
     }
 
@@ -529,77 +522,6 @@ export default function WarrantyForm({ formData, onBack, onNext }: WarrantyFormP
                     </Collapsible>
                   </div>
 
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <Label className="text-gray-900 text-sm font-normal text-[14px]">{t("Dodaj folder autokławu", "Add autoclave folder")}</Label>
-                      <TooltipProvider delayDuration={0}>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Info className="h-4 w-4 text-gray-600 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent
-                            side="top"
-                            align="end"
-                            className="bg-blue-100 border border-blue-200 text-blue-900 max-w-[280px] p-3 rounded-md z-50 rounded-br-none mr-2"
-                            sideOffset={5}
-                          >
-                            <p className="text-sm">
-                              {t("Dołącz folder z pendrive'a z logami autoklawu (pendrive znajduje się z tyłu urządzenia).", "Attach the USB folder with autoclave logs (USB is located at the back of the device).")}
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-
-                    <div
-                      className={`border border-solid border-gray-300 rounded-md p-4 py-8 min-h-[100px] flex items-center relative transition-all duration-200 ${
-                        selectedFolder
-                          ? "bg-white border-solid border-gray-300"
-                          : "bg-gray-50 hover:bg-gray-200 hover:text-gray-900 cursor-pointer group"
-                      }`}
-                    >
-                      <input
-                        type="file"
-                        id="folderUpload"
-                        // @ts-ignore - webkitdirectory nie jest standardową właściwością, ale działa w większości przeglądarek
-                        webkitdirectory=""
-                        directory=""
-                        onChange={(e) => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            const files = Array.from(e.target.files)
-                            const folderName = files[0].webkitRelativePath.split("/")[0]
-                            setSelectedFolder({ name: folderName, files: files })
-                          }
-                        }}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                      />
-                      <div
-                        className={`flex items-center justify-center gap-2 text-gray-600 text-sm w-full ${
-                          selectedFolder ? "" : "group-hover:text-gray-900 transition-colors duration-200 px-2"
-                        }`}
-                      >
-                        {selectedFolder ? (
-                          <div className="flex items-center gap-2 text-gray-600">
-                            <Folder className="h-4 w-4 text-gray-600" />
-                            <span>{selectedFolder.name}</span>
-                            <span className="text-gray-600 text-xs">({selectedFolder.files.length} {t("plików", "files")})</span>
-                          </div>
-                        ) : (
-                          <>
-                            <span>{t("Przeciągnij lub", "Drag and")}</span>
-                            <span className="text-gray-600 underline">{t("wybierz folder", "choose folder")}</span>
-                            <Folder className="h-4 w-4 text-gray-600" />
-                          </>
-                        )}
-                      </div>
-                    </div>
-
-                    <p className="text-gray-600 text-xs mt-4">
-                      {t("Wybierz folder o numerze autoklawu,", "Choose folder with autoclave number,")}
-                      <br />
-                      np. ST01-PL-24-00001
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
