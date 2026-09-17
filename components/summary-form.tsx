@@ -4,11 +4,13 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Paperclip, ArrowRight, ChevronDown } from "lucide-react"
+import { Paperclip, ArrowRight, ChevronDown, CalendarDays } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import {
   AUTOCLAVE_ERRORS,
@@ -20,6 +22,23 @@ import {
 import { COUNTRY_NAMES_EN, COUNTRY_NAMES_PL, normalizeCountryKeyFromAny } from "@/lib/form-data"
 
 type SummaryLang = "pl" | "en" | "es" | "fr" | "de" | "it" | "uk" | "ru" | "pt"
+
+const parseIsoDate = (value: string): Date | undefined => {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
+  if (!match) return undefined
+
+  const [, year, month, day] = match
+  const date = new Date(Number(year), Number(month) - 1, Number(day))
+  return date.getFullYear() === Number(year) &&
+    date.getMonth() === Number(month) - 1 &&
+    date.getDate() === Number(day)
+    ? date
+    : undefined
+}
+
+const formatIsoDate = (date: Date) =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
+
 const SUMMARY_TRANSLATIONS: Record<SummaryLang, Record<string, string>> = {
   pl: {},
   pt: {
@@ -793,6 +812,7 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
 
 
   const [editingSection, setEditingSection] = useState<string | null>(null)
+  const [purchaseDateCalendarOpen, setPurchaseDateCalendarOpen] = useState(false)
   const [deviceData, setDeviceData] = useState({
     type: "", // This will be updated based on serviceType from formData
     productName: "", // New field for accessory product name
@@ -1397,12 +1417,43 @@ export default function SummaryForm({ formData, summaryData, onDataChange, onBac
               {tr(language, "Data zakupu")}
               {strictAutoclaveDevice && requiredMark}
             </Label>
-            <Input
-              value={deviceData.purchaseDate}
-              onChange={(e) => setDeviceData({ ...deviceData, purchaseDate: e.target.value })}
-              className={getInputStyles(deviceData.purchaseDate)}
-              {...(strictAutoclaveDevice ? { required: true } : {})}
-            />
+            <div className="relative">
+              <Input
+                type="text"
+                inputMode="numeric"
+                placeholder="RRRR-MM-DD"
+                value={deviceData.purchaseDate}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^\d-]/g, "").slice(0, 10)
+                  setDeviceData({ ...deviceData, purchaseDate: value })
+                }}
+                className={`${getInputStyles(deviceData.purchaseDate)} pr-12`}
+                {...(strictAutoclaveDevice ? { required: true } : {})}
+              />
+              <Popover open={purchaseDateCalendarOpen} onOpenChange={setPurchaseDateCalendarOpen}>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label={tr(language, "Data zakupu")}
+                    className="absolute right-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                  >
+                    <CalendarDays className="h-5 w-5" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-auto rounded-lg border-gray-200 bg-white p-0 text-gray-900 shadow-lg">
+                  <Calendar
+                    mode="single"
+                    selected={parseIsoDate(deviceData.purchaseDate)}
+                    onSelect={(date) => {
+                      if (!date) return
+                      setDeviceData({ ...deviceData, purchaseDate: formatIsoDate(date) })
+                      setPurchaseDateCalendarOpen(false)
+                    }}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
 
           <div>

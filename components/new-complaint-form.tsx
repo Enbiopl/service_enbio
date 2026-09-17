@@ -51,6 +51,7 @@ type DevicePhotoKey =
   | "powerCableConnection"
   | "devicePlacement"
   | "cycleCountScreen"
+  | "warningCodeScreen"
 
 const DEVICE_PHOTO_FIELDS: Array<{
   key: DevicePhotoKey
@@ -96,6 +97,11 @@ const DEVICE_PHOTO_FIELDS: Array<{
     key: "cycleCountScreen",
     title: "Ekran urządzenia – licznik cykli",
     description: "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).",
+  },
+  {
+    key: "warningCodeScreen",
+    title: "Ekran urządzenia – kod ostrzeżenia",
+    description: "Zrób zdjęcie ekranu autoklawu pokazującego kod lub komunikat ostrzeżenia.",
   },
 ]
 
@@ -211,8 +217,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Przesyłanie folderu...": "A enviar pasta...",
     "1. Dane urządzenia": "1. Dados do dispositivo",
     "Zdjęcia urządzenia": "Fotografias do dispositivo",
-    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
-      "Carregue as 8 fotografias abaixo. Elas ajudarão a nossa equipa de assistência a diagnosticar o problema mais rapidamente.",
+    "Dodaj wszystkie 9 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Carregue as 9 fotografias abaixo. Elas ajudarão a nossa equipa de assistência a diagnosticar o problema mais rapidamente.",
     "Etykieta z numerem seryjnym": "Etiqueta do número de série",
     "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
       "Fotografia da parte traseira do dispositivo com o número de série claramente visível.",
@@ -237,16 +243,19 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Ekran urządzenia – licznik cykli": "Ecrã do dispositivo – contador de ciclos",
     "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
       "Fotografe o ecrã do autoclave com o número de processos concluídos (Info → Contadores).",
+    "Ekran urządzenia – kod ostrzeżenia": "Ecrã do dispositivo – código de aviso",
+    "Zrób zdjęcie ekranu autoklawu pokazującego kod lub komunikat ostrzeżenia.":
+      "Fotografe o ecrã do autoclave mostrando o código ou a mensagem de aviso.",
     "Przeciągnij lub wybierz zdjęcie": "Arraste e largue ou escolha uma fotografia",
-    "maks. 15 MB": "máx. 15 MB",
+    "maks. 5 MB": "máx. 5 MB",
     "Kompresowanie zdjęcia...": "A comprimir a fotografia...",
     "Przesyłanie zdjęcia...": "A enviar a fotografia...",
     "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
       "Não foi possível processar a fotografia. Tente novamente.",
     "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
       "Não foi possível enviar a fotografia. Tente novamente.",
-    "Maksymalny rozmiar zdjęcia to 15 MB.": "O tamanho máximo da fotografia é 15 MB.",
-    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Carregue as 8 fotografias do dispositivo.",
+    "Maksymalny rozmiar zdjęcia to 5 MB.": "O tamanho máximo da fotografia é 5 MB.",
+    "Proszę dodać wszystkie 9 zdjęć urządzenia.": "Carregue as 9 fotografias do dispositivo.",
     "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
       "Aguarde até que todas as fotografias do dispositivo terminem de ser enviadas.",
     "1. Dane produktu": "1. Dados do produto",
@@ -412,8 +421,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Przesyłanie folderu...": "Uploading folder...",
     "1. Dane urządzenia": "1. Device data",
     "Zdjęcia urządzenia": "Device photos",
-    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
-      "Please upload all 8 photos below. They will help our service team diagnose the issue faster.",
+    "Dodaj wszystkie 9 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Please upload all 9 photos below. They will help our service team diagnose the issue faster.",
     "Etykieta z numerem seryjnym": "Serial number label",
     "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
       "Photo of the back of the device with the serial number clearly visible.",
@@ -438,15 +447,18 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Ekran urządzenia – licznik cykli": "Device screen – cycle count",
     "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
       "Take a photo of the autoclave screen showing the number of completed processes (Info → Counters).",
+    "Ekran urządzenia – kod ostrzeżenia": "Device screen – warning code",
+    "Zrób zdjęcie ekranu autoklawu pokazującego kod lub komunikat ostrzeżenia.":
+      "Take a photo of the autoclave screen showing the warning code/message.",
     "Przeciągnij lub wybierz zdjęcie": "Drag & drop or choose a photo",
-    "maks. 15 MB": "max. 15 MB",
+    "maks. 5 MB": "max. 5 MB",
     "Kompresowanie zdjęcia...": "Compressing photo...",
     "Przesyłanie zdjęcia...": "Uploading photo...",
     "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
       "The photo could not be processed. Please try again.",
     "Nie udało się przesłać zdjęcia. Spróbuj ponownie.": "The photo could not be uploaded. Please try again.",
-    "Maksymalny rozmiar zdjęcia to 15 MB.": "The maximum photo size is 15 MB.",
-    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Please upload all 8 device photos.",
+    "Maksymalny rozmiar zdjęcia to 5 MB.": "The maximum photo size is 5 MB.",
+    "Proszę dodać wszystkie 9 zdjęć urządzenia.": "Please upload all 9 device photos.",
     "Poczekaj na zakończenie przesyłania zdjęć urządzenia.": "Please wait until all device photos finish uploading.",
     "1. Dane produktu": "1. Product data",
     "Autoklaw": "Autoclave",
@@ -611,8 +623,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Przesyłanie folderu...": "Téléchargement du dossier...",
     "1. Dane urządzenia": "1. Données de l’appareil",
     "Zdjęcia urządzenia": "Photos de l’appareil",
-    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
-      "Téléchargez les 8 photos ci-dessous. Elles aideront notre équipe de service à diagnostiquer le problème plus rapidement.",
+    "Dodaj wszystkie 9 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Téléchargez les 9 photos ci-dessous. Elles aideront notre équipe de service à diagnostiquer le problème plus rapidement.",
     "Etykieta z numerem seryjnym": "Étiquette du numéro de série",
     "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
       "Photo de l’arrière de l’appareil avec le numéro de série clairement visible.",
@@ -637,16 +649,19 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Ekran urządzenia – licznik cykli": "Écran de l’appareil – compteur de cycles",
     "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
       "Photographiez l’écran de l’autoclave affichant le nombre de processus terminés (Info → Compteurs).",
+    "Ekran urządzenia – kod ostrzeżenia": "Écran de l’appareil – code d’avertissement",
+    "Zrób zdjęcie ekranu autoklawu pokazującego kod lub komunikat ostrzeżenia.":
+      "Photographiez l’écran de l’autoclave affichant le code ou le message d’avertissement.",
     "Przeciągnij lub wybierz zdjęcie": "Glissez-déposez ou choisissez une photo",
-    "maks. 15 MB": "15 Mo max.",
+    "maks. 5 MB": "5 Mo max.",
     "Kompresowanie zdjęcia...": "Compression de la photo...",
     "Przesyłanie zdjęcia...": "Téléchargement de la photo...",
     "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
       "La photo n’a pas pu être traitée. Réessayez.",
     "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
       "La photo n’a pas pu être téléchargée. Réessayez.",
-    "Maksymalny rozmiar zdjęcia to 15 MB.": "La taille maximale de la photo est de 15 Mo.",
-    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Veuillez télécharger les 8 photos de l’appareil.",
+    "Maksymalny rozmiar zdjęcia to 5 MB.": "La taille maximale de la photo est de 5 Mo.",
+    "Proszę dodać wszystkie 9 zdjęć urządzenia.": "Veuillez télécharger les 9 photos de l’appareil.",
     "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
       "Attendez la fin du téléchargement de toutes les photos de l’appareil.",
     "Autoklaw": "Autoclave",
@@ -814,8 +829,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "np. ST01-PL-24-00001": "p. ej. ST01-PL-24-00001",
     "1. Dane urządzenia": "1. Datos del dispositivo",
     "Zdjęcia urządzenia": "Fotos del dispositivo",
-    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
-      "Sube las 8 fotos que aparecen a continuación. Ayudarán a nuestro equipo técnico a diagnosticar el problema más rápidamente.",
+    "Dodaj wszystkie 9 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Sube las 9 fotos que aparecen a continuación. Ayudarán a nuestro equipo técnico a diagnosticar el problema más rápidamente.",
     "Etykieta z numerem seryjnym": "Etiqueta del número de serie",
     "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
       "Foto de la parte trasera del dispositivo con el número de serie claramente visible.",
@@ -840,16 +855,19 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Ekran urządzenia – licznik cykli": "Pantalla del dispositivo – contador de ciclos",
     "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
       "Fotografía la pantalla del autoclave mostrando el número de procesos completados (Info → Contadores).",
+    "Ekran urządzenia – kod ostrzeżenia": "Pantalla del dispositivo – código de advertencia",
+    "Zrób zdjęcie ekranu autoklawu pokazującego kod lub komunikat ostrzeżenia.":
+      "Fotografía la pantalla del autoclave mostrando el código o mensaje de advertencia.",
     "Przeciągnij lub wybierz zdjęcie": "Arrastra y suelta o elige una foto",
-    "maks. 15 MB": "máx. 15 MB",
+    "maks. 5 MB": "máx. 5 MB",
     "Kompresowanie zdjęcia...": "Comprimiendo la foto...",
     "Przesyłanie zdjęcia...": "Subiendo la foto...",
     "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
       "No se pudo procesar la foto. Inténtalo de nuevo.",
     "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
       "No se pudo subir la foto. Inténtalo de nuevo.",
-    "Maksymalny rozmiar zdjęcia to 15 MB.": "El tamaño máximo de la foto es de 15 MB.",
-    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Sube las 8 fotos del dispositivo.",
+    "Maksymalny rozmiar zdjęcia to 5 MB.": "El tamaño máximo de la foto es de 5 MB.",
+    "Proszę dodać wszystkie 9 zdjęć urządzenia.": "Sube las 9 fotos del dispositivo.",
     "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
       "Espera a que terminen de subirse todas las fotos del dispositivo.",
     "1. Dane produktu": "1. Datos del producto",
@@ -1017,8 +1035,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "np. ST01-PL-24-00001": "z. B. ST01-PL-24-00001",
     "1. Dane urządzenia": "1. Gerätedaten",
     "Zdjęcia urządzenia": "Gerätefotos",
-    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
-      "Laden Sie alle 8 unten aufgeführten Fotos hoch. Sie helfen unserem Serviceteam, das Problem schneller zu diagnostizieren.",
+    "Dodaj wszystkie 9 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Laden Sie alle 9 unten aufgeführten Fotos hoch. Sie helfen unserem Serviceteam, das Problem schneller zu diagnostizieren.",
     "Etykieta z numerem seryjnym": "Seriennummernetikett",
     "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
       "Foto der Geräterückseite mit deutlich sichtbarer Seriennummer.",
@@ -1043,16 +1061,19 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Ekran urządzenia – licznik cykli": "Gerätebildschirm – Zykluszähler",
     "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
       "Fotografieren Sie den Autoklavenbildschirm mit der Anzahl der abgeschlossenen Prozesse (Info → Zähler).",
+    "Ekran urządzenia – kod ostrzeżenia": "Gerätebildschirm – Warncode",
+    "Zrób zdjęcie ekranu autoklawu pokazującego kod lub komunikat ostrzeżenia.":
+      "Fotografieren Sie den Autoklavenbildschirm mit dem Warncode oder der Warnmeldung.",
     "Przeciągnij lub wybierz zdjęcie": "Foto hierher ziehen oder auswählen",
-    "maks. 15 MB": "max. 15 MB",
+    "maks. 5 MB": "max. 5 MB",
     "Kompresowanie zdjęcia...": "Foto wird komprimiert...",
     "Przesyłanie zdjęcia...": "Foto wird hochgeladen...",
     "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
       "Das Foto konnte nicht verarbeitet werden. Versuchen Sie es erneut.",
     "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
       "Das Foto konnte nicht hochgeladen werden. Versuchen Sie es erneut.",
-    "Maksymalny rozmiar zdjęcia to 15 MB.": "Die maximale Fotogröße beträgt 15 MB.",
-    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Bitte laden Sie alle 8 Gerätefotos hoch.",
+    "Maksymalny rozmiar zdjęcia to 5 MB.": "Die maximale Fotogröße beträgt 5 MB.",
+    "Proszę dodać wszystkie 9 zdjęć urządzenia.": "Bitte laden Sie alle 9 Gerätefotos hoch.",
     "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
       "Warten Sie, bis alle Gerätefotos vollständig hochgeladen wurden.",
     "1. Dane produktu": "1. Produktdaten",
@@ -1217,8 +1238,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "np. ST01-PL-24-00001": "es. ST01-PL-24-00001",
     "1. Dane urządzenia": "1. Dati dispositivo",
     "Zdjęcia urządzenia": "Foto del dispositivo",
-    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
-      "Carica tutte le 8 foto riportate di seguito. Aiuteranno il nostro team di assistenza a diagnosticare il problema più rapidamente.",
+    "Dodaj wszystkie 9 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Carica tutte le 9 foto riportate di seguito. Aiuteranno il nostro team di assistenza a diagnosticare il problema più rapidamente.",
     "Etykieta z numerem seryjnym": "Etichetta del numero di serie",
     "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
       "Foto del retro del dispositivo con il numero di serie chiaramente visibile.",
@@ -1243,16 +1264,19 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Ekran urządzenia – licznik cykli": "Schermo del dispositivo – contatore cicli",
     "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
       "Fotografa lo schermo dell’autoclave con il numero di processi completati (Info → Contatori).",
+    "Ekran urządzenia – kod ostrzeżenia": "Schermo del dispositivo – codice di avviso",
+    "Zrób zdjęcie ekranu autoklawu pokazującego kod lub komunikat ostrzeżenia.":
+      "Fotografa lo schermo dell’autoclave mostrando il codice o il messaggio di avviso.",
     "Przeciągnij lub wybierz zdjęcie": "Trascina e rilascia oppure scegli una foto",
-    "maks. 15 MB": "max. 15 MB",
+    "maks. 5 MB": "max. 5 MB",
     "Kompresowanie zdjęcia...": "Compressione della foto...",
     "Przesyłanie zdjęcia...": "Caricamento della foto...",
     "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
       "Impossibile elaborare la foto. Riprova.",
     "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
       "Impossibile caricare la foto. Riprova.",
-    "Maksymalny rozmiar zdjęcia to 15 MB.": "La dimensione massima della foto è 15 MB.",
-    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Carica tutte le 8 foto del dispositivo.",
+    "Maksymalny rozmiar zdjęcia to 5 MB.": "La dimensione massima della foto è 5 MB.",
+    "Proszę dodać wszystkie 9 zdjęć urządzenia.": "Carica tutte le 9 foto del dispositivo.",
     "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
       "Attendi il completamento del caricamento di tutte le foto del dispositivo.",
     "1. Dane produktu": "1. Dati prodotto",
@@ -1414,8 +1438,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "np. ST01-PL-24-00001": "напр. ST01-PL-24-00001",
     "1. Dane urządzenia": "1. Дані пристрою",
     "Zdjęcia urządzenia": "Фотографії пристрою",
-    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
-      "Завантажте всі 8 фотографій нижче. Вони допоможуть нашій сервісній команді швидше діагностувати проблему.",
+    "Dodaj wszystkie 9 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Завантажте всі 9 фотографій нижче. Вони допоможуть нашій сервісній команді швидше діагностувати проблему.",
     "Etykieta z numerem seryjnym": "Етикетка із серійним номером",
     "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
       "Фотографія задньої панелі пристрою з чітко видимим серійним номером.",
@@ -1440,16 +1464,19 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Ekran urządzenia – licznik cykli": "Екран пристрою – лічильник циклів",
     "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
       "Сфотографуйте екран автоклава з кількістю завершених процесів (Info → Лічильники).",
+    "Ekran urządzenia – kod ostrzeżenia": "Екран пристрою – код попередження",
+    "Zrób zdjęcie ekranu autoklawu pokazującego kod lub komunikat ostrzeżenia.":
+      "Сфотографуйте екран автоклава, на якому показано код або повідомлення попередження.",
     "Przeciągnij lub wybierz zdjęcie": "Перетягніть або виберіть фотографію",
-    "maks. 15 MB": "макс. 15 МБ",
+    "maks. 5 MB": "макс. 5 МБ",
     "Kompresowanie zdjęcia...": "Стиснення фотографії...",
     "Przesyłanie zdjęcia...": "Завантаження фотографії...",
     "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
       "Не вдалося обробити фотографію. Спробуйте ще раз.",
     "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
       "Не вдалося завантажити фотографію. Спробуйте ще раз.",
-    "Maksymalny rozmiar zdjęcia to 15 MB.": "Максимальний розмір фотографії — 15 МБ.",
-    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Завантажте всі 8 фотографій пристрою.",
+    "Maksymalny rozmiar zdjęcia to 5 MB.": "Максимальний розмір фотографії — 5 МБ.",
+    "Proszę dodać wszystkie 9 zdjęć urządzenia.": "Завантажте всі 9 фотографій пристрою.",
     "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
       "Зачекайте, доки завершиться завантаження всіх фотографій пристрою.",
     "1. Dane produktu": "1. Дані продукту",
@@ -1611,8 +1638,8 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "np. ST01-PL-24-00001": "напр. ST01-PL-24-00001",
     "1. Dane urządzenia": "1. Данные устройства",
     "Zdjęcia urządzenia": "Фотографии устройства",
-    "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
-      "Загрузите все 8 фотографий ниже. Они помогут нашей сервисной команде быстрее диагностировать проблему.",
+    "Dodaj wszystkie 9 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem.":
+      "Загрузите все 9 фотографий ниже. Они помогут нашей сервисной команде быстрее диагностировать проблему.",
     "Etykieta z numerem seryjnym": "Этикетка с серийным номером",
     "Zdjęcie tyłu urządzenia z wyraźnie widocznym numerem seryjnym.":
       "Фотография задней панели устройства с чётко видимым серийным номером.",
@@ -1637,16 +1664,19 @@ const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     "Ekran urządzenia – licznik cykli": "Экран устройства – счётчик циклов",
     "Zrób zdjęcie ekranu autoklawu z liczbą wykonanych procesów (Info → Liczniki).":
       "Сфотографируйте экран автоклава с количеством завершённых процессов (Info → Счётчики).",
+    "Ekran urządzenia – kod ostrzeżenia": "Экран устройства – код предупреждения",
+    "Zrób zdjęcie ekranu autoklawu pokazującego kod lub komunikat ostrzeżenia.":
+      "Сфотографируйте экран автоклава, на котором показан код или сообщение предупреждения.",
     "Przeciągnij lub wybierz zdjęcie": "Перетащите или выберите фотографию",
-    "maks. 15 MB": "макс. 15 МБ",
+    "maks. 5 MB": "макс. 5 МБ",
     "Kompresowanie zdjęcia...": "Сжатие фотографии...",
     "Przesyłanie zdjęcia...": "Загрузка фотографии...",
     "Nie udało się przetworzyć zdjęcia. Spróbuj ponownie.":
       "Не удалось обработать фотографию. Попробуйте ещё раз.",
     "Nie udało się przesłać zdjęcia. Spróbuj ponownie.":
       "Не удалось загрузить фотографию. Попробуйте ещё раз.",
-    "Maksymalny rozmiar zdjęcia to 15 MB.": "Максимальный размер фотографии — 15 МБ.",
-    "Proszę dodać wszystkie 8 zdjęć urządzenia.": "Загрузите все 8 фотографий устройства.",
+    "Maksymalny rozmiar zdjęcia to 5 MB.": "Максимальный размер фотографии — 5 МБ.",
+    "Proszę dodać wszystkie 9 zdjęć urządzenia.": "Загрузите все 9 фотографий устройства.",
     "Poczekaj na zakończenie przesyłania zdjęć urządzenia.":
       "Дождитесь завершения загрузки всех фотографий устройства.",
     "1. Dane produktu": "1. Данные продукта",
@@ -1835,6 +1865,7 @@ export default function NewComplaintForm() {
     powerCableConnection: null,
     devicePlacement: null,
     cycleCountScreen: null,
+    warningCodeScreen: null,
   })
   const [devicePhotoUploading, setDevicePhotoUploading] = useState<Partial<Record<DevicePhotoKey, boolean>>>({})
   const [devicePhotoCompressing, setDevicePhotoCompressing] = useState<Partial<Record<DevicePhotoKey, boolean>>>({})
@@ -2199,8 +2230,8 @@ export default function NewComplaintForm() {
   const handleDevicePhotoUpload = async (key: DevicePhotoKey, file: File | null) => {
     if (!file) return
 
-    if (file.size > 15 * 1024 * 1024) {
-      setDevicePhotoErrors((prev) => ({ ...prev, [key]: tr(language, "Maksymalny rozmiar zdjęcia to 15 MB.") }))
+    if (file.size > 5 * 1024 * 1024) {
+      setDevicePhotoErrors((prev) => ({ ...prev, [key]: tr(language, "Maksymalny rozmiar zdjęcia to 5 MB.") }))
       return
     }
 
@@ -2264,7 +2295,7 @@ export default function NewComplaintForm() {
       <p className="mt-3 mb-6 text-sm leading-6 text-gray-600">
         {tr(
           language,
-          "Dodaj wszystkie 8 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem."
+          "Dodaj wszystkie 9 poniższych zdjęć. Pomogą one naszemu serwisowi szybciej zdiagnozować problem."
         )}
       </p>
 
@@ -2321,7 +2352,7 @@ export default function NewComplaintForm() {
                   ) : (
                     <>
                       <span>
-                        {tr(language, "Przeciągnij lub wybierz zdjęcie")} ({tr(language, "maks. 15 MB")})
+                        {tr(language, "Przeciągnij lub wybierz zdjęcie")} ({tr(language, "maks. 5 MB")})
                       </span>
                       <Camera className="h-4 w-4 flex-shrink-0" />
                     </>
@@ -2403,7 +2434,7 @@ export default function NewComplaintForm() {
       if (Object.values(devicePhotoUploading).some(Boolean)) {
         errors.push(tr(language, "Poczekaj na zakończenie przesyłania zdjęć urządzenia."))
       } else if (DEVICE_PHOTO_FIELDS.some((field) => !devicePhotos[field.key])) {
-        errors.push(tr(language, "Proszę dodać wszystkie 8 zdjęć urządzenia."))
+        errors.push(tr(language, "Proszę dodać wszystkie 9 zdjęć urządzenia."))
       }
     }
     if (errors.length > 0) {
